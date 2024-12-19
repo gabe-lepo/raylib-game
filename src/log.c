@@ -5,21 +5,34 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-void WriteLog(TraceLogLevel level, const char *format, ...)
+int ensureDirectory(const char *path)
 {
-   // Ensure directory exists
    struct stat st = {0};
-   if (stat("logs", &st) == -1)
+   if (stat(path, &st) == -1)
    {
-      printf("DEBUG: Log directory didn't exist, creating it.\n");
-      mkdir("logs", 0700);
+      printf("[WARNING]: Log directory didn't exist, creating it.\n");
+      if (mkdir(path, 0700) == -1)
+      {
+         return 0;
+      }
+   }
+   return 1;
+}
+
+void WriteLog(int logLevel, const char *text, va_list args)
+{
+   if (!ensureDirectory("logs"))
+   {
+      printf("[ERROR]: Could not create log directory.\n");
+      return;
    }
 
    FILE *log_file = fopen(LOG_PATH, "a");
 
    if (log_file != NULL)
    {
-      switch (level)
+      // Write log level
+      switch (logLevel)
       {
       case LOG_INFO:
          fprintf(log_file, "[INFO]: ");
@@ -37,10 +50,8 @@ void WriteLog(TraceLogLevel level, const char *format, ...)
          fprintf(log_file, "[UNKNOWN]: ");
       }
 
-      va_list args;
-      va_start(args, format);
-      vfprintf(log_file, format, args);
-      va_end(args);
+      // Write log message
+      vfprintf(log_file, text, args);
       fprintf(log_file, "\n");
       fclose(log_file);
    }
@@ -48,4 +59,12 @@ void WriteLog(TraceLogLevel level, const char *format, ...)
    {
       printf("ERROR: Could not open log file.\n");
    }
+}
+
+void LogMessage(int logLevel, const char *format, ...)
+{
+   va_list args;
+   va_start(args, format);
+   WriteLog(logLevel, format, args);
+   va_end(args);
 }
