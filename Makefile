@@ -6,7 +6,7 @@ APP_NAME = raylib_app
 SRC_DIR = src
 BUILD_DIR = build
 INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
-SRC = $(SRC_DIR)/main.c $(SRC_DIR)/game.c $(SRC_DIR)/player.c $(SRC_DIR)/timer.c $(SRC_DIR)/screen.c
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/game.c $(SRC_DIR)/player.c $(SRC_DIR)/timer.c $(SRC_DIR)/screen.c $(SRC_DIR)/log.c
 
 build: $(SRC)
 	@echo "Building"
