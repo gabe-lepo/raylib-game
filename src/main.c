@@ -1,8 +1,6 @@
-#include "/Users/glepoutre/Documents/vscode/raylib/src/raylib.h"
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 450
-#define SCREEN_TITLE "Raylib Graphics"
+#include "raylib.h"
+#include "game.h"
+#include "screen.h"
 
 int main(void)
 {
@@ -10,16 +8,23 @@ int main(void)
    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
    SetTargetFPS(60);
 
+   InitGame();
+
+   int fps = GetFPS();
+
    // Main game loop
    while (!WindowShouldClose())
    {
+      UpdateGame();
+
       BeginDrawing();
-      ClearBackground(WHITE);
-      DrawText("Congrats! You created your first window!", (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 20, LIGHTGRAY);
+      ClearBackground(RAYWHITE);
+      DrawGame();
       EndDrawing();
    }
 
    // Cleanup
+   CloseGame();
    CloseWindow();
    return 0;
 }

@@ -5,12 +5,13 @@ default: clean run
 APP_NAME = raylib_app
 SRC_DIR = src
 BUILD_DIR = build
-SRC = $(SRC_DIR)/main.c
+INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/game.c $(SRC_DIR)/player.c
 
 build: $(SRC)
 	@echo "Building"
 	mkdir -p $(BUILD_DIR)
-	clang -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a $(SRC) -o $(BUILD_DIR)/$(APP_NAME)
+	clang -I$(INCLUDE_DIR) -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a $(SRC) -o $(BUILD_DIR)/$(APP_NAME)
 	@echo "Build done"
 
 run: build
