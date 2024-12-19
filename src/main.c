@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "game.h"
 #include "screen.h"
+#include "timer.h"
 
 int main(void)
 {
@@ -9,6 +10,7 @@ int main(void)
    SetTargetFPS(60);
 
    InitGame();
+   InitTimer();
 
    int fps = GetFPS();
 
@@ -16,10 +18,12 @@ int main(void)
    while (!WindowShouldClose())
    {
       UpdateGame();
+      UpdateTimer();
 
       BeginDrawing();
       ClearBackground(RAYWHITE);
       DrawGame();
+      DrawTimer();
       EndDrawing();
    }
 
