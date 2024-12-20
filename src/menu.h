@@ -1,10 +1,21 @@
 #ifndef MENU_H
 #define MENU_H
 
-void InitMenu(void);
-void ToggleMenu(void);
-void UpdateMenu(void);
-void DrawMenu(void);
-int isMenuActive(void);
+#include "raylib.h"
+#include "screen.h"
+#include "log.h"
+
+#define START_MENU 0
+#define PAUSE_MENU 1
+#define SETTINGS_MENU 2
+
+void ResetMenuSelections(void);
+void InitMenus(void);
+void ToggleMenu(int menu);
+void UpdateStartMenu(void);
+void UpdatePauseMenu(void);
+void UpdateSettingsMenu(void);
+void DrawMenus(void);
+int isMenuActive(int menu);
 
 #endif // MENU_H

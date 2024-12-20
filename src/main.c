@@ -19,20 +19,20 @@ int main(void)
    SetTargetFPS(60);
 
    InitGame();
+   InitMenus();
    InitTimer();
-   InitMenu();
 
    // Main game loop
    while (!WindowShouldClose())
    {
-      // Menu
-      if (IsKeyPressed(KEY_ESCAPE))
+      // Menu control
+      if (IsKeyPressed(KEY_ESCAPE) && !isMenuActive(START_MENU))
       {
-         ToggleMenu();
+         ToggleMenu(PAUSE_MENU);
       }
 
       // State loop
-      if (!isMenuActive())
+      if (!isMenuActive(START_MENU) && !isMenuActive(PAUSE_MENU))
       {
          UpdateGame();
          UpdateTimer();
@@ -41,11 +41,21 @@ int main(void)
       // Draw loop
       BeginDrawing();
 
-      ClearBackground(RAYWHITE);
-      if (isMenuActive())
+      ClearBackground(DARKGRAY);
+      if (isMenuActive(START_MENU))
       {
-         UpdateMenu();
-         DrawMenu();
+         UpdateStartMenu();
+         DrawMenus();
+      }
+      else if (isMenuActive(PAUSE_MENU))
+      {
+         UpdatePauseMenu();
+         DrawMenus();
+      }
+      else if (isMenuActive(SETTINGS_MENU))
+      {
+         UpdateSettingsMenu();
+         DrawMenus();
       }
       else
       {
