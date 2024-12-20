@@ -2,6 +2,8 @@
 #include "game.h"
 #include "player.h"
 
+int gameShouldClose = 0;
+
 static Player player1;
 
 void InitGame(void)
@@ -28,5 +30,5 @@ void DrawGame(void)
 
 void CloseGame(void)
 {
-   // Nothing to do here
+   gameShouldClose = 1;
 }

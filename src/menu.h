@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "screen.h"
 #include "log.h"
+#include "game.h"
 
 #define START_MENU 0
 #define PAUSE_MENU 1

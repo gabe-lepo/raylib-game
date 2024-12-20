@@ -148,6 +148,7 @@ void UpdateStartMenu(void)
       else if (selectedStartMenuItem == 3)
       {
          // Close game
+         CloseGame();
       }
    }
 }

@@ -23,7 +23,7 @@ int main(void)
    InitTimer();
 
    // Main game loop
-   while (!WindowShouldClose())
+   while (!WindowShouldClose() && !gameShouldClose)
    {
       // Menu control
       if (IsKeyPressed(KEY_ESCAPE) && !isMenuActive(START_MENU))
@@ -68,7 +68,6 @@ int main(void)
    }
 
    // Cleanup
-   // CloseGame();
    CloseWindow();
    return 0;
 }

@@ -1,6 +1,7 @@
 {
   "C_Cpp.default.compilerPath": "/usr/bin/clang",
   "files.associations": {
-    "log.h": "c"
+    "log.h": "c",
+    "raylib.h": "c"
   }
 }
