@@ -56,6 +56,3 @@ build/
 
 # Game logs
 logs/
-
-# Unity tests
-tests/unity/
