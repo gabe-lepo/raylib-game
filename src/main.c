@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "log.h"
 #include "menu.h"
+#include "fps.h"
 
 #include <stdio.h>
 
@@ -20,8 +21,6 @@ int main(void)
    InitGame();
    InitTimer();
    InitMenu();
-
-   // int fps = GetFPS();
 
    // Main game loop
    while (!WindowShouldClose())
@@ -51,6 +50,7 @@ int main(void)
       {
          DrawGame();
          DrawTimer();
+         int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
       }
 
       EndDrawing();

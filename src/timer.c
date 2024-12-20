@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-static float gameTime = 0.0f;
+static float gameTime;
 
 void InitTimer()
 {
