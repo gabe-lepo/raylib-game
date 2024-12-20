@@ -44,6 +44,7 @@ int main(void)
       ClearBackground(RAYWHITE);
       if (isMenuActive())
       {
+         UpdateMenu();
          DrawMenu();
       }
       else

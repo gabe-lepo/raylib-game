@@ -3,6 +3,7 @@
 
 void InitMenu(void);
 void ToggleMenu(void);
+void UpdateMenu(void);
 void DrawMenu(void);
 int isMenuActive(void);
 

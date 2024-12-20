@@ -1,14 +1,14 @@
 #include "menu.h"
 #include "raylib.h"
+#include "screen.h"
 
-// Defaults for menu on game start
-static int menuActive = 1;
-static float menuAlpha = 1.0f;
+static int menuActive;
+int selectedMenuItem;
 
 void InitMenu(void)
 {
    menuActive = 1;
-   menuAlpha = 1.0f;
+   selectedMenuItem = 0;
 }
 
 void ToggleMenu(void)
@@ -23,6 +23,26 @@ void ToggleMenu(void)
    }
 }
 
+void UpdateMenu(void)
+{
+   if (IsKeyPressed(KEY_DOWN))
+   {
+      selectedMenuItem++;
+      if (selectedMenuItem > 2)
+      {
+         selectedMenuItem = 0;
+      }
+   }
+   if (IsKeyPressed(KEY_UP))
+   {
+      selectedMenuItem--;
+      if (selectedMenuItem < 0)
+      {
+         selectedMenuItem = 2;
+      }
+   }
+}
+
 void DrawMenu(void)
 {
    if (menuActive)
@@ -30,22 +50,31 @@ void DrawMenu(void)
       DrawRectangle(
           0,
           0,
-          GetScreenWidth(),
-          GetScreenHeight(),
-          Fade(BLACK, menuAlpha));
+          SCREEN_WIDTH,
+          SCREEN_HEIGHT,
+          BLACK);
 
-      int screenWidth = GetScreenWidth();
-      int screenHeight = GetScreenHeight();
-      int menuItemPosY = screenHeight / 2 - 60;
-      int menuItemPosX = screenWidth / 2 - MeasureText("Box Man", 40) / 2;
+      int menuItemPosY = SCREEN_HEIGHT / 2 - 60;
+      int menuItemPosX = SCREEN_WIDTH / 2 - MeasureText("Box Man", 40) / 2;
 
+      // Menu colors
+      Color titleColor = RAYWHITE;
+      Color saveColor = (selectedMenuItem == 0) ? YELLOW : WHITE;
+      Color loadColor = (selectedMenuItem == 1) ? YELLOW : WHITE;
+      Color closeColor = (selectedMenuItem == 2) ? YELLOW : WHITE;
+
+      // Menu title
       DrawText("Box Man", menuItemPosX, menuItemPosY, 40, RAYWHITE);
       menuItemPosY += 60;
-      DrawText("1. Save", screenWidth / 2 - MeasureText("1. Save", 20) / 2, menuItemPosY, 20, WHITE);
+
+      // Menu options
+      DrawText("Save", SCREEN_WIDTH / 2 - MeasureText("Save", 20) / 2, menuItemPosY, 20, saveColor);
       menuItemPosY += 40;
-      DrawText("2. Load", screenWidth / 2 - MeasureText("2. Load", 20) / 2, menuItemPosY, 20, WHITE);
+
+      DrawText("Load", SCREEN_WIDTH / 2 - MeasureText("Load", 20) / 2, menuItemPosY, 20, loadColor);
       menuItemPosY += 40;
-      DrawText("3. Close", screenWidth / 2 - MeasureText("3. Close", 20) / 2, menuItemPosY, 20, WHITE);
+
+      DrawText("Close", SCREEN_WIDTH / 2 - MeasureText("Close", 20) / 2, menuItemPosY, 20, closeColor);
    }
 }
 
