@@ -6,7 +6,8 @@
         "${workspaceFolder}/**",
         "/Users/glepoutre/Documents/vscode/raylib/src",
         "${workspaceFolder}/src",
-        "${workspaceFolder}/src/menus"
+        "${workspaceFolder}/src/menus/",
+        "${workspaceFolder}/src/game/"
       ],
       "defines": [],
       "macFrameworkPath": [

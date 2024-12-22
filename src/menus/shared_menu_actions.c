@@ -1,5 +1,4 @@
 #include "shared_menu_actions.h"
-#include "menu_stack.h"
 
 void openLoad(void)
 {
@@ -13,5 +12,5 @@ void openSettings(void)
 
 void backUpMenu(void)
 {
-   popMenu();
+   // TODO
 }

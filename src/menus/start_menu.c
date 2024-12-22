@@ -1,6 +1,7 @@
 #include "start_menu.h"
 #include "shared_menu_actions.h"
-#include "game.h"
+#include "game/game.h"
+#include "game/game_state_stack.h"
 
 // Unique actions
 void newGame(void)

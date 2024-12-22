@@ -1,5 +1,6 @@
 #include "raylib.h"
-#include "game.h"
+#include "game/game.h"
+#include "game/game_state_stack.h"
 #include "player.h"
 #include "timer.h"
 #include "fps.h"
@@ -60,10 +61,6 @@ void UpdateGame(void)
    {
    case GAME_STATE_START_MENU:
       updateMenu(startMenu);
-      if (!startMenu->isActive)
-      {
-         currentGameState = GAME_STATE_PLAYING;
-      }
       break;
    case GAME_STATE_PLAYING:
       // Normal game updates

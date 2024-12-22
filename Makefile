@@ -7,7 +7,7 @@ SRC_DIR = src
 BUILD_DIR = build
 RLIB_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
 BM_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib-game/src
-SRC = $(SRC_DIR)/*c ${SRC_DIR}/menus/*c
+SRC = $(SRC_DIR)/*c ${SRC_DIR}/menus/*c ${SRC_DIR}/game/*c
 
 build: $(SRC)
 	@echo "Building"
