@@ -5,13 +5,14 @@ default: clean run
 APP_NAME = box_man
 SRC_DIR = src
 BUILD_DIR = build
-INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
-SRC = $(SRC_DIR)/main.c $(SRC_DIR)/game.c $(SRC_DIR)/player.c $(SRC_DIR)/timer.c $(SRC_DIR)/screen.c $(SRC_DIR)/log.c ${SRC_DIR}/menu.c ${SRC_DIR}/fps.c
+RLIB_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
+BM_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib-game/src
+SRC = $(SRC_DIR)/*c ${SRC_DIR}/menus/*c
 
 build: $(SRC)
 	@echo "Building"
 	mkdir -p $(BUILD_DIR)
-	clang -I$(INCLUDE_DIR) -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a $(SRC) -o $(BUILD_DIR)/$(APP_NAME)
+	clang -I$(RLIB_INCLUDE_DIR) -I$(BM_INCLUDE_DIR) -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a $(SRC) -o $(BUILD_DIR)/$(APP_NAME)
 	@echo "Build done"
 
 run: build
