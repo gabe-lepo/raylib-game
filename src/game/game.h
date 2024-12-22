@@ -4,8 +4,8 @@
 extern int gameShouldClose;
 
 void InitGame(void);
-void UpdateGame(void);
-void DrawGame(void);
+int UpdateGame(void);
+int DrawGame(void);
 void CloseGame(void);
 
 #endif // GAME_H

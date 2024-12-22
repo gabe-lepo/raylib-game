@@ -26,7 +26,7 @@ int gameShouldClose = 0;
 void InitGame()
 {
    // Setup logs
-   if (InitLog())
+   if (InitLog(0))
    {
       CloseGame();
    }

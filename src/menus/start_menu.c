@@ -7,7 +7,7 @@
 void newGame(void)
 {
    LogMessage(LOG_INFO, "Starting a new game.");
-   currentGameState = GAME_STATE_PLAYING;
+   gameState = GAME_STATE_PLAYING;
 }
 
 void closeGame(void)
@@ -29,7 +29,6 @@ static Menu startMenu = {
     startMenuItems,
     sizeof(startMenuItems) / sizeof(startMenuItems[0]),
     0,
-    1,
     BLACK,
 };
 

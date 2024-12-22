@@ -8,6 +8,7 @@
 #include <errno.h>
 
 static FILE *log_file = NULL;
+static int debug;
 
 int ensureDirectory(const char *path)
 {
@@ -41,8 +42,9 @@ void generateLogFilename(char *filename, size_t size)
    strftime(filename, size, "logs/log_%Y%m%d_%H%M%S.txt", tm_info);
 }
 
-int InitLog(void)
+int InitLog(int withDebugMessages)
 {
+   debug = withDebugMessages;
    int result = ensureDirectory(LOG_DIR);
    if (result)
    {
@@ -75,6 +77,10 @@ void WriteLog(int logLevel, const char *text, va_list args)
          fprintf(log_file, "[INFO]: ");
          break;
       case LOG_DEBUG:
+         if (!debug)
+         {
+            return;
+         }
          fprintf(log_file, "[DEBUG]: ");
          break;
       case LOG_WARNING:
@@ -93,7 +99,6 @@ void WriteLog(int logLevel, const char *text, va_list args)
       // Write log message
       vfprintf(log_file, text, args);
       fprintf(log_file, "\n");
-      fclose(log_file);
    }
    else
    {
@@ -107,4 +112,17 @@ void LogMessage(int logLevel, const char *format, ...)
    va_start(args, format);
    WriteLog(logLevel, format, args);
    va_end(args);
+}
+
+void CloseLog(void)
+{
+   if (log_file != NULL)
+   {
+      fclose(log_file);
+      log_file = NULL;
+      printf("[INFO]: Log file closed\n");
+      return;
+   }
+   printf("[WARNING]: Log file was already closed!\n");
+   return;
 }

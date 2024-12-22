@@ -19,12 +19,11 @@ typedef struct Menu
    MenuItem *items;
    size_t itemCount;
    size_t selectedItemIndex;
-   int isActive;
    Color backgroundColor;
 } Menu;
 
 void toggleMenu(Menu *menu);
 void updateMenu(Menu *menu);
-void drawMenu(Menu *menu);
+int drawMenu(Menu *menu);
 
 #endif // MENU_H

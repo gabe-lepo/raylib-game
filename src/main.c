@@ -1,5 +1,8 @@
 #include "raylib.h"
 #include "game/game.h"
+#include "log.h"
+
+#include <stdlib.h>
 
 int main(void)
 {
@@ -10,16 +13,23 @@ int main(void)
    while (!WindowShouldClose() && !gameShouldClose)
    {
       // Update game states
-      UpdateGame();
+      if (UpdateGame())
+      {
+         break;
+      }
 
       // Draw the updates
       BeginDrawing();
       ClearBackground(RAYWHITE);
-      DrawGame();
+      if (DrawGame())
+      {
+         break;
+      }
       EndDrawing();
    }
 
    // Cleanup
    CloseWindow();
-   return 0;
+   CloseLog();
+   return EXIT_SUCCESS;
 }

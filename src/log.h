@@ -9,8 +9,9 @@
 
 #define LOG_DIR "logs/"
 
-int InitLog(void);
+int InitLog(int withDebugMessages);
 void WriteLog(int logLevel, const char *text, va_list args);
 void LogMessage(int logLevel, const char *format, ...);
+void CloseLog(void);
 
 #endif

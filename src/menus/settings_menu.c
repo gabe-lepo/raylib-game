@@ -14,10 +14,9 @@ static MenuItem settingsMenuItems[] = {
 };
 
 static Menu settingsMenu = {
-    "Box Man",
+    "Settings",
     settingsMenuItems,
     sizeof(settingsMenuItems) / sizeof(settingsMenuItems[0]),
-    0,
     0,
     BLACK,
 };

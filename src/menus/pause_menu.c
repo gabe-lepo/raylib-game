@@ -25,10 +25,9 @@ static MenuItem pauseMenuItems[] = {
 };
 
 static Menu pauseMenu = {
-    "Box Man",
+    "Pause",
     pauseMenuItems,
     sizeof(pauseMenuItems) / sizeof(pauseMenuItems[0]),
-    0,
     0,
     BLACK,
 };

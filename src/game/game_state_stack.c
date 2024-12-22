@@ -42,3 +42,15 @@ GameState PeekGameState(const GameStateStack *stack)
 
    return stack->states[stack->top - 1];
 }
+
+int ClearGameStateStack(GameStateStack *stack)
+{
+   if (stack->top < 0)
+   {
+      LogMessage(LOG_INFO, "Nothing in the GameStateStack to clear");
+      return EXIT_FAILURE;
+   }
+
+   stack->top = -1;
+   return EXIT_SUCCESS;
+}

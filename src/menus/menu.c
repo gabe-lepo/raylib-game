@@ -1,17 +1,12 @@
 #include "menu.h"
 #include "log.h"
 
+#include <stdlib.h>
+
 // Menu control funcs
 void toggleMenu(Menu *menu)
 {
-   if (menu->isActive)
-   {
-      menu->isActive = 0;
-   }
-   else
-   {
-      menu->isActive = 1;
-   }
+   // TODO
 }
 
 void updateMenu(Menu *menu)
@@ -29,18 +24,18 @@ void updateMenu(Menu *menu)
    // Item selection
    if (IsKeyPressed(KEY_DOWN))
    {
-      LogMessage(LOG_DEBUG, "INCREASING index of menu:{%s} from index:{%d}...", menu->title, menu->selectedItemIndex);
+      // LogMessage(LOG_DEBUG, "INCREASING index of menu:{%s} from index:{%d}...", menu->title, menu->selectedItemIndex);
       menu->selectedItemIndex++;
       if (menu->selectedItemIndex > menu->itemCount - 1)
       {
          menu->selectedItemIndex = 0;
       }
-      LogMessage(LOG_DEBUG, "\t...to index:{%d}", menu->selectedItemIndex);
+      // LogMessage(LOG_DEBUG, "\t...to index:{%d}", menu->selectedItemIndex);
    }
 
    if (IsKeyPressed(KEY_UP))
    {
-      LogMessage(LOG_DEBUG, "DECREASING index of menu:{%s} from index:{%d}...", menu->title, menu->selectedItemIndex);
+      // LogMessage(LOG_DEBUG, "DECREASING index of menu:{%s} from index:{%d}...", menu->title, menu->selectedItemIndex);
       if ((int)menu->selectedItemIndex <= 0) // Cast from size_t for signed comparison
       {
          menu->selectedItemIndex = menu->itemCount - 1;
@@ -49,7 +44,7 @@ void updateMenu(Menu *menu)
       {
          menu->selectedItemIndex--;
       }
-      LogMessage(LOG_DEBUG, "\t...to index:{%d}", menu->selectedItemIndex);
+      // LogMessage(LOG_DEBUG, "\t...to index:{%d}", menu->selectedItemIndex);
    }
 
    // Item action
@@ -59,15 +54,8 @@ void updateMenu(Menu *menu)
    }
 }
 
-void drawMenu(Menu *menu)
+int drawMenu(Menu *menu)
 {
-   // Check if menu is active before drawing
-   if (!menu->isActive)
-   {
-      LogMessage(LOG_INFO, "Can't draw menu {%s}, it is not active.", menu->title);
-      return;
-   }
-
    // Background
    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, menu->backgroundColor);
 
@@ -100,4 +88,6 @@ void drawMenu(Menu *menu)
       // Padding between next item
       menuItemPosY += textSize;
    }
+
+   return EXIT_SUCCESS;
 }

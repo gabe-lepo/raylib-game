@@ -14,10 +14,9 @@ static MenuItem loadMenuItems[] = {
 };
 
 static Menu loadMenu = {
-    "Box Man",
+    "Load Game",
     loadMenuItems,
     sizeof(loadMenuItems) / sizeof(loadMenuItems[0]),
-    0,
     0,
     BLACK,
 };

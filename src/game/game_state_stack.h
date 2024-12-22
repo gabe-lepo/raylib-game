@@ -20,11 +20,12 @@ typedef struct GameStateStack
    size_t top;
 } GameStateStack;
 
-extern GameState currentGameState;
+extern GameState gameState;
 
 void InitGameStateStack(GameStateStack *stack);
 int PushGameState(GameStateStack *stack, GameState state);
 int PopGameState(GameStateStack *stack, GameState *state);
 GameState PeekGameState(const GameStateStack *stack);
+int ClearGameStateStack(GameStateStack *stack);
 
 #endif
