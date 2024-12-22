@@ -1,22 +1,25 @@
 #include "start_menu.h"
 #include "shared_menu_actions.h"
+#include "game.h"
 
-// Actions
+// Unique actions
 void newGame(void)
 {
-   LogMessage(LOG_INFO, "Starting a new game");
+   LogMessage(LOG_INFO, "Starting a new game.");
+   currentGameState = GAME_STATE_PLAYING;
 }
 
 void closeGame(void)
 {
-   // TODO
+   LogMessage(LOG_INFO, "Closing game.");
+   CloseGame();
 }
 
 // Objects
 static MenuItem startMenuItems[] = {
     {"New Game", newGame},
-    {"Load Game", loadGame},
-    {"Settings", openSettings},
+    {"Load Game", openLoad},    // Shared actions
+    {"Settings", openSettings}, // Shared actions
     {"Close", closeGame},
 };
 

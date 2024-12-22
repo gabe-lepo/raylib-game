@@ -7,24 +7,19 @@
 #include "menus/start_menu.h"
 #include "menus/pause_menu.h"
 #include "menus/settings_menu.h"
-
-typedef enum
-{
-   GAME_STATE_PLAYING,
-   GAME_STATE_START_MENU,
-   GAME_STATE_PAUSE_MENU,
-   GAME_STATE_SETTINGS_MENU,
-} GameState;
-GameState currentGameState;
+#include "menus/load_menu.h"
+#include "log.h"
 
 static Player player1;
 static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
+static Menu *loadMenu;
 
+GameState currentGameState = GAME_STATE_START_MENU;
 int gameShouldClose = 0;
 
-void InitGame(void)
+void InitGame()
 {
    // Setup logs
    SetTraceLogCallback(WriteLog);
@@ -33,14 +28,14 @@ void InitGame(void)
    InitScreenSize();
    // SetConfigFlags(FLAG_WINDOW_RESIZABLE); // Resizeable window
    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
+
+   // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    SetTargetFPS(60);
 
    // Timer
    InitTimer();
-
-   // Game state init
-   currentGameState = GAME_STATE_START_MENU;
+   // FPS init?
 
    // Player init
    Vector2 startPosition = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
@@ -56,12 +51,20 @@ void InitGame(void)
    startMenu = getStartMenu();
    pauseMenu = getPauseMenu();
    settingsMenu = getSettingsMenu();
+   loadMenu = getLoadMenu();
 }
 
 void UpdateGame(void)
 {
    switch (currentGameState)
    {
+   case GAME_STATE_START_MENU:
+      updateMenu(startMenu);
+      if (!startMenu->isActive)
+      {
+         currentGameState = GAME_STATE_PLAYING;
+      }
+      break;
    case GAME_STATE_PLAYING:
       // Normal game updates
       UpdatePlayer(&player1);
@@ -71,32 +74,20 @@ void UpdateGame(void)
       if (IsKeyPressed(KEY_ESCAPE))
       {
          currentGameState = GAME_STATE_PAUSE_MENU;
-         toggleMenu(pauseMenu);
       }
       break;
-   case GAME_STATE_START_MENU:
-      updateMenu(startMenu);
-      if (!startMenu->isActive)
-      {
-         currentGameState = GAME_STATE_PLAYING;
-      }
-      break;
-
    case GAME_STATE_PAUSE_MENU:
       updateMenu(pauseMenu);
-      if (!pauseMenu->isActive)
-      {
-         currentGameState = GAME_STATE_PLAYING;
-      }
       break;
    case GAME_STATE_SETTINGS_MENU:
       updateMenu(settingsMenu);
-      if (!settingsMenu->isActive)
-      {
-         currentGameState = GAME_STATE_PAUSE_MENU;
-      }
+      break;
+   case GAME_STATE_LOAD_MENU:
+      updateMenu(loadMenu);
       break;
    default:
+      LogMessage(LOG_FATAL, "Can't update game, game state is undefined, exiting.");
+      CloseGame();
       break;
    }
 }
@@ -105,13 +96,13 @@ void DrawGame(void)
 {
    switch (currentGameState)
    {
+   case GAME_STATE_START_MENU:
+      drawMenu(startMenu);
+      break;
    case GAME_STATE_PLAYING:
       DrawPlayer(&player1);
       DrawTimer();
       int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
-      break;
-   case GAME_STATE_START_MENU:
-      drawMenu(startMenu);
       break;
    case GAME_STATE_PAUSE_MENU:
       drawMenu(pauseMenu);
@@ -119,7 +110,12 @@ void DrawGame(void)
    case GAME_STATE_SETTINGS_MENU:
       drawMenu(settingsMenu);
       break;
+   case GAME_STATE_LOAD_MENU:
+      drawMenu(loadMenu);
+      break;
    default:
+      LogMessage(LOG_FATAL, "Can't draw game, game state is undefined, exiting.");
+      CloseGame();
       break;
    }
 }

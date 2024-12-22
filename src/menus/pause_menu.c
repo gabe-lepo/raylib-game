@@ -19,7 +19,7 @@ void backToStart(void)
 static MenuItem pauseMenuItems[] = {
     {"Resume", resumeGame},
     {"Save", saveGame},
-    {"Load", loadGame},
+    {"Load", openLoad},
     {"Settings", openSettings},
     {"Exit", backToStart},
 };

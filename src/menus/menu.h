@@ -7,13 +7,13 @@
 
 #include <stddef.h>
 
-typedef struct
+typedef struct MenuItem
 {
    const char *label;
    void (*action)(void);
 } MenuItem;
 
-typedef struct
+typedef struct Menu
 {
    const char *title;
    MenuItem *items;

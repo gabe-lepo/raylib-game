@@ -1,6 +1,6 @@
 #include "fps.h"
 
-// Modified from raylib/src/rtext.c to return as text width
+// Modified from raylib/src/rtext.c to return text width
 int DrawMyFPS(int posX, int posY)
 {
    Color color = LIME; // Good FPS
