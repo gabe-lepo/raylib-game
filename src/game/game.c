@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 #define DEBUG_LOGS 1
-#define RAYLIB_LOGS 0
+#define RAYLIB_LOGS 1
 
 static Player player1;
 static Menu *startMenu;

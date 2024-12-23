@@ -72,7 +72,7 @@ int PopGameState(void)
    --stateStack.top;
    LogMessage(LOG_DEBUG,
               "Popped state, new state is {%s} at index {%zu}",
-              StateToString(stateStack.states[stateStack.top]),
+              StateToString(stateStack.states[stateStack.top - 1]),
               stateStack.top);
 
    if (stateStack.top == 0)
