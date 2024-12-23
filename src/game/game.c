@@ -13,47 +13,39 @@
 
 #include <stdlib.h>
 
+#define DEBUG_LOGS 1
+#define RAYLIB_LOGS 0
+
 static Player player1;
 static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
 static Menu *loadMenu;
 
-GameState gameState;
-GameStateStack stateStack;
 int gameShouldClose = 0;
 
 void InitGame()
 {
    // Setup logs
-   if (InitLog(0))
+   if (InitLog(DEBUG_LOGS, RAYLIB_LOGS))
    {
       CloseGame();
    }
-   // SetTraceLogCallback(WriteLog);
    LogMessage(LOG_DEBUG, "InitGame():");
 
    // Setup game state
-   gameState = GAME_STATE_START_MENU;
-   InitGameStateStack(&stateStack);
-   PushGameState(&stateStack, gameState);
-   LogMessage(LOG_DEBUG, "\tGame state and state stack initialized");
+   InitGameStateStack();
 
    // Window init
    InitScreenSize();
    // SetConfigFlags(FLAG_WINDOW_RESIZABLE); // Resizeable window
    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
-   LogMessage(LOG_DEBUG, "\tWindow initialized");
 
    // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    SetTargetFPS(60);
-   LogMessage(LOG_DEBUG, "\tFPS counter initialized");
-
-   // Timer
    InitTimer();
    // FPS init?
-   LogMessage(LOG_DEBUG, "\tTimer counter initialized");
 
    // Player init
    Vector2 startPosition = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
@@ -64,52 +56,55 @@ void InitGame()
        size,
        PLAYER_DEFAULT_SPEED,
        BLUE);
-   LogMessage(LOG_DEBUG, "\tPlayer initialized");
 
    // Menu init
    startMenu = getStartMenu();
    pauseMenu = getPauseMenu();
    settingsMenu = getSettingsMenu();
    loadMenu = getLoadMenu();
-   LogMessage(LOG_DEBUG, "\tMenus initialized");
+
+   LogMessage(LOG_INFO, "InitGame() done");
+   PopGameState();
+   PushGameState(GAME_STATE_START_MENU);
 }
 
 int UpdateGame(void)
 {
-   switch (gameState)
+   switch (PeekGameState())
    {
+   case GAME_STATE_INIT:
+      break;
    case GAME_STATE_START_MENU:
-      LogMessage(LOG_DEBUG, "Game State: START_MENU");
       updateMenu(startMenu);
       break;
    case GAME_STATE_PLAYING:
-      LogMessage(LOG_DEBUG, "Game State: PLAYING");
-
       // Open pause menu
       if (IsKeyPressed(KEY_ESCAPE))
       {
-         gameState = GAME_STATE_PAUSE_MENU;
-         PushGameState(&stateStack, gameState);
+         PushGameState(GAME_STATE_PAUSE_MENU);
       }
 
-      // Normal game updates
+      // Normal routine
       UpdatePlayer(&player1);
       UpdateTimer();
       break;
    case GAME_STATE_PAUSE_MENU:
-      LogMessage(LOG_DEBUG, "Game State: PAUSE_MENU");
+      if (IsKeyPressed(KEY_ESCAPE))
+      {
+         PushGameState(GAME_STATE_PLAYING);
+      }
+
+      // Normal routine
       updateMenu(pauseMenu);
       break;
    case GAME_STATE_SETTINGS_MENU:
-      LogMessage(LOG_DEBUG, "Game State: SETTINGS_MENU");
       updateMenu(settingsMenu);
       break;
    case GAME_STATE_LOAD_MENU:
-      LogMessage(LOG_DEBUG, "Game State: LOAD_MENU");
       updateMenu(loadMenu);
       break;
    default:
-      LogMessage(LOG_ERROR, "Can't update game, game state is undefined, exiting.");
+      LogMessage(LOG_ERROR, "Can't update game, undefined game state!");
       return EXIT_FAILURE;
    }
 
@@ -118,8 +113,10 @@ int UpdateGame(void)
 
 int DrawGame(void)
 {
-   switch (gameState)
+   switch (PeekGameState())
    {
+   case GAME_STATE_INIT:
+      break;
    case GAME_STATE_START_MENU:
       if (drawMenu(startMenu))
       {
@@ -150,7 +147,7 @@ int DrawGame(void)
       }
       break;
    default:
-      LogMessage(LOG_ERROR, "Can't draw game, game state is undefined, exiting.");
+      LogMessage(LOG_ERROR, "Can't draw game, undefined game state!");
       return EXIT_FAILURE;
       break;
    }
@@ -160,6 +157,7 @@ int DrawGame(void)
 
 void CloseGame(void)
 {
-   ClearGameStateStack(&stateStack);
+   LogMessage(LOG_INFO, "Closing game");
+   ClearGameStateStack();
    gameShouldClose = 1;
 }

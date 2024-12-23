@@ -7,7 +7,7 @@
 void newGame(void)
 {
    LogMessage(LOG_INFO, "Starting a new game.");
-   gameState = GAME_STATE_PLAYING;
+   PushGameState(GAME_STATE_PLAYING);
 }
 
 void closeGame(void)

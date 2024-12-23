@@ -42,9 +42,14 @@ void generateLogFilename(char *filename, size_t size)
    strftime(filename, size, "logs/log_%Y%m%d_%H%M%S.txt", tm_info);
 }
 
-int InitLog(int withDebugMessages)
+int InitLog(int withDebugMessages, int withRaylibMessages)
 {
+   if (withRaylibMessages)
+   {
+      SetTraceLogCallback(WriteLog);
+   }
    debug = withDebugMessages;
+
    int result = ensureDirectory(LOG_DIR);
    if (result)
    {
@@ -99,6 +104,12 @@ void WriteLog(int logLevel, const char *text, va_list args)
       // Write log message
       vfprintf(log_file, text, args);
       fprintf(log_file, "\n");
+
+      // If we want to debug, ensure we flush to the file constantly
+      if (debug)
+      {
+         fflush(log_file);
+      }
    }
    else
    {

@@ -7,8 +7,9 @@
 
 typedef enum GameState
 {
-   GAME_STATE_PLAYING,
+   GAME_STATE_INIT = -1,
    GAME_STATE_START_MENU,
+   GAME_STATE_PLAYING,
    GAME_STATE_PAUSE_MENU,
    GAME_STATE_SETTINGS_MENU,
    GAME_STATE_LOAD_MENU,
@@ -22,10 +23,10 @@ typedef struct GameStateStack
 
 extern GameState gameState;
 
-void InitGameStateStack(GameStateStack *stack);
-int PushGameState(GameStateStack *stack, GameState state);
-int PopGameState(GameStateStack *stack, GameState *state);
-GameState PeekGameState(const GameStateStack *stack);
-int ClearGameStateStack(GameStateStack *stack);
+void InitGameStateStack(void);
+int PushGameState(GameState state);
+GameState PopGameState(void);
+GameState PeekGameState(void);
+int ClearGameStateStack(void);
 
 #endif

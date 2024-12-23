@@ -9,7 +9,7 @@
 
 #define LOG_DIR "logs/"
 
-int InitLog(int withDebugMessages);
+int InitLog(int withDebugMessages, int withRaylibMessages);
 void WriteLog(int logLevel, const char *text, va_list args);
 void LogMessage(int logLevel, const char *format, ...);
 void CloseLog(void);

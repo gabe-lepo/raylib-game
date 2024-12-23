@@ -3,54 +3,68 @@
 
 #include <stdlib.h>
 
-void InitGameStateStack(GameStateStack *stack)
+static GameStateStack stateStack;
+
+void InitGameStateStack(void)
 {
-   stack->top = 0;
+   stateStack.top = 0;
+   PushGameState(GAME_STATE_INIT);
+   LogMessage(LOG_INFO, "Initialized state stack, index is {%zu}", stateStack.top);
 }
 
-int PushGameState(GameStateStack *stack, GameState state)
+int PushGameState(GameState state)
 {
-   if (stack->top >= MAX_GAME_STATE_STACK)
+   if (stateStack.top >= MAX_GAME_STATE_STACK)
    {
-      LogMessage(LOG_ERROR, "GameStateStack overflow trying to push state.");
+      LogMessage(LOG_ERROR, "GameStateStack overflow trying to push state {%d} on stack position {%zu}.", state, stateStack.top);
       return EXIT_FAILURE;
    }
 
-   stack->states[stack->top++] = state;
+   stateStack.states[stateStack.top++] = state;
+   LogMessage(LOG_INFO, "Pushed game state {%d} onto state stack at index {%zu}", state, stateStack.top);
    return EXIT_SUCCESS;
 }
 
-int PopGameState(GameStateStack *stack, GameState *state)
+GameState PopGameState(void)
 {
-   if (stack->top == 0)
+   if (stateStack.top <= GAME_STATE_INIT)
    {
-      LogMessage(LOG_ERROR, "GameStateStack underflow trying to pop state.");
-      return EXIT_FAILURE;
+      LogMessage(LOG_ERROR, "GameStateStack underflow trying to pop state {%d} from stack position {%zu}.", stateStack.states[stateStack.top - 1], stateStack.top);
+      return GAME_STATE_INIT;
    }
 
-   *state = stack->states[--stack->top];
-   return EXIT_SUCCESS;
+   --stateStack.top;
+
+   if (stateStack.top > GAME_STATE_INIT)
+   {
+      LogMessage(LOG_INFO, "Popped state, new state is {%d} at index {%zu}", stateStack.states[stateStack.top - 1], stateStack.top);
+      return stateStack.states[stateStack.top - 1];
+   }
+
+   LogMessage(LOG_WARNING, "Game state stack is empty after pop");
+   return GAME_STATE_INIT;
 }
 
-GameState PeekGameState(const GameStateStack *stack)
+GameState PeekGameState(void)
 {
-   if (stack->top == 0)
+   if (stateStack.top <= 0)
    {
-      LogMessage(LOG_ERROR, "GameStateStack empty trying to peek state.");
+      LogMessage(LOG_ERROR, "Error trying to peek at state of stack position {%zu}.", stateStack.top);
       return EXIT_FAILURE;
    }
 
-   return stack->states[stack->top - 1];
+   return stateStack.states[stateStack.top - 1];
 }
 
-int ClearGameStateStack(GameStateStack *stack)
+int ClearGameStateStack(void)
 {
-   if (stack->top < 0)
+   if (stateStack.top < 0)
    {
-      LogMessage(LOG_INFO, "Nothing in the GameStateStack to clear");
+      LogMessage(LOG_WARNING, "Nothing in the GameStateStack to clear");
       return EXIT_FAILURE;
    }
 
-   stack->top = -1;
+   stateStack.top = -1;
+   LogMessage(LOG_INFO, "Game state stack cleared");
    return EXIT_SUCCESS;
 }

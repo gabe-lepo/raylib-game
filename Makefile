@@ -5,6 +5,7 @@ default: clean run
 APP_NAME = box_man
 SRC_DIR = src
 BUILD_DIR = build
+LOG_DIR = logs
 RLIB_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
 BM_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib-game/src
 SRC = $(SRC_DIR)/*c ${SRC_DIR}/menus/*c ${SRC_DIR}/game/*c
@@ -22,4 +23,5 @@ run: build
 clean:
 	@echo "Cleaning"
 	rm -rf $(BUILD_DIR)/*
+	rm -rf $(LOG_DIR)/*
 	@echo "Clean done"
