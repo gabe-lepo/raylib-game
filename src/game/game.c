@@ -16,6 +16,9 @@
 #define DEBUG_LOGS 1
 #define RAYLIB_LOGS 1
 
+#define TARGET_FPS 60
+#define STACK_PRINT_TIME_S_MOD 1
+
 static Player player1;
 static Menu *startMenu;
 static Menu *pauseMenu;
@@ -23,6 +26,7 @@ static Menu *settingsMenu;
 static Menu *loadMenu;
 
 int gameShouldClose = 0;
+int updateGameIterations = 0;
 
 void InitGame()
 {
@@ -43,7 +47,7 @@ void InitGame()
 
    // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow
-   SetTargetFPS(60);
+   SetTargetFPS(TARGET_FPS);
    InitTimer();
    // FPS init?
 
@@ -70,6 +74,19 @@ void InitGame()
 
 int UpdateGame(void)
 {
+   // Print out contents of state stack occasionally
+   updateGameIterations++;
+   if (updateGameIterations == TARGET_FPS * STACK_PRINT_TIME_S_MOD)
+   {
+      const GameStateStack *stack = getStateStack();
+      LogMessage(LOG_DEBUG, "Contents of game state stack:");
+      for (size_t i = 0; i < stack->top; i++)
+      {
+         LogMessage(LOG_DEBUG, "\tStack Index: {%zu} | State {%s}", i, StateToString(stack->states[i]));
+      }
+      updateGameIterations = 0;
+   }
+
    switch (PeekGameState())
    {
    case GAME_STATE_INIT:

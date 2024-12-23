@@ -110,3 +110,8 @@ int ClearGameStateStack(void)
    LogMessage(LOG_DEBUG, "Game state stack cleared");
    return EXIT_SUCCESS;
 }
+
+const GameStateStack *getStateStack(void)
+{
+   return &stateStack;
+}

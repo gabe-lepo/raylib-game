@@ -24,10 +24,12 @@ typedef struct GameStateStack
 
 extern GameState gameState;
 
+const char *StateToString(GameState state);
 void InitGameStateStack(void);
 int PushGameState(GameState state);
 int PopGameState(void);
 GameState PeekGameState(void);
 int ClearGameStateStack(void);
+const GameStateStack *getStateStack(void);
 
 #endif
