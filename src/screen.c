@@ -17,7 +17,7 @@ void InitScreenSize(void)
 
    if (monitor < 0 || monitor >= monitorCount)
    {
-      printf("# Error: Monitor index out of range, setting it to 0\n");
+      LogMessage(LOG_WARNING, "Monitor index out of range, setting it to 0.");
       monitor = 0;
    }
 
@@ -26,7 +26,7 @@ void InitScreenSize(void)
 
    // Debug
    LogMessage(LOG_DEBUG, "Monitor Size: %dx%d", GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-   LogMessage(LOG_DEBUG, "Screen Size: %dx%d\n", SCREEN_WIDTH, SCREEN_HEIGHT);
+   LogMessage(LOG_DEBUG, "Screen Size: %dx%d", SCREEN_WIDTH, SCREEN_HEIGHT);
 
    // Close temp window
    CloseWindow();

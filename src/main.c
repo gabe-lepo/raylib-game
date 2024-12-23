@@ -1,73 +1,35 @@
 #include "raylib.h"
-#include "game.h"
-#include "screen.h"
-#include "timer.h"
+#include "game/game.h"
 #include "log.h"
-#include "menu.h"
-#include "fps.h"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
-   // Initialization
-   SetTraceLogCallback(WriteLog);
-   InitScreenSize();
-   // SetConfigFlags(FLAG_WINDOW_RESIZABLE); // Resizeable window
-   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
-   SetExitKey(KEY_NULL); // Must be called after InitWindow
-   SetTargetFPS(60);
-
+   // Init game states
    InitGame();
-   InitMenus();
-   InitTimer();
 
    // Main game loop
    while (!WindowShouldClose() && !gameShouldClose)
    {
-      // Menu control
-      if (IsKeyPressed(KEY_ESCAPE) && !isMenuActive(START_MENU))
+      // Update game states
+      if (UpdateGame())
       {
-         ToggleMenu(PAUSE_MENU);
+         break;
       }
 
-      // State loop
-      if (!isMenuActive(START_MENU) && !isMenuActive(PAUSE_MENU))
-      {
-         UpdateGame();
-         UpdateTimer();
-      }
-
-      // Draw loop
+      // Draw the updates
       BeginDrawing();
-
-      ClearBackground(DARKGRAY);
-      if (isMenuActive(START_MENU))
+      ClearBackground(RAYWHITE);
+      if (DrawGame())
       {
-         UpdateStartMenu();
-         DrawMenus();
+         break;
       }
-      else if (isMenuActive(PAUSE_MENU))
-      {
-         UpdatePauseMenu();
-         DrawMenus();
-      }
-      else if (isMenuActive(SETTINGS_MENU))
-      {
-         UpdateSettingsMenu();
-         DrawMenus();
-      }
-      else
-      {
-         DrawGame();
-         DrawTimer();
-         int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
-      }
-
       EndDrawing();
    }
 
    // Cleanup
    CloseWindow();
-   return 0;
+   CloseLog();
+   return EXIT_SUCCESS;
 }
