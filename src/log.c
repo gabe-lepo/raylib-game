@@ -12,27 +12,29 @@ static int debug;
 
 int ensureDirectory(const char *path)
 {
-   struct stat st = {0};
-
-   // Check if directory exists
-   if (stat(path, &st) == -1)
+   struct stat st;
+   if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
    {
-      printf("[INFO]: Log directory didn't exist, creating it\n");
-
-      if (mkdir(path, 0700) == -1)
+      printf("[INFO]: Directory exists {%s}\n", path);
+      return EXIT_SUCCESS;
+   }
+   else
+   {
+      printf("[INFO]: Directory does not exist or is not valid, attempting to create it\n");
+      int result = mkdir(path, 0700);
+      if (result != 0)
       {
-         if (errno == EEXIST)
-         {
-            printf("[INFO]: Log directory exists\n");
-         }
-         else
-         {
-            return errno;
-         }
+         printf("[ERROR]: Error creating logs at {%s}\n\tresult: {%d} | errno: {%d}\n", path, result, errno);
+         return EXIT_FAILURE;
+      }
+      else
+      {
+         printf("[INFO]: Directory created successfully at {%s}\n", path);
+         return EXIT_SUCCESS;
       }
    }
-
-   return EXIT_SUCCESS;
+   printf("[ERROR]: Something went wrong!\n\tGlobal ERRNO: {%d}\n", errno);
+   return EXIT_FAILURE;
 }
 
 void generateLogFilename(char *filename, size_t size)
@@ -44,6 +46,7 @@ void generateLogFilename(char *filename, size_t size)
 
 int InitLog(int withDebugMessages, int withRaylibMessages)
 {
+   printf("[INFO]: Initializing logs\n");
    if (withRaylibMessages)
    {
       SetTraceLogCallback(WriteLog);

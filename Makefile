@@ -1,6 +1,6 @@
 .PHONY: default clean build run
 
-default: clean run
+default: build run
 
 APP_NAME = box_man
 SRC_DIR = src
@@ -11,17 +11,17 @@ BM_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib-game/src
 SRC = $(SRC_DIR)/*c ${SRC_DIR}/menus/*c ${SRC_DIR}/game/*c
 
 build: $(SRC)
-	@echo "Building"
+	@echo "# Building"
 	mkdir -p $(BUILD_DIR)
 	clang -I$(RLIB_INCLUDE_DIR) -I$(BM_INCLUDE_DIR) -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a $(SRC) -o $(BUILD_DIR)/$(APP_NAME)
 	@echo "Build done"
 
 run: build
-	@echo "Running..."
+	@echo "# Running"
 	./$(BUILD_DIR)/$(APP_NAME)
 
 clean:
-	@echo "Cleaning"
+	@echo "# Cleaning"
 	rm -rf $(BUILD_DIR)/*
 	rm -rf $(LOG_DIR)/*
 	@echo "Clean done"
