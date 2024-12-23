@@ -51,6 +51,11 @@ int InitLog(int withDebugMessages, int withRaylibMessages)
    {
       SetTraceLogCallback(WriteLog);
    }
+   else
+   {
+      SetTraceLogLevel(LOG_NONE);
+   }
+
    debug = withDebugMessages;
 
    int result = ensureDirectory(LOG_DIR);
