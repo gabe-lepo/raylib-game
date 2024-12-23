@@ -21,6 +21,8 @@ const char *StateToString(GameState state)
       return "GAME_STATE_SETTINGS_MENU";
    case GAME_STATE_LOAD_MENU:
       return "GAME_STATE_LOAD_MENU";
+   case GAME_STATE_CONFIRM_MENU:
+      return "GAME_STATE_CONFIRM_MENU";
    default:
       return "UNKNOWN STATE";
    }

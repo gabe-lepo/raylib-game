@@ -13,6 +13,7 @@ typedef enum GameState
    GAME_STATE_PAUSE_MENU,
    GAME_STATE_SETTINGS_MENU,
    GAME_STATE_LOAD_MENU,
+   GAME_STATE_CONFIRM_MENU,
 } GameState;
 
 typedef struct GameStateStack
