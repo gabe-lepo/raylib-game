@@ -9,7 +9,7 @@ void tempLoad(void)
 
 // Objects
 static MenuItem loadMenuItems[] = {
-    {"Some settings", tempLoad},
+    {"Some load options", tempLoad},
     {"Back", backUpMenu},
 };
 

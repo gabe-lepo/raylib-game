@@ -5,17 +5,12 @@
 // Actions
 void resumeGame(void)
 {
-   LogMessage(LOG_INFO, "Resuming game");
+   PopGameState();
    PushGameState(GAME_STATE_PLAYING);
 }
 void saveGame(void)
 {
    // TODO
-}
-void backToStart(void)
-{
-   LogMessage(LOG_INFO, "Going back to start menu");
-   PushGameState(GAME_STATE_START_MENU);
 }
 
 // Objects
@@ -24,7 +19,7 @@ static MenuItem pauseMenuItems[] = {
     {"Save", saveGame},
     {"Load", openLoad},
     {"Settings", openSettings},
-    {"Exit", backToStart},
+    {"Exit", backUpMenu},
 };
 
 static Menu pauseMenu = {

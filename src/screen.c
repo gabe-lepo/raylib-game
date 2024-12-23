@@ -25,8 +25,8 @@ void InitScreenSize(void)
    SCREEN_HEIGHT = GetMonitorHeight(monitor) * WINDOW_MONITOR_RATIO;
 
    // Debug
-   LogMessage(LOG_DEBUG, "Monitor Size: %dx%d", GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-   LogMessage(LOG_DEBUG, "Screen Size: %dx%d", SCREEN_WIDTH, SCREEN_HEIGHT);
+   LogMessage(LOG_INFO, "Monitor Size: %dx%d", GetMonitorWidth(monitor), GetMonitorHeight(monitor));
+   LogMessage(LOG_INFO, "Screen Size: %dx%d", SCREEN_WIDTH, SCREEN_HEIGHT);
 
    // Close temp window
    CloseWindow();

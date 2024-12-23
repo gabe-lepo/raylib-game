@@ -6,13 +6,11 @@
 // Unique actions
 void newGame(void)
 {
-   LogMessage(LOG_INFO, "Starting a new game.");
    PushGameState(GAME_STATE_PLAYING);
 }
 
 void closeGame(void)
 {
-   LogMessage(LOG_INFO, "Closing game.");
    CloseGame();
 }
 

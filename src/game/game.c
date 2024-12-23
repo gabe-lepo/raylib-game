@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 #define DEBUG_LOGS 1
-#define RAYLIB_LOGS 1
+#define RAYLIB_LOGS 0
 
 static Player player1;
 static Menu *startMenu;
@@ -31,7 +31,7 @@ void InitGame()
    {
       CloseGame();
    }
-   LogMessage(LOG_DEBUG, "InitGame():");
+   LogMessage(LOG_INFO, "InitGame start");
 
    // Setup game state
    InitGameStateStack();
@@ -63,9 +63,9 @@ void InitGame()
    settingsMenu = getSettingsMenu();
    loadMenu = getLoadMenu();
 
-   LogMessage(LOG_INFO, "InitGame() done");
    PopGameState();
    PushGameState(GAME_STATE_START_MENU);
+   LogMessage(LOG_INFO, "InitGame done");
 }
 
 int UpdateGame(void)
@@ -81,6 +81,7 @@ int UpdateGame(void)
       // Open pause menu
       if (IsKeyPressed(KEY_ESCAPE))
       {
+         PopGameState();
          PushGameState(GAME_STATE_PAUSE_MENU);
       }
 
@@ -91,6 +92,7 @@ int UpdateGame(void)
    case GAME_STATE_PAUSE_MENU:
       if (IsKeyPressed(KEY_ESCAPE))
       {
+         PopGameState();
          PushGameState(GAME_STATE_PLAYING);
       }
 

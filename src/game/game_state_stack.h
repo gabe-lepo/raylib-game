@@ -8,8 +8,8 @@
 typedef enum GameState
 {
    GAME_STATE_INIT = -1,
-   GAME_STATE_START_MENU,
    GAME_STATE_PLAYING,
+   GAME_STATE_START_MENU,
    GAME_STATE_PAUSE_MENU,
    GAME_STATE_SETTINGS_MENU,
    GAME_STATE_LOAD_MENU,
@@ -25,7 +25,7 @@ extern GameState gameState;
 
 void InitGameStateStack(void);
 int PushGameState(GameState state);
-GameState PopGameState(void);
+int PopGameState(void);
 GameState PeekGameState(void);
 int ClearGameStateStack(void);
 
