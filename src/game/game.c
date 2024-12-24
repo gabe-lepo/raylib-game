@@ -59,7 +59,7 @@ void InitGame()
    // Player init
    float basicSize = 50.0f;
    Vector2 size = {basicSize, basicSize};
-   Vector2 startPosition = {SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT - basicSize - 10};
+   Vector2 startPosition = {SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT - basicSize - 100};
    InitPlayer(
        &player1,
        startPosition,
@@ -142,6 +142,7 @@ int DrawGame(void)
    case GAME_STATE_INIT:
       break;
    case GAME_STATE_PLAYING:
+      ClearBackground(DARKGRAY);
       DrawFloor();
       DrawPlayer(&player1);
       DrawTimer();

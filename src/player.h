@@ -19,6 +19,8 @@ typedef struct Player
    float gravity;
    float jump_speed;
    float max_jump_height;
+   int num_jumps;
+   int remaining_jumps;
 } Player;
 
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color);

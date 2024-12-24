@@ -20,7 +20,6 @@ int main(void)
 
       // Draw the updates
       BeginDrawing();
-      ClearBackground(DARKGRAY);
       if (DrawGame())
       {
          break;

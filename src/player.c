@@ -11,9 +11,11 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
    player->velocity.y = 0.0f;
    player->color = color;
    player->grounded = UNGROUNDED;
-   player->gravity = 0.5f;
+   player->gravity = 0.7f;
    player->jump_speed = 15.0f;
-   player->max_jump_height = player->rect.height;
+   player->max_jump_height = player->rect.height * 2;
+   player->num_jumps = 2;
+   player->remaining_jumps = player->num_jumps;
 }
 
 void UpdatePlayer(Player *player)
@@ -31,6 +33,7 @@ void UpdatePlayer(Player *player)
       player->rect.y = SCREEN_HEIGHT - player->rect.height;
       player->velocity.y = 0.0f;
       player->grounded = GROUNDED;
+      player->remaining_jumps = player->num_jumps;
    }
 
    // Check for ceiling collision
@@ -59,11 +62,12 @@ void UpdatePlayer(Player *player)
       player->rect.x -= player->velocity.x;
    }
 
-   // Jump logic
-   if (IsKeyPressed(KEY_SPACE) && player->grounded)
+   // Multi jump logic
+   if (IsKeyPressed(KEY_SPACE) && player->remaining_jumps > 0)
    {
       player->grounded = UNGROUNDED;
       player->velocity.y = -(player->jump_speed);
+      player->remaining_jumps--;
    }
 }
 
