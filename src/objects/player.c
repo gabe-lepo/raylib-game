@@ -3,6 +3,7 @@
 
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
 {
+   player->objectType = OBJECT_TYPE_COLLIDEABLE;
    player->rect.x = position.x;
    player->rect.y = position.y;
    player->rect.width = size.x;
@@ -20,9 +21,16 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
 
 void UpdatePlayer(Player *player)
 {
-   // Apply gravity if not grounded
-   if (!player->grounded)
+   // Reapply some states based on grounding
+   if (player->grounded)
    {
+      LogMessage(LOG_DEBUG, "PLAYER: Grounded!");
+      player->remaining_jumps = player->num_jumps;
+      player->velocity.y = 0;
+   }
+   else
+   {
+      LogMessage(LOG_DEBUG, "PLAYER: Ungrounded!");
       player->velocity.y += player->gravity;
       player->rect.y += player->velocity.y;
    }
@@ -32,8 +40,9 @@ void UpdatePlayer(Player *player)
    {
       player->rect.y = SCREEN_HEIGHT - player->rect.height;
       player->velocity.y = 0.0f;
+
+      LogMessage(LOG_DEBUG, "PLAYER: Grounded due to collision at bottom of screen");
       player->grounded = GROUNDED;
-      player->remaining_jumps = player->num_jumps;
    }
 
    // Check for ceiling collision
@@ -65,6 +74,7 @@ void UpdatePlayer(Player *player)
    // Multi jump logic
    if (IsKeyPressed(KEY_SPACE) && player->remaining_jumps > 0)
    {
+      LogMessage(LOG_DEBUG, "PLAYER: Ungrounded due to space bar jump");
       player->grounded = UNGROUNDED;
       player->velocity.y = -(player->jump_speed);
       player->remaining_jumps--;

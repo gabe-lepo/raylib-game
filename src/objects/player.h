@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "screen.h"
+#include "objects.h"
 
 typedef enum isGrounded
 {
@@ -12,6 +13,7 @@ typedef enum isGrounded
 
 typedef struct Player
 {
+   ObjectType objectType;
    Rectangle rect;
    Vector2 velocity;
    Color color;
