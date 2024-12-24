@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include "game/game.h"
 #include "game/game_state_stack.h"
-#include "player.h"
 #include "timer.h"
 #include "fps.h"
 #include "screen.h"
@@ -10,6 +9,10 @@
 #include "menus/settings_menu.h"
 #include "menus/load_menu.h"
 #include "log.h"
+#include "objects/objects.h"
+#include "objects/floor.h"
+#include "objects/player.h"
+#include "physics/check_collisions.h"
 
 #include <stdlib.h>
 
@@ -17,7 +20,7 @@
 #define RAYLIB_LOGS 1
 
 #define TARGET_FPS 60
-#define STACK_PRINT_TIME_S_MOD 1
+#define STACK_PRINT_TIME_S_MOD 10
 
 static Player player1;
 static Menu *startMenu;
@@ -51,14 +54,17 @@ void InitGame()
    InitTimer();
    // FPS init?
 
+   // Floor init
+   InitFloor();
+
    // Player init
-   Vector2 startPosition = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-   Vector2 size = {SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f};
+   float basicSize = 50.0f;
+   Vector2 size = {basicSize, basicSize};
+   Vector2 startPosition = {SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT - basicSize - 100};
    InitPlayer(
        &player1,
        startPosition,
        size,
-       PLAYER_DEFAULT_SPEED,
        BLUE);
 
    // Menu init
@@ -79,10 +85,10 @@ int UpdateGame(void)
    if (updateGameIterations == TARGET_FPS * STACK_PRINT_TIME_S_MOD)
    {
       const GameStateStack *stack = getStateStack();
-      LogMessage(LOG_DEBUG, "Contents of game state stack:");
+      LogMessage(LOG_INFO, "Contents of game state stack:");
       for (size_t i = 0; i < stack->top; i++)
       {
-         LogMessage(LOG_DEBUG, "\tStack Index: {%zu} | State {%s}", i, StateToString(stack->states[i]));
+         LogMessage(LOG_INFO, "\tStack Index: {%zu} | State {%s}", i, StateToString(stack->states[i]));
       }
       updateGameIterations = 0;
    }
@@ -100,6 +106,9 @@ int UpdateGame(void)
       }
 
       // Normal routine
+      GameObject objects[] = {*getFloor()};
+      size_t objectCount = sizeof(objects) / sizeof(objects[0]);
+      CheckPlayerCollision(&player1, objects, objectCount);
       UpdatePlayer(&player1);
       UpdateTimer();
       break;
@@ -137,6 +146,8 @@ int DrawGame(void)
    case GAME_STATE_INIT:
       break;
    case GAME_STATE_PLAYING:
+      ClearBackground(DARKGRAY);
+      DrawFloor();
       DrawPlayer(&player1);
       DrawTimer();
       int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
