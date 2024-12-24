@@ -1,21 +1,45 @@
 #include "player.h"
 #include "log.h"
 
-#define MAX_JUMP_HEIGHT 32
-#define JUMP_SPEED 0.5
-
-void InitPlayer(Player *player, Vector2 position, Vector2 size, int speed, Color color)
+void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
 {
    player->rect.x = position.x;
    player->rect.y = position.y;
    player->rect.width = size.x;
    player->rect.height = size.y;
-   player->speed = speed;
+   player->velocity.x = 5.0f;
+   player->velocity.y = 0.0f;
    player->color = color;
+   player->grounded = UNGROUNDED;
+   player->gravity = 0.5f;
+   player->jump_speed = 15.0f;
+   player->max_jump_height = player->rect.height;
 }
 
 void UpdatePlayer(Player *player)
 {
+   // Apply gravity if not grounded
+   if (!player->grounded)
+   {
+      player->velocity.y += player->gravity;
+      player->rect.y += player->velocity.y;
+   }
+
+   // Check for ground collision at bottom of screen
+   if (player->rect.y + player->rect.height >= SCREEN_HEIGHT)
+   {
+      player->rect.y = SCREEN_HEIGHT - player->rect.height;
+      player->velocity.y = 0.0f;
+      player->grounded = GROUNDED;
+   }
+
+   // Check for ceiling collision
+   if (player->rect.y <= 0)
+   {
+      player->rect.y = 0;
+   }
+
+   // Horizontal screen wrapping
    if (player->rect.x > SCREEN_WIDTH)
    {
       player->rect.x = 0;
@@ -24,39 +48,22 @@ void UpdatePlayer(Player *player)
    {
       player->rect.x = SCREEN_WIDTH;
    }
-   if (player->rect.y > SCREEN_HEIGHT)
-   {
-      player->rect.y = 0;
-   }
-   if (player->rect.y < 0)
-   {
-      player->rect.y = SCREEN_HEIGHT;
-   }
 
+   // Movement controls
    if (IsKeyDown(KEY_RIGHT))
    {
-      LogMessage(LOG_DEBUG, "PLAYER: Moving right");
-      player->rect.x += player->speed;
+      player->rect.x += player->velocity.x;
    }
    if (IsKeyDown(KEY_LEFT))
    {
-      LogMessage(LOG_DEBUG, "PLAYER: Moving left");
-      player->rect.x -= player->speed;
-   }
-   if (IsKeyDown(KEY_UP))
-   {
-      LogMessage(LOG_DEBUG, "PLAYER: Moving up");
-      player->rect.y -= player->speed;
-   }
-   if (IsKeyDown(KEY_DOWN))
-   {
-      LogMessage(LOG_DEBUG, "PLAYER: Moving down");
-      player->rect.y += player->speed;
+      player->rect.x -= player->velocity.x;
    }
 
-   if (IsKeyPressed(KEY_SPACE))
+   // Jump logic
+   if (IsKeyPressed(KEY_SPACE) && player->grounded)
    {
-      // TODO
+      player->grounded = UNGROUNDED;
+      player->velocity.y = -(player->jump_speed);
    }
 }
 

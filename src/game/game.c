@@ -10,6 +10,8 @@
 #include "menus/settings_menu.h"
 #include "menus/load_menu.h"
 #include "log.h"
+#include "objects/objects.h"
+#include "objects/floor.h"
 
 #include <stdlib.h>
 
@@ -17,7 +19,7 @@
 #define RAYLIB_LOGS 1
 
 #define TARGET_FPS 60
-#define STACK_PRINT_TIME_S_MOD 1
+#define STACK_PRINT_TIME_S_MOD 5
 
 static Player player1;
 static Menu *startMenu;
@@ -51,14 +53,17 @@ void InitGame()
    InitTimer();
    // FPS init?
 
+   // Floor init
+   InitFloor();
+
    // Player init
-   Vector2 startPosition = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-   Vector2 size = {SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.1f};
+   float basicSize = 50.0f;
+   Vector2 size = {basicSize, basicSize};
+   Vector2 startPosition = {SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT - basicSize - 10};
    InitPlayer(
        &player1,
        startPosition,
        size,
-       PLAYER_DEFAULT_SPEED,
        BLUE);
 
    // Menu init
@@ -137,6 +142,7 @@ int DrawGame(void)
    case GAME_STATE_INIT:
       break;
    case GAME_STATE_PLAYING:
+      DrawFloor();
       DrawPlayer(&player1);
       DrawTimer();
       int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);

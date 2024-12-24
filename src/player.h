@@ -4,16 +4,24 @@
 #include "raylib.h"
 #include "screen.h"
 
-#define PLAYER_DEFAULT_SPEED (int)5
+typedef enum isGrounded
+{
+   UNGROUNDED = 0,
+   GROUNDED
+} isGrounded;
 
 typedef struct Player
 {
    Rectangle rect;
-   int speed;
+   Vector2 velocity;
    Color color;
+   isGrounded grounded;
+   float gravity;
+   float jump_speed;
+   float max_jump_height;
 } Player;
 
-void InitPlayer(Player *player, Vector2 position, Vector2 size, int speed, Color color);
+void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color);
 void UpdatePlayer(Player *player);
 void DrawPlayer(Player *player);
 
