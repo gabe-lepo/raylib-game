@@ -8,7 +8,7 @@ BUILD_DIR = build
 LOG_DIR = logs
 RLIB_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib/src
 BM_INCLUDE_DIR = /Users/glepoutre/Documents/vscode/raylib-game/src
-SRC = $(SRC_DIR)/*c ${SRC_DIR}/menus/*c ${SRC_DIR}/game/*c
+SRC = $(shell find $(SRC_DIR) -name '*.c')
 
 build: $(SRC)
 	@echo "# Building"
