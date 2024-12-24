@@ -91,9 +91,6 @@ int UpdateGame(void)
    {
    case GAME_STATE_INIT:
       break;
-   case GAME_STATE_START_MENU:
-      updateMenu(startMenu);
-      break;
    case GAME_STATE_PLAYING:
       // Open pause menu
       if (IsKeyPressed(KEY_ESCAPE))
@@ -105,6 +102,9 @@ int UpdateGame(void)
       // Normal routine
       UpdatePlayer(&player1);
       UpdateTimer();
+      break;
+   case GAME_STATE_START_MENU:
+      updateMenu(startMenu);
       break;
    case GAME_STATE_PAUSE_MENU:
       if (IsKeyPressed(KEY_ESCAPE))
@@ -136,16 +136,16 @@ int DrawGame(void)
    {
    case GAME_STATE_INIT:
       break;
+   case GAME_STATE_PLAYING:
+      DrawPlayer(&player1);
+      DrawTimer();
+      int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
+      break;
    case GAME_STATE_START_MENU:
       if (drawMenu(startMenu))
       {
          return EXIT_FAILURE;
       }
-      break;
-   case GAME_STATE_PLAYING:
-      DrawPlayer(&player1);
-      DrawTimer();
-      int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
       break;
    case GAME_STATE_PAUSE_MENU:
       if (drawMenu(pauseMenu))
