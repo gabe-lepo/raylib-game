@@ -43,9 +43,8 @@ void InitGame()
    InitGameStateStack();
 
    // Window init
-   InitScreenSize();
-   // SetConfigFlags(FLAG_WINDOW_RESIZABLE); // Resizeable window
-   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
+   InitStartScreen();
+   InitMainScreen();
 
    // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow

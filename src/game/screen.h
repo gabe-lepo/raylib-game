@@ -10,6 +10,7 @@
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
 
-void InitScreenSize(void);
+void InitStartScreen(void);
+void InitMainScreen(void);
 
 #endif
