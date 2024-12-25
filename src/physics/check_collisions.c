@@ -1,5 +1,5 @@
 #include "check_collisions.h"
-#include "logs/log.h"
+#include "logging/log.h"
 
 void CheckPlayerCollision(Player *player, GameObject objects[], size_t objectCount)
 {

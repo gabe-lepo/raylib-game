@@ -1,6 +1,6 @@
 #include "settings_menu.h"
 #include "shared_menu_actions.h"
-#include "logs/log.h"
+#include "logging/log.h"
 
 // Actions
 void setVsync(void)

@@ -2,7 +2,7 @@
 #define MENU_H
 
 #include "raylib.h"
-#include "logs/log.h"
+#include "logging/log.h"
 #include "game/screen.h"
 
 #include <stddef.h>

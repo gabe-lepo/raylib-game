@@ -1,5 +1,5 @@
 #include "player.h"
-#include "logs/log.h"
+#include "logging/log.h"
 #include "utils/lerp.h"
 
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)

@@ -7,7 +7,7 @@
 #include <stdarg.h>
 #include <time.h>
 
-#define LOG_DIR "game_logs/"
+#define LOG_DIR "logs/"
 
 int InitLog(int withDebugMessages, int withRaylibMessages);
 void WriteLog(int logLevel, const char *text, va_list args);

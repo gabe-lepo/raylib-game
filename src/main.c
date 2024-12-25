@@ -1,6 +1,6 @@
 #include "raylib.h"
 #include "game/game.h"
-#include "logs/log.h"
+#include "logging/log.h"
 
 #include <stdlib.h>
 

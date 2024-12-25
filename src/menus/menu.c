@@ -1,5 +1,5 @@
 #include "menu.h"
-#include "logs/log.h"
+#include "logging/log.h"
 
 #include <stdlib.h>
 
