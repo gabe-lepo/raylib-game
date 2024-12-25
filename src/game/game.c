@@ -15,6 +15,7 @@
 #include "physics/check_collisions.h"
 
 #include <stdlib.h>
+#include <time.h> // For random seed for floors
 
 #define DEBUG_LOGS 1
 #define RAYLIB_LOGS 1
@@ -52,7 +53,7 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   InitFloors();
+   InitFloors(1234);
 
    // Player init
    float basicSize = 50.0f;

@@ -3,9 +3,9 @@
 static GameObject floors[MAX_FLOORS];
 static size_t floorCount = 0;
 
-void InitFloors(void)
+void InitFloors(unsigned int seed)
 {
-   SetRandomSeed((unsigned int)time(NULL));
+   SetRandomSeed(seed);
    floorCount = MAX_FLOORS;
    int colorRandMin = 0;
    int colorRandMax = 255;
