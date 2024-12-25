@@ -2,6 +2,8 @@
 #include "logging/log.h"
 #include "utils/lerp.h"
 
+// #include "math.h"
+
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
 {
    player->objectType = OBJECT_TYPE_COLLIDEABLE;
@@ -18,6 +20,8 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
    player->max_jump_height = player->rect.height * 2;
    player->num_jumps = 2;
    player->remaining_jumps = player->num_jumps;
+   player->movement_delta = 0.9f;
+   player->movement_targetX = player->rect.x;
 }
 
 void UpdatePlayer(Player *player)
@@ -25,13 +29,13 @@ void UpdatePlayer(Player *player)
    // Reapply some states based on grounding
    if (player->grounded)
    {
-      LogMessage(LOG_DEBUG, "PLAYER: Grounded!");
+      // LogMessage(LOG_DEBUG, "PLAYER: Grounded!");
       player->remaining_jumps = player->num_jumps;
       player->velocity.y = 0;
    }
    else
    {
-      LogMessage(LOG_DEBUG, "PLAYER: Ungrounded!");
+      // LogMessage(LOG_DEBUG, "PLAYER: Ungrounded!");
       player->velocity.y += player->gravity;
       player->rect.y += player->velocity.y;
    }
@@ -42,7 +46,7 @@ void UpdatePlayer(Player *player)
       player->rect.y = SCREEN_DIMENSIONS.y - player->rect.height;
       player->velocity.y = 0.0f;
 
-      LogMessage(LOG_DEBUG, "PLAYER: Grounded due to collision at bottom of screen");
+      // LogMessage(LOG_DEBUG, "PLAYER: Grounded due to collision at bottom of screen");
       player->grounded = GROUNDED;
    }
 
@@ -51,32 +55,54 @@ void UpdatePlayer(Player *player)
    {
       player->rect.y = 0 + player->rect.height;
       player->velocity.y = 0.0f;
-      LogMessage(LOG_DEBUG, "PLAYER: Hit the ceiling!");
+      // LogMessage(LOG_DEBUG, "PLAYER: Hit the ceiling!");
    }
 
    // Horizontal screen collision
-   if (player->rect.x + player->rect.width >= SCREEN_DIMENSIONS.x - SCREEN_EDGE_PADDING)
+   if (player->rect.x + player->rect.width >= SCREEN_DIMENSIONS.x)
    {
-      player->velocity.x = 0.0f;                                 // Stop movement
-      player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width; // Ensure position is at edge
+      LogMessage(LOG_DEBUG,
+                 "Stopping player movement at right screen boundary\n\tRectX %.2f - %.2f",
+                 player->rect.x,
+                 player->rect.x + player->rect.width);
+
+      player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width;
+      player->velocity.x = 0.0f;
+      player->movement_targetX = player->rect.x;
    }
-   if (player->rect.x - player->rect.width <= 0 + SCREEN_EDGE_PADDING)
+   if (player->rect.x <= 0)
    {
-      player->velocity.x = 0.0f;                                 // Stop movement
-      player->rect.x = SCREEN_DIMENSIONS.x + player->rect.width; // Ensure position is at edge
+      LogMessage(LOG_DEBUG,
+                 "Stopping player movement at left screen boundary\n\tRectX %.2f - %.2f",
+                 player->rect.x,
+                 player->rect.x + player->rect.width);
+      player->rect.x = 0;
+      player->velocity.x = 0.0f;
+      player->movement_targetX = player->rect.x;
    }
 
    // Left/right movement controls
-   float targetX = player->rect.x;
-   if (IsKeyDown(KEY_RIGHT))
+   if (IsKeyDown(KEY_RIGHT) && player->rect.x + player->rect.width < SCREEN_DIMENSIONS.x)
    {
-      targetX += player->velocity.x;
+      player->movement_targetX += player->velocity.x;
    }
-   if (IsKeyDown(KEY_LEFT))
+   if (IsKeyDown(KEY_LEFT) && player->rect.x > 0)
    {
-      targetX -= player->velocity.x;
+      player->movement_targetX -= player->velocity.x;
    }
-   player->rect.x = MyLerp(player->rect.x, targetX, 0.9f);
+
+   // Clamp movement targetX to ensure plyer stays within screen bounds
+   if (player->movement_targetX < 0)
+   {
+      player->movement_targetX = 0;
+   }
+   if (player->movement_targetX + player->rect.width > SCREEN_DIMENSIONS.x)
+   {
+      player->movement_targetX = SCREEN_DIMENSIONS.x - player->rect.width;
+   }
+
+   // Smoothly interpolate player x position
+   player->rect.x = MyLerp(player->rect.x, player->movement_targetX, player->movement_delta);
 
    // Multi jump logic
    if (IsKeyPressed(KEY_SPACE) && player->remaining_jumps > 0)
@@ -90,10 +116,10 @@ void UpdatePlayer(Player *player)
 
 void DrawPlayer(Player *player)
 {
+   // Object
    DrawRectangleRec(player->rect, player->color);
 
-   // Position display
-   char text[] = "";
+   // Position text
    int x = player->rect.x;
    int y = player->rect.y;
    int size = 20;

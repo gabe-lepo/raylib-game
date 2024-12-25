@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <time.h> // For random seed for floors
 
-#define DEBUG_LOGS 0
+#define DEBUG_LOGS 1
 #define RAYLIB_LOGS 1
 
 #define STACK_PRINT_TIME_S_MOD 10

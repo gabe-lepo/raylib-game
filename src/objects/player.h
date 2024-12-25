@@ -23,10 +23,12 @@ typedef struct Player
    float max_jump_height;
    int num_jumps;
    int remaining_jumps;
+   float movement_delta;
+   float movement_targetX;
 } Player;
 
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color);
 void UpdatePlayer(Player *player);
 void DrawPlayer(Player *player);
 
-#endif // PLAYER_H
+#endif
