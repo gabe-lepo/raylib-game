@@ -1,5 +1,6 @@
 #include "player.h"
 #include "log.h"
+#include "utils/lerp.h"
 
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
 {
@@ -61,15 +62,17 @@ void UpdatePlayer(Player *player)
       player->rect.x = SCREEN_WIDTH;
    }
 
-   // Movement controls
+   // Left/right movement controls
+   float targetX = player->rect.x;
    if (IsKeyDown(KEY_RIGHT))
    {
-      player->rect.x += player->velocity.x;
+      targetX += player->velocity.x;
    }
    if (IsKeyDown(KEY_LEFT))
    {
-      player->rect.x -= player->velocity.x;
+      targetX -= player->velocity.x;
    }
+   player->rect.x = MyLerp(player->rect.x, targetX, 0.9f);
 
    // Multi jump logic
    if (IsKeyPressed(KEY_SPACE) && player->remaining_jumps > 0)
