@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "raylib.h"
-#include "screen.h"
+#include "game/screen.h"
 #include "objects.h"
 
 typedef enum isGrounded

@@ -3,7 +3,7 @@
 #include "game/game_state_stack.h"
 #include "utils/timer.h"
 #include "utils/fps.h"
-#include "screen.h"
+#include "game/screen.h"
 #include "menus/start_menu.h"
 #include "menus/pause_menu.h"
 #include "menus/settings_menu.h"

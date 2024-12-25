@@ -10,6 +10,7 @@ int SCREEN_HEIGHT = 450;
 void InitScreenSize(void)
 {
    // Startup screen size
+   LogMessage(LOG_DEBUG, "Initializing screen");
    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Startup Window");
 
    int monitorCount = GetMonitorCount();
@@ -21,13 +22,15 @@ void InitScreenSize(void)
       monitor = 0;
    }
 
-   SCREEN_WIDTH = GetMonitorWidth(monitor) * WINDOW_MONITOR_RATIO;
-   SCREEN_HEIGHT = GetMonitorHeight(monitor) * WINDOW_MONITOR_RATIO;
+   // Uncomment for screen size % based on monitor
+   // SCREEN_WIDTH = GetMonitorWidth(monitor) * WINDOW_MONITOR_RATIO;
+   // SCREEN_HEIGHT = GetMonitorHeight(monitor) * WINDOW_MONITOR_RATIO;
 
-   // Debug
    LogMessage(LOG_INFO, "Monitor Size: %dx%d", GetMonitorWidth(monitor), GetMonitorHeight(monitor));
    LogMessage(LOG_INFO, "Screen Size: %dx%d", SCREEN_WIDTH, SCREEN_HEIGHT);
 
    // Close temp window
+   LogMessage(LOG_DEBUG, "Closing temporary startup window");
    CloseWindow();
+   LogMessage(LOG_DEBUG, "Screen initialization done");
 }

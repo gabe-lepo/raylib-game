@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 
-#define SCREEN_TITLE "Raylib Game"
+#define SCREEN_TITLE "Box Man"
 #define WINDOW_MONITOR_RATIO 0.8f
 
 extern int SCREEN_WIDTH;

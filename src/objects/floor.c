@@ -1,6 +1,6 @@
 #include "objects.h"
 #include "floor.h"
-#include "screen.h"
+#include "game/screen.h"
 
 static GameObject floor;
 

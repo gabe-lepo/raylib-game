@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 #include "log.h"
-#include "screen.h"
+#include "game/screen.h"
 
 #include <stddef.h>
 
