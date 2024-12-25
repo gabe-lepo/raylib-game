@@ -3,6 +3,11 @@
 
 #include "raylib.h"
 
-int DrawMyFPS(int posX, int posY);
+#define TARGET_FPS 60
+#define FPS_TEXT_SIZE 20
 
-#endif // FPS_H
+void InitFPS(void);
+void UpdateFPS(void);
+void DrawMyFPS(void);
+
+#endif

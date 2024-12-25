@@ -1,17 +1,38 @@
 #include "fps.h"
+#include "game/screen.h"
 
-// Modified from raylib/src/rtext.c to return text width
-int DrawMyFPS(int posX, int posY)
+void InitFPS(void)
 {
-   Color color = LIME; // Good FPS
+   SetTargetFPS(TARGET_FPS);
+}
+
+void UpdateFPS(void)
+{
+   // TODO
+}
+
+// Improved/modified from raylib's rtext.c
+void DrawMyFPS(void)
+{
+   // Values
    int fps = GetFPS();
+   Color color = LIME;
 
-   if ((fps < 30) && (fps >= 15))
-      color = ORANGE; // Warning FPS
-   else if (fps < 15)
-      color = RED; // Low FPS
+   // Positioning
+   int textWidth = MeasureText(TextFormat("%2i FPS", fps), FPS_TEXT_SIZE);
+   int posX = SCREEN_WIDTH - textWidth - SCREEN_EDGE_PADDING;
+   int posY = 0 + SCREEN_EDGE_PADDING;
 
-   DrawText(TextFormat("%2i FPS", fps), posX, posY, 20, color);
+   // Colors
+   if (fps < (int)(TARGET_FPS * 0.5) && fps >= (int)(TARGET_FPS * 0.25))
+   {
+      color = ORANGE;
+   }
+   else if (fps < (int)(TARGET_FPS * 0.25))
+   {
+      color = RED;
+   }
 
-   return MeasureText(TextFormat("%2i FPS", fps), 20);
+   // Draw it
+   DrawText(TextFormat("%2i FPS", fps), posX, posY, FPS_TEXT_SIZE, color);
 }

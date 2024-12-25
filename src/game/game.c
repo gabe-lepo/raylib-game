@@ -19,7 +19,6 @@
 #define DEBUG_LOGS 1
 #define RAYLIB_LOGS 1
 
-#define TARGET_FPS 60
 #define STACK_PRINT_TIME_S_MOD 10
 
 static Player player1;
@@ -50,9 +49,8 @@ void InitGame()
 
    // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow
-   SetTargetFPS(TARGET_FPS);
+   InitFPS();
    InitTimer();
-   // FPS init?
 
    // Floor init
    InitFloor();
@@ -110,6 +108,7 @@ int UpdateGame(void)
       size_t objectCount = sizeof(objects) / sizeof(objects[0]);
       CheckPlayerCollision(&player1, objects, objectCount);
       UpdatePlayer(&player1);
+      // UpdateFPS();
       UpdateTimer();
       break;
    case GAME_STATE_START_MENU:
@@ -150,7 +149,7 @@ int DrawGame(void)
       DrawFloor();
       DrawPlayer(&player1);
       DrawTimer();
-      int fpsTextWidth = DrawMyFPS((SCREEN_WIDTH - fpsTextWidth) - 10, 10);
+      DrawMyFPS();
       break;
    case GAME_STATE_START_MENU:
       if (drawMenu(startMenu))
