@@ -1,6 +1,14 @@
 {
   "C_Cpp.default.compilerPath": "/usr/bin/clang",
   "files.associations": {
-    "*.h": "c"
+    "*.h": "c",
+    "__availability": "c",
+    "__config": "c",
+    "__locale": "c",
+    "ctime": "c",
+    "locale": "c",
+    "print": "c",
+    "algorithm": "c",
+    "*.m": "c"
   }
 }

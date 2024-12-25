@@ -53,7 +53,7 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   InitFloor();
+   InitFloors();
 
    // Player init
    float basicSize = 50.0f;
@@ -104,8 +104,8 @@ int UpdateGame(void)
       }
 
       // Normal routine
-      GameObject objects[] = {*getFloor()};
-      size_t objectCount = sizeof(objects) / sizeof(objects[0]);
+      size_t objectCount = 0;
+      GameObject *objects = getFloors(&objectCount);
       CheckPlayerCollision(&player1, objects, objectCount);
       UpdatePlayer(&player1);
       UpdateFPS();
@@ -146,7 +146,7 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      DrawFloor();
+      DrawFloors();
       DrawPlayer(&player1);
       DrawTimer();
       DrawMyFPS();

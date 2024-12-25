@@ -22,7 +22,7 @@ void InitScreenSize(void)
       monitor = 0;
    }
 
-   // Uncomment for screen size % based on monitor
+   // Uncomment for screen size % based on monitor size
    // SCREEN_WIDTH = GetMonitorWidth(monitor) * WINDOW_MONITOR_RATIO;
    // SCREEN_HEIGHT = GetMonitorHeight(monitor) * WINDOW_MONITOR_RATIO;
 
