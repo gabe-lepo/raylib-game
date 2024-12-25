@@ -9,7 +9,7 @@ void InitFPS(void)
    fpsText.fps = TARGET_FPS;
    fpsText.size = 20;
    int textWidth = MeasureText(TextFormat("%2i FPS", fpsText.fps), fpsText.size);
-   fpsText.position.x = SCREEN_WIDTH - textWidth - SCREEN_EDGE_PADDING;
+   fpsText.position.x = SCREEN_DIMENSIONS.x - textWidth - SCREEN_EDGE_PADDING;
    fpsText.position.y = 0 + SCREEN_EDGE_PADDING;
    fpsText.color = LIME;
 }

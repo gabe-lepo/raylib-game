@@ -37,9 +37,9 @@ void UpdatePlayer(Player *player)
    }
 
    // Check for ground collision at bottom of screen
-   if (player->rect.y + player->rect.height >= SCREEN_HEIGHT)
+   if (player->rect.y + player->rect.height >= SCREEN_DIMENSIONS.y)
    {
-      player->rect.y = SCREEN_HEIGHT - player->rect.height;
+      player->rect.y = SCREEN_DIMENSIONS.y - player->rect.height;
       player->velocity.y = 0.0f;
 
       LogMessage(LOG_DEBUG, "PLAYER: Grounded due to collision at bottom of screen");
@@ -53,13 +53,13 @@ void UpdatePlayer(Player *player)
    }
 
    // Horizontal screen wrapping
-   if (player->rect.x > SCREEN_WIDTH)
+   if (player->rect.x > SCREEN_DIMENSIONS.x)
    {
       player->rect.x = 0;
    }
    if (player->rect.x < 0)
    {
-      player->rect.x = SCREEN_WIDTH;
+      player->rect.x = SCREEN_DIMENSIONS.x;
    }
 
    // Left/right movement controls

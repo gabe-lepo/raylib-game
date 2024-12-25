@@ -4,14 +4,13 @@
 #include <stdio.h>
 
 // Default screen sizes
-int SCREEN_WIDTH = 800;
-int SCREEN_HEIGHT = 450;
+Vector2 SCREEN_DIMENSIONS = {1440, 900};
 
 void InitStartScreen(void)
 {
    // Startup screen size
    LogMessage(LOG_DEBUG, "Initializing screen");
-   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Startup Window");
+   InitWindow(SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, "Startup Window");
 
    int monitorCount = GetMonitorCount();
    int monitor = GetCurrentMonitor();
@@ -23,7 +22,7 @@ void InitStartScreen(void)
    }
 
    LogMessage(LOG_INFO, "Monitor Size: %dx%d", GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-   LogMessage(LOG_INFO, "Screen Size: %dx%d", SCREEN_WIDTH, SCREEN_HEIGHT);
+   LogMessage(LOG_INFO, "Screen Size: %dx%d", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y);
 
    // Close temp window
    LogMessage(LOG_DEBUG, "Closing temporary startup window");
@@ -37,8 +36,8 @@ void InitMainScreen(void)
    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
    // Uncomment for screen size % based on monitor size
-   // SCREEN_WIDTH = GetMonitorWidth(monitor) * WINDOW_MONITOR_RATIO;
-   // SCREEN_HEIGHT = GetMonitorHeight(monitor) * WINDOW_MONITOR_RATIO;
+   // SCREEN_DIMENSIONS.x = GetMonitorWidth(monitor) * WINDOW_MONITOR_RATIO;
+   // SCREEN_DIMENSIONS.y = GetMonitorHeight(monitor) * WINDOW_MONITOR_RATIO;
 
-   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE); // Closed in main.c when gameShouldClose = 1
+   InitWindow(SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, SCREEN_TITLE); // Closed in main.c when gameShouldClose = 1
 }

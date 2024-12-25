@@ -57,12 +57,12 @@ void updateMenu(Menu *menu)
 int drawMenu(Menu *menu)
 {
    // Background
-   DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, menu->backgroundColor);
+   DrawRectangle(0, 0, SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, menu->backgroundColor);
 
    // Title
    int titleSize = 60;
-   int menuItemPosY = SCREEN_HEIGHT / 2 - titleSize;
-   int menuItemPosX = SCREEN_WIDTH / 2 - MeasureText(menu->title, titleSize) / 2;
+   int menuItemPosY = SCREEN_DIMENSIONS.y / 2 - titleSize;
+   int menuItemPosX = SCREEN_DIMENSIONS.x / 2 - MeasureText(menu->title, titleSize) / 2;
 
    DrawText(menu->title, menuItemPosX, menuItemPosY, titleSize, RAYWHITE);
    menuItemPosY += titleSize;
@@ -73,7 +73,7 @@ int drawMenu(Menu *menu)
    for (int i = 0; i < menu->itemCount; i++)
    {
       // Re-center items
-      menuItemPosX = SCREEN_WIDTH / 2 - MeasureText(menu->items[i].label, textSize) / 2;
+      menuItemPosX = SCREEN_DIMENSIONS.x / 2 - MeasureText(menu->items[i].label, textSize) / 2;
 
       // Check if item is selected
       textColor = WHITE;

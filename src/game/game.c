@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <time.h> // For random seed for floors
 
-#define DEBUG_LOGS 1
+#define DEBUG_LOGS 0
 #define RAYLIB_LOGS 1
 
 #define STACK_PRINT_TIME_S_MOD 10
@@ -53,12 +53,13 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   InitFloors(1234);
+   unsigned int floorSeed = 666;
+   InitFloors(floorSeed);
 
    // Player init
    float basicSize = 50.0f;
    Vector2 size = {basicSize, basicSize};
-   Vector2 startPosition = {SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT - basicSize - 100};
+   Vector2 startPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - basicSize - 100};
    InitPlayer(
        &player1,
        startPosition,

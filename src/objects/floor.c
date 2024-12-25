@@ -14,8 +14,8 @@ void InitFloors(unsigned int seed)
    {
       // Random dimensions and positions
       float width = (float)GetRandomValue(MIN_FLOOR_WIDTH, MAX_FLOOR_WIDTH);
-      float x = (float)GetRandomValue(0, SCREEN_WIDTH - (int)width);
-      float y = (float)GetRandomValue(FLOOR_HEIGHT, SCREEN_HEIGHT - FLOOR_HEIGHT * 2);
+      float x = (float)GetRandomValue(0, SCREEN_DIMENSIONS.x - (int)width);
+      float y = (float)GetRandomValue(FLOOR_HEIGHT, SCREEN_DIMENSIONS.y - FLOOR_HEIGHT * 2);
 
       Vector2 size = {width, FLOOR_HEIGHT};
       Vector2 position = {x, y};
