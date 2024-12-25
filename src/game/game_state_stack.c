@@ -1,5 +1,5 @@
 #include "game_state_stack.h"
-#include "log.h"
+#include "logs/log.h"
 
 #include <stdlib.h>
 

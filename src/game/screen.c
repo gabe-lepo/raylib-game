@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "log.h"
+#include "logs/log.h"
 
 #include <stdio.h>
 

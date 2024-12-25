@@ -8,7 +8,7 @@
 #include "menus/pause_menu.h"
 #include "menus/settings_menu.h"
 #include "menus/load_menu.h"
-#include "log.h"
+#include "logs/log.h"
 #include "objects/objects.h"
 #include "objects/floor.h"
 #include "objects/player.h"
