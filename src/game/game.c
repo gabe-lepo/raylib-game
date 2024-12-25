@@ -108,7 +108,7 @@ int UpdateGame(void)
       size_t objectCount = sizeof(objects) / sizeof(objects[0]);
       CheckPlayerCollision(&player1, objects, objectCount);
       UpdatePlayer(&player1);
-      // UpdateFPS();
+      UpdateFPS();
       UpdateTimer();
       break;
    case GAME_STATE_START_MENU:
