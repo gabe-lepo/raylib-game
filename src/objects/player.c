@@ -47,19 +47,23 @@ void UpdatePlayer(Player *player)
    }
 
    // Check for ceiling collision
-   if (player->rect.y <= 0)
+   if (player->rect.y - player->rect.height <= 0)
    {
-      player->rect.y = 0;
+      player->rect.y = 0 + player->rect.height;
+      player->velocity.y = 0.0f;
+      LogMessage(LOG_DEBUG, "PLAYER: Hit the ceiling!");
    }
 
-   // Horizontal screen wrapping
-   if (player->rect.x > SCREEN_DIMENSIONS.x)
+   // Horizontal screen collision
+   if (player->rect.x + player->rect.width >= SCREEN_DIMENSIONS.x - SCREEN_EDGE_PADDING)
    {
-      player->rect.x = 0;
+      player->velocity.x = 0.0f;                                 // Stop movement
+      player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width; // Ensure position is at edge
    }
-   if (player->rect.x < 0)
+   if (player->rect.x - player->rect.width <= 0 + SCREEN_EDGE_PADDING)
    {
-      player->rect.x = SCREEN_DIMENSIONS.x;
+      player->velocity.x = 0.0f;                                 // Stop movement
+      player->rect.x = SCREEN_DIMENSIONS.x + player->rect.width; // Ensure position is at edge
    }
 
    // Left/right movement controls
@@ -87,4 +91,11 @@ void UpdatePlayer(Player *player)
 void DrawPlayer(Player *player)
 {
    DrawRectangleRec(player->rect, player->color);
+
+   // Position display
+   char text[] = "";
+   int x = player->rect.x;
+   int y = player->rect.y;
+   int size = 20;
+   DrawText(TextFormat("%dx%d", x, y), x - player->rect.width, y - size, size, BLACK);
 }
