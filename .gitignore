@@ -55,4 +55,4 @@ dkms.conf
 build/
 logs/
 temp/
-assets/music/
+# assets/music/
