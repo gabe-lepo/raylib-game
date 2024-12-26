@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 // Default screen sizes
-Vector2 SCREEN_DIMENSIONS = {1440, 900};
+Vector2 SCREEN_DIMENSIONS = {1300, 800};
 
 void InitStartScreen(void)
 {

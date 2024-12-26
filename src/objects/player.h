@@ -19,12 +19,11 @@ typedef struct Player
    Color color;
    isGrounded grounded;
    float gravity;
+   float move_speed;
    float jump_speed;
    float max_jump_height;
    int num_jumps;
    int remaining_jumps;
-   float movement_delta;
-   float movement_targetX;
 } Player;
 
 void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color);

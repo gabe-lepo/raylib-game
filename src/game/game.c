@@ -53,7 +53,7 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   unsigned int floorSeed = 666;
+   unsigned int floorSeed = 1234;
    InitFloors(floorSeed);
 
    // Player init

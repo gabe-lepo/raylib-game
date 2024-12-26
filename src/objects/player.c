@@ -11,17 +11,16 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
    player->rect.y = position.y;
    player->rect.width = size.x;
    player->rect.height = size.y;
-   player->velocity.x = 5.0f;
+   player->velocity.x = 0.0f;
    player->velocity.y = 0.0f;
    player->color = color;
    player->grounded = UNGROUNDED;
    player->gravity = 0.7f;
+   player->move_speed = 7.5f;
    player->jump_speed = 15.0f;
    player->max_jump_height = player->rect.height * 2;
    player->num_jumps = 2;
    player->remaining_jumps = player->num_jumps;
-   player->movement_delta = 0.9f;
-   player->movement_targetX = player->rect.x;
 }
 
 void UpdatePlayer(Player *player)
@@ -68,7 +67,6 @@ void UpdatePlayer(Player *player)
 
       player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width;
       player->velocity.x = 0.0f;
-      player->movement_targetX = player->rect.x;
    }
    if (player->rect.x <= 0)
    {
@@ -78,31 +76,23 @@ void UpdatePlayer(Player *player)
                  player->rect.x + player->rect.width);
       player->rect.x = 0;
       player->velocity.x = 0.0f;
-      player->movement_targetX = player->rect.x;
    }
 
    // Left/right movement controls
    if (IsKeyDown(KEY_RIGHT) && player->rect.x + player->rect.width < SCREEN_DIMENSIONS.x)
    {
-      player->movement_targetX += player->velocity.x;
+      player->velocity.x = player->move_speed;
+      player->rect.x += player->velocity.x;
    }
-   if (IsKeyDown(KEY_LEFT) && player->rect.x > 0)
+   else if (IsKeyDown(KEY_LEFT) && player->rect.x > 0)
    {
-      player->movement_targetX -= player->velocity.x;
+      player->velocity.x = -(player->move_speed);
+      player->rect.x += player->velocity.x;
    }
-
-   // Clamp movement targetX to ensure plyer stays within screen bounds
-   if (player->movement_targetX < 0)
+   else
    {
-      player->movement_targetX = 0;
+      player->velocity.x = 0.0f;
    }
-   if (player->movement_targetX + player->rect.width > SCREEN_DIMENSIONS.x)
-   {
-      player->movement_targetX = SCREEN_DIMENSIONS.x - player->rect.width;
-   }
-
-   // Smoothly interpolate player x position
-   player->rect.x = MyLerp(player->rect.x, player->movement_targetX, player->movement_delta);
 
    // Multi jump logic
    if (IsKeyPressed(KEY_SPACE) && player->remaining_jumps > 0)
@@ -120,8 +110,23 @@ void DrawPlayer(Player *player)
    DrawRectangleRec(player->rect, player->color);
 
    // Position text
-   int x = player->rect.x;
-   int y = player->rect.y;
+   // int posX = player->rect.x;
+   // int posY = player->rect.y;
+   // int velocityX = player->velocity.x;
+   // int velocityY = player->velocity.y;
    int size = 20;
-   DrawText(TextFormat("%dx%d", x, y), x - player->rect.width, y - size, size, BLACK);
+   int textWidth = MeasureText(TextFormat("Position:\t%.2fx%.2f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), size);
+   DrawText(
+       TextFormat(
+           "Position:\t\t%.2fx%.2f\nVelocity:\t%.2fx%.2f\nGrounded:\t%s\nJumps:\t%d",
+           player->rect.x,
+           player->rect.y,
+           player->velocity.x,
+           player->velocity.y,
+           player->grounded > 0 ? "GROUNDED" : "UNGROUNDED",
+           player->remaining_jumps),
+       SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
+       0 + 10,
+       size,
+       BLACK);
 }
