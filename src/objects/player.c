@@ -55,9 +55,9 @@ void UpdatePlayer(Player *player)
    {
       player->rect.y = SCREEN_DIMENSIONS.y - player->rect.height;
       player->velocity.y = 0.0f;
-
-      // LogMessage(LOG_DEBUG, "PLAYER: Grounded due to collision at bottom of screen");
       player->grounded = GROUNDED;
+
+      LogMessage(LOG_DEBUG, "Player grounded due to collision at bottom of screen");
    }
 
    // Check for ceiling collision
@@ -65,7 +65,7 @@ void UpdatePlayer(Player *player)
    {
       player->rect.y = 0 + player->rect.height;
       player->velocity.y = 0.0f;
-      // LogMessage(LOG_DEBUG, "PLAYER: Hit the ceiling!");
+      LogMessage(LOG_DEBUG, "Player hit the ceiling");
    }
 
    // Left/right movement controls
@@ -73,29 +73,21 @@ void UpdatePlayer(Player *player)
 
    // Sprint/sneaking modifiers
    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
-   {
       player->move_speed *= player->sprint_speed_mod;
-   }
+
    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))
-   {
       player->move_speed *= player->sneak_speed_mod;
-   }
 
    if (IsKeyDown(KEY_RIGHT))
-   {
       player->velocity.x = player->move_speed;
-   }
 
    if (IsKeyDown(KEY_LEFT))
-   {
       player->velocity.x = -(player->move_speed);
-   }
 
    if (!IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT))
-   {
       player->velocity.x = 0.0f;
-   }
 
+   // Apply velocity
    player->rect.x += player->velocity.x;
 
    // Horizontal screen collision (must be done after horizontal movement checks)
