@@ -20,6 +20,7 @@ typedef struct Player
 
    // Basic movement
    Vector2 velocity;
+   Vector2 terminal_velocity;
    float move_speed;
    float sprint_speed_mod;
    float sneak_speed_mod;

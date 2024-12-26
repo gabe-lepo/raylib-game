@@ -22,6 +22,8 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
    player->max_jump_height = player->rect.height * 2;
    player->num_jumps = 2;
    player->remaining_jumps = player->num_jumps;
+   player->terminal_velocity.x = 50.0f; // PLaceholder
+   player->terminal_velocity.y = 15.0f;
 }
 
 void UpdatePlayer(Player *player)
@@ -29,14 +31,20 @@ void UpdatePlayer(Player *player)
    // Reapply some states based on grounding
    if (player->grounded)
    {
-      // LogMessage(LOG_DEBUG, "PLAYER: Grounded!");
       player->remaining_jumps = player->num_jumps;
       player->velocity.y = 0;
    }
    else
    {
-      // LogMessage(LOG_DEBUG, "PLAYER: Ungrounded!");
-      player->velocity.y += player->gravity;
+      if (!(player->velocity.y >= player->terminal_velocity.y))
+      {
+         player->velocity.y += player->gravity;
+      }
+      else
+      {
+         player->velocity.y = player->terminal_velocity.y;
+      }
+
       player->rect.y += player->velocity.y;
    }
 
@@ -113,17 +121,19 @@ void DrawPlayer(Player *player)
    // Object
    DrawRectangleRec(player->rect, player->color);
 
-   // Position text
+   // Player info text
    int textWidth = MeasureText(TextFormat("Position: %.2fx%.2f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
+
    DrawText(
        TextFormat(
-           "Position: %.2fx%.2f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\nGrounded: %s\nJumps: %d",
+           "Position: %.2fx%.2f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\nTerminal_V: %s\nGrounded: %s\nJumps: %d",
            player->rect.x,
            player->rect.y,
            0 + player->rect.x,
            SCREEN_DIMENSIONS.x - player->rect.x,
            player->velocity.x,
            player->velocity.y,
+           player->velocity.y >= player->terminal_velocity.y ? "Yes" : "No",
            player->grounded > 0 ? "GROUNDED" : "UNGROUNDED",
            player->remaining_jumps),
        SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
