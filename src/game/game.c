@@ -13,6 +13,7 @@
 #include "objects/floor.h"
 #include "objects/player.h"
 #include "physics/check_collisions.h"
+// #include "audio/music.h"
 
 #include <stdlib.h>
 #include <time.h> // For random seed for floors
@@ -22,6 +23,12 @@
 
 #define STACK_PRINT_TIME_S_MOD 10
 
+/**
+ * @todo Need to clean up these object definitions. I.e. does player1
+ * really need to be "global" by being defined here. Should it (and maybe
+ * other objects) be scoped to their unique functionality files (player.c)?
+ *
+ */
 static Player player1;
 static GameObject floors[10];
 static unsigned int floorSeed = 0;
@@ -29,6 +36,7 @@ static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
 static Menu *loadMenu;
+// static Music mainMenuSong;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -66,6 +74,10 @@ void InitGame()
        startPosition,
        size,
        BLUE);
+
+   // Music init
+   // InitMusic();
+   // StartMusic(mainMenuSong);
 
    // Menu init
    startMenu = getStartMenu();
@@ -113,6 +125,8 @@ int UpdateGame(void)
       break;
    case GAME_STATE_START_MENU:
       updateMenu(startMenu);
+      // if (IsKeyPressed(KEY_P))
+      //    UpdateMusic(mainMenuSong, true);
       break;
    case GAME_STATE_PAUSE_MENU:
       if (IsKeyPressed(KEY_ESCAPE))
