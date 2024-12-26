@@ -23,6 +23,8 @@
 #define STACK_PRINT_TIME_S_MOD 10
 
 static Player player1;
+static GameObject floors[10];
+static unsigned int floorSeed = 0;
 static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
@@ -53,8 +55,7 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   unsigned int floorSeed = 0;
-   InitFloors(floorSeed);
+   InitFloors(floors, sizeof(floors) / sizeof(floors[0]), floorSeed);
 
    // Player init
    float basicSize = 50.0f;
@@ -105,9 +106,7 @@ int UpdateGame(void)
       }
 
       // Normal routine
-      size_t objectCount = 0;
-      GameObject *objects = getFloors(&objectCount);
-      CheckPlayerCollision(&player1, objects, objectCount);
+      CheckPlayerCollision(&player1, floors, sizeof(floors) / sizeof(floors[0]));
       UpdatePlayer(&player1);
       UpdateFPS();
       UpdateTimer();
@@ -147,7 +146,7 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      DrawFloors();
+      DrawFloors(floors, sizeof(floors) / sizeof(floors[0]));
       DrawPlayer(&player1);
       DrawTimer();
       DrawMyFPS();

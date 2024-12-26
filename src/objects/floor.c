@@ -1,14 +1,10 @@
 #include "floor.h"
 #include "logging/log.h"
 
-static GameObject floors[MAX_FLOORS];
-static size_t floorCount = 0;
-
-void InitFloors(unsigned int seed)
+void InitFloors(GameObject *floors, size_t floorCount, unsigned int seed)
 {
    LogMessage(LOG_INFO, "Initializing floors {[%zu]}:", floorCount);
    SetRandomSeed(seed);
-   floorCount = MAX_FLOORS;
    int colorRandMin = 0;
    int colorRandMax = 255;
 
@@ -26,12 +22,12 @@ void InitFloors(unsigned int seed)
       Color color = (Color){GetRandomValue(colorRandMin, colorRandMax), GetRandomValue(colorRandMin, colorRandMax), GetRandomValue(colorRandMin, colorRandMax), 255};
 
       // Init the floor
-      InitGameObject(&floors[i], position, size, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %d", i));
+      InitGameObject(&floors[i], position, size, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %zu", i));
    }
    LogMessage(LOG_INFO, "Done initializing floors\n");
 }
 
-void DrawFloors(void)
+void DrawFloors(GameObject *floors, size_t floorCount)
 {
    for (size_t i = 0; i < floorCount; i++)
    {
@@ -39,8 +35,8 @@ void DrawFloors(void)
    }
 }
 
-GameObject *getFloors(size_t *count)
-{
-   *count = floorCount;
-   return floors;
-}
+// GameObject *getFloors(size_t *count)
+// {
+//    *count = floorCount;
+//    return floors;
+// }
