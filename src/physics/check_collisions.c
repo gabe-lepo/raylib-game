@@ -3,26 +3,53 @@
 
 void CheckPlayerCollision(Player *player, GameObject objects[], size_t objectCount)
 {
-   // This is causing cycling between grounded/ungrounded, but without it player cannot fall from floor
-   // LogMessage(LOG_DEBUG, "PLAYER: Ungrounded due to initial object collision check");
-   // player->grounded = UNGROUNDED;
+   player->grounded = UNGROUNDED;
 
    for (size_t i = 0; i < objectCount; i++)
    {
       GameObject *object = &objects[i];
 
-      if (object->type == OBJECT_TYPE_COLLIDEABLE && CheckCollisionRecs(player->rect, object->rect))
+      // Check for collisions with only collideable objects
+      if (player->objectType == OBJECT_TYPE_COLLIDEABLE &&
+          object->type == OBJECT_TYPE_COLLIDEABLE)
       {
-         // Vertical collision correction
-         if (player->velocity.y > 0 && player->rect.y + player->rect.height <= object->rect.y + player->velocity.y)
+         // Check for vertical collision
+         if (CheckCollisionRecs(player->rect, object->rect))
          {
-            player->rect.y = object->rect.y - player->rect.height;
-            player->velocity.y = 0;
-            LogMessage(LOG_DEBUG, "PLAYER: Grounded due to vertical object collision detection");
-            player->grounded = GROUNDED;
+            LogMessage(LOG_DEBUG, "Player collided with object");
+
+            // Vertical collision: Player landing on top of the object
+            if (player->velocity.y > 0 &&
+                player->rect.y + player->rect.height <= object->rect.y + player->velocity.y)
+            {
+               player->rect.y = object->rect.y - player->rect.height;
+               player->velocity.y = 0;
+               LogMessage(LOG_DEBUG, "Player grounded due to vertical object collision");
+               player->grounded = GROUNDED;
+            }
          }
 
-         // Horizontal collision correction
+         // Check if player is no longer touching top of the object
+         bool isOverlappingHorizontally =
+             (player->rect.x < object->rect.x + object->rect.width) &&
+             (player->rect.x + player->rect.width > object->rect.x);
+
+         bool isTouchingVertically =
+             (player->rect.y + player->rect.height == object->rect.y);
+
+         if (isTouchingVertically && !isOverlappingHorizontally)
+         {
+            // Player moved off the object horizontally
+            player->grounded = UNGROUNDED;
+            LogMessage(LOG_DEBUG, "Player ungrounded due to moving off object");
+         }
       }
+   }
+
+   // If the player is ungrounded, apply gravity
+   if (player->grounded == UNGROUNDED)
+   {
+      LogMessage(LOG_DEBUG, "Player falling due to being ungrounded");
+      player->velocity.y += player->gravity;
    }
 }

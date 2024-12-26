@@ -36,6 +36,7 @@ void UpdatePlayer(Player *player)
    }
    else
    {
+      // Apply terminal y velocity
       if (!(player->velocity.y >= player->terminal_velocity.y))
       {
          player->velocity.y += player->gravity;
@@ -45,6 +46,7 @@ void UpdatePlayer(Player *player)
          player->velocity.y = player->terminal_velocity.y;
       }
 
+      // Apply final y velocity
       player->rect.y += player->velocity.y;
    }
 
