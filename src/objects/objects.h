@@ -15,10 +15,12 @@ typedef struct GameObject
    Vector2 size;
    Color color;
    ObjectType type;
+   char *label;
 } GameObject;
 
-void InitGameObject(GameObject *object, Vector2 position, Vector2 size, Color color, ObjectType type);
+void InitGameObject(GameObject *object, Vector2 position, Vector2 size, Color color, ObjectType type, const char *label);
 void UpdateGameObject(GameObject *object);
 void DrawGameObject(GameObject *object);
+void CleanUpObject(GameObject *object);
 
 #endif

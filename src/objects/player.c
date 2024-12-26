@@ -15,7 +15,7 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
    player->velocity.y = 0.0f;
    player->color = color;
    player->grounded = UNGROUNDED;
-   player->gravity = 0.7f;
+   player->gravity = 0.5f;
    player->sprint_speed_mod = 2.0f;
    player->sneak_speed_mod = 0.5f;
    player->jump_speed = 15.0f;

@@ -1,6 +1,10 @@
 #include "objects.h"
+#include "logging/log.h"
 
-void InitGameObject(GameObject *object, Vector2 position, Vector2 size, Color color, ObjectType type)
+#include "string.h"
+#include "stdlib.h"
+
+void InitGameObject(GameObject *object, Vector2 position, Vector2 size, Color color, ObjectType type, const char *label)
 {
    object->rect.x = position.x;
    object->rect.y = position.y;
@@ -8,6 +12,34 @@ void InitGameObject(GameObject *object, Vector2 position, Vector2 size, Color co
    object->rect.height = size.y;
    object->color = color;
    object->type = type;
+
+   // Dynamic label allocation
+   if (label)
+   {
+      object->label = malloc(strlen(label) + 1);
+      if (object->label)
+      {
+         strcpy(object->label, label);
+      }
+   }
+   else
+   {
+      object->label = NULL;
+   }
+
+   LogMessage(LOG_INFO,
+              "Done initializing object {%s}, parameters:\n"
+              "\tPosition: {%.0fx%.0f}\n"
+              "\tType: {%s}\n"
+              "\tSize: {%.0fx%.0f}\n"
+              "\tColor: {R:%d, G:%d, B:%d, A:%d}",
+              object->label ? object->label : "NULL",
+              object->rect.x,
+              object->rect.y,
+              object->type == OBJECT_TYPE_COLLIDEABLE ? "Collideable" : "Non-collideable",
+              object->rect.width,
+              object->rect.height,
+              object->color.r, object->color.g, object->color.b, object->color.a);
 }
 
 void UpdateGameObject(GameObject *object)
@@ -18,4 +50,13 @@ void UpdateGameObject(GameObject *object)
 void DrawGameObject(GameObject *object)
 {
    DrawRectangleRec(object->rect, object->color);
+}
+
+void CleanUpObject(GameObject *object)
+{
+   if (object->label)
+   {
+      free(object->label);
+      object->label = NULL;
+   }
 }

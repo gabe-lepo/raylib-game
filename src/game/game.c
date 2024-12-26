@@ -53,7 +53,7 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   unsigned int floorSeed = 5678;
+   unsigned int floorSeed = 0;
    InitFloors(floorSeed);
 
    // Player init
@@ -185,9 +185,10 @@ int DrawGame(void)
    return EXIT_SUCCESS;
 }
 
-void CloseGame(void)
+void CloseGame()
 {
    LogMessage(LOG_INFO, "Closing game");
+   // Cleanup object labels
    ClearGameStateStack();
    gameShouldClose = 1;
 }

@@ -3,8 +3,6 @@
 
 void CheckPlayerCollision(Player *player, GameObject objects[], size_t objectCount)
 {
-   player->grounded = UNGROUNDED;
-
    for (size_t i = 0; i < objectCount; i++)
    {
       GameObject *object = &objects[i];
