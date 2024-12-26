@@ -16,7 +16,8 @@ void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
    player->color = color;
    player->grounded = UNGROUNDED;
    player->gravity = 0.7f;
-   player->move_speed = 7.5f;
+   player->sprint_speed_mod = 2.0f;
+   player->sneak_speed_mod = 0.5f;
    player->jump_speed = 15.0f;
    player->max_jump_height = player->rect.height * 2;
    player->num_jumps = 2;
@@ -57,41 +58,44 @@ void UpdatePlayer(Player *player)
       // LogMessage(LOG_DEBUG, "PLAYER: Hit the ceiling!");
    }
 
-   // Horizontal screen collision
+   // Left/right movement controls
+   player->move_speed = 5.0f; // Reset move speed every frame
+
+   // Sprint/sneaking modifiers
+   if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
+   {
+      player->move_speed *= player->sprint_speed_mod;
+   }
+   if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))
+   {
+      player->move_speed *= player->sneak_speed_mod;
+   }
+
+   if (IsKeyDown(KEY_RIGHT))
+   {
+      player->velocity.x = player->move_speed;
+   }
+
+   if (IsKeyDown(KEY_LEFT))
+   {
+      player->velocity.x = -(player->move_speed);
+   }
+
+   if (!IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT))
+   {
+      player->velocity.x = 0.0f;
+   }
+
+   player->rect.x += player->velocity.x;
+
+   // Horizontal screen collision (must be done after horizontal movement checks)
    if (player->rect.x + player->rect.width >= SCREEN_DIMENSIONS.x)
    {
-      LogMessage(LOG_DEBUG,
-                 "Stopping player movement at right screen boundary\n\tRectX %.2f - %.2f",
-                 player->rect.x,
-                 player->rect.x + player->rect.width);
-
-      player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width;
-      player->velocity.x = 0.0f;
+      player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width - SCREEN_EDGE_PADDING;
    }
    if (player->rect.x <= 0)
    {
-      LogMessage(LOG_DEBUG,
-                 "Stopping player movement at left screen boundary\n\tRectX %.2f - %.2f",
-                 player->rect.x,
-                 player->rect.x + player->rect.width);
-      player->rect.x = 0;
-      player->velocity.x = 0.0f;
-   }
-
-   // Left/right movement controls
-   if (IsKeyDown(KEY_RIGHT) && player->rect.x + player->rect.width < SCREEN_DIMENSIONS.x)
-   {
-      player->velocity.x = player->move_speed;
-      player->rect.x += player->velocity.x;
-   }
-   else if (IsKeyDown(KEY_LEFT) && player->rect.x > 0)
-   {
-      player->velocity.x = -(player->move_speed);
-      player->rect.x += player->velocity.x;
-   }
-   else
-   {
-      player->velocity.x = 0.0f;
+      player->rect.x = SCREEN_EDGE_PADDING;
    }
 
    // Multi jump logic
@@ -110,23 +114,20 @@ void DrawPlayer(Player *player)
    DrawRectangleRec(player->rect, player->color);
 
    // Position text
-   // int posX = player->rect.x;
-   // int posY = player->rect.y;
-   // int velocityX = player->velocity.x;
-   // int velocityY = player->velocity.y;
-   int size = 20;
-   int textWidth = MeasureText(TextFormat("Position:\t%.2fx%.2f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), size);
+   int textWidth = MeasureText(TextFormat("Position: %.2fx%.2f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
    DrawText(
        TextFormat(
-           "Position:\t\t%.2fx%.2f\nVelocity:\t%.2fx%.2f\nGrounded:\t%s\nJumps:\t%d",
+           "Position: %.2fx%.2f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\nGrounded: %s\nJumps: %d",
            player->rect.x,
            player->rect.y,
+           0 + player->rect.x,
+           SCREEN_DIMENSIONS.x - player->rect.x,
            player->velocity.x,
            player->velocity.y,
            player->grounded > 0 ? "GROUNDED" : "UNGROUNDED",
            player->remaining_jumps),
        SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
-       0 + 10,
-       size,
+       10,
+       20,
        BLACK);
 }

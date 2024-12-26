@@ -13,13 +13,20 @@ typedef enum isGrounded
 
 typedef struct Player
 {
+   // Visuals
    ObjectType objectType;
    Rectangle rect;
-   Vector2 velocity;
    Color color;
+
+   // Basic movement
+   Vector2 velocity;
+   float move_speed;
+   float sprint_speed_mod;
+   float sneak_speed_mod;
+
+   // Jumping mechanics
    isGrounded grounded;
    float gravity;
-   float move_speed;
    float jump_speed;
    float max_jump_height;
    int num_jumps;
