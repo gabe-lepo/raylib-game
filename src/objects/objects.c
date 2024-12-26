@@ -50,6 +50,15 @@ void UpdateGameObject(GameObject *object)
 void DrawGameObject(GameObject *object)
 {
    DrawRectangleRec(object->rect, object->color);
+   if (object->label)
+   {
+      int textWidth = MeasureText(object->label, 20);
+      int textSize = 20;
+      float textX = object->rect.x + (object->rect.width / 2) - (textWidth / 2);
+      float textY = object->rect.y + (object->rect.height / 2) - (textSize / 2);
+
+      DrawText(object->label, textX, textY, textSize, BLACK);
+   }
 }
 
 void CleanUpObject(GameObject *object)

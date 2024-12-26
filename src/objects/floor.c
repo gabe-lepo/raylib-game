@@ -1,5 +1,6 @@
 #include "floor.h"
 #include "logging/log.h"
+#include "utils/color_utils.h"
 
 void InitFloors(GameObject *floors, size_t floorCount, unsigned int seed)
 {
@@ -19,7 +20,7 @@ void InitFloors(GameObject *floors, size_t floorCount, unsigned int seed)
       Vector2 position = {x, y};
 
       // Unique colors
-      Color color = (Color){GetRandomValue(colorRandMin, colorRandMax), GetRandomValue(colorRandMin, colorRandMax), GetRandomValue(colorRandMin, colorRandMax), 255};
+      Color color = GetRandomColor(0, 255, 255);
 
       // Init the floor
       InitGameObject(&floors[i], position, size, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %zu", i));
