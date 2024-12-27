@@ -5,7 +5,7 @@
 void InitFloors(GameObject *floors, size_t floorCount, unsigned int seed)
 {
    LogMessage(LOG_INFO, "Initializing floors {[%zu]}:", floorCount);
-   SetRandomSeed(seed);
+   // SetRandomSeed(seed);
    int colorRandMin = 0;
    int colorRandMax = 255;
 
