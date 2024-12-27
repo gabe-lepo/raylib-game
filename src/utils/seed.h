@@ -3,12 +3,8 @@
 
 #include "raylib.h"
 
-typedef struct RandomSeed
-{
-   unsigned int value;
-} RandomSeed;
-
-void setSeed(int value);
-RandomSeed getSeed(void);
+void InitSeed(unsigned int value);
+unsigned int GetSeed(void);
+void RandomizeSeed(bool init);
 
 #endif

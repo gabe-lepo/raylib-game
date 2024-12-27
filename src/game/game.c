@@ -41,6 +41,8 @@ static Menu *loadMenu;
 int gameShouldClose = 0;
 int updateGameIterations = 0;
 
+static int target_fps = 60;
+
 void InitGame()
 {
    // Setup logs
@@ -59,7 +61,7 @@ void InitGame()
 
    // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow
-   InitFPS();
+   InitFPS(target_fps);
    InitTimer();
 
    // Floor init
@@ -94,7 +96,7 @@ int UpdateGame(void)
 {
    // Print out contents of state stack occasionally
    updateGameIterations++;
-   if (updateGameIterations == TARGET_FPS * STACK_PRINT_TIME_S_MOD)
+   if (updateGameIterations == target_fps * STACK_PRINT_TIME_S_MOD)
    {
       const GameStateStack *stack = getStateStack();
       LogMessage(LOG_INFO, "Contents of game state stack:");
