@@ -14,6 +14,7 @@
 #include "objects/player.h"
 #include "physics/check_collisions.h"
 // #include "audio/music.h"
+#include "utils/seed.h"
 
 #include <stdlib.h>
 #include <time.h> // For random seed for floors
@@ -63,6 +64,7 @@ void InitGame()
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    InitFPS(target_fps);
    InitTimer();
+   InitSeed(123456789);
 
    // Floor init
    InitFloors();
@@ -155,10 +157,10 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      DrawFloors();
-      DrawPlayer();
       DrawTimer();
       DrawMyFPS();
+      DrawPlayer();
+      DrawFloors();
       break;
    case GAME_STATE_START_MENU:
       if (drawMenu(startMenu))

@@ -8,7 +8,10 @@
 void InitGameObject(GameObject *object, Shape shape, Color color, ObjectType type, const char *label)
 {
    if (!object)
+   {
+      LogMessage(LOG_ERROR, "Object is null trying to InitObject");
       return;
+   }
 
    // Init basic object members
    object->shape = shape;

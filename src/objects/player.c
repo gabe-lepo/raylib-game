@@ -10,13 +10,14 @@ void InitPlayer(void)
 {
    // Init player as 50x50 px rectangle
    player.size = (Vector2){50.0f};
-   player.object.color = BLUE;
    Vector2 playerStartPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - player.size.y - 100};
 
    Shape playerShape = {
        .type = SHAPE_TYPE_RECTANGLE,
        .rectangle = {playerStartPosition.x, playerStartPosition.y, player.size.x, player.size.y},
    };
+
+   player.object.color = BLUE;
 
    InitGameObject(&player.object, playerShape, player.object.color, OBJECT_TYPE_COLLIDEABLE, "Player");
 
