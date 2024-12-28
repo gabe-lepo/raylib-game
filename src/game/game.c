@@ -65,17 +65,10 @@ void InitGame()
    InitTimer();
 
    // Floor init
-   InitFloors(floors, sizeof(floors) / sizeof(floors[0]), floorSeed);
+   InitFloors();
 
    // Player init
-   float basicSize = 50.0f;
-   Vector2 size = {basicSize, basicSize};
-   Vector2 startPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - basicSize - 100};
-   InitPlayer(
-       &player1,
-       startPosition,
-       size,
-       BLUE);
+   InitPlayer();
 
    // Music init
    // InitMusic();
@@ -121,7 +114,7 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerCollision(&player1, floors, sizeof(floors) / sizeof(floors[0]));
-      UpdatePlayer(&player1);
+      UpdatePlayer();
       UpdateFPS();
       UpdateTimer();
       break;
@@ -162,8 +155,8 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      DrawFloors(floors, sizeof(floors) / sizeof(floors[0]));
-      DrawPlayer(&player1);
+      DrawFloors();
+      DrawPlayer();
       DrawTimer();
       DrawMyFPS();
       break;

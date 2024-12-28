@@ -2,16 +2,23 @@
 #define FLOOR_H
 
 #include "objects.h"
-#include "game/screen.h"
 
-#include <stddef.h>
+typedef struct Floor
+{
+   // Object
+   GameObject object;
 
-#define MIN_FLOOR_WIDTH 100
-#define MAX_FLOOR_WIDTH 300
-#define FLOOR_HEIGHT 20
+   // Size constraints
+   Vector2 width_limit;
+   Vector2 height_limit;
 
-void InitFloors(GameObject *floors, size_t floorCount, unsigned int seed);
-void DrawFloors(GameObject *floors, size_t floorCount);
-// GameObject *getFloors(size_t *count);
+   // Other
+} Floor;
+
+void InitFloors(void);
+void UpdateFloors(void);
+void DrawFloors(void);
+Floor *GetFloors(void);
+void CleanUpFloors(void);
 
 #endif

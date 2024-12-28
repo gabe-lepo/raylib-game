@@ -5,18 +5,16 @@
 #include "game/screen.h"
 #include "objects.h"
 
-typedef enum isGrounded
+typedef enum GroundedState
 {
-   UNGROUNDED = 0,
-   GROUNDED
-} isGrounded;
+   GROUNDED_STATE_UNGROUNDED = 0,
+   GROUNDED_STATE_GROUNDED
+} GroundedState;
 
 typedef struct Player
 {
-   // Visuals
-   ObjectType objectType;
-   Rectangle rect;
-   Color color;
+   // Object
+   GameObject object;
 
    // Basic movement
    Vector2 velocity;
@@ -26,16 +24,21 @@ typedef struct Player
    float sneak_speed_mod;
 
    // Jumping mechanics
-   isGrounded grounded;
+   GroundedState grounded;
    float gravity;
    float jump_speed;
    float max_jump_height;
-   int num_jumps;
+   int max_jumps;
    int remaining_jumps;
+
+   // Other
+   Vector2 size;
 } Player;
 
-void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color);
-void UpdatePlayer(Player *player);
-void DrawPlayer(Player *player);
+void InitPlayer(void);
+void UpdatePlayer(void);
+void DrawPlayer(void);
+Player *GetPlayer(void);
+void CleanUpPlayer(void);
 
 #endif
