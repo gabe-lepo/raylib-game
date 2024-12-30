@@ -159,8 +159,8 @@ int DrawGame(void)
       ClearBackground(DARKGRAY);
       DrawTimer();
       DrawMyFPS();
-      DrawPlayer();
       DrawFloors();
+      DrawPlayer();
       break;
    case GAME_STATE_START_MENU:
       if (drawMenu(startMenu))

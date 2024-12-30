@@ -9,7 +9,7 @@ static Player player;
 void InitPlayer(void)
 {
    // Init player as 50x50 px rectangle
-   player.size = (Vector2){50.0f};
+   player.size = (Vector2){50.0f, 50.0f};
    Vector2 playerStartPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - player.size.y - 100};
 
    Shape playerShape = {
