@@ -15,8 +15,6 @@ static int floorCount = sizeof(floors) / sizeof(floors[0]);
  */
 void InitFloors(void)
 {
-   LogMessage(LOG_INFO, "Initializing floors {[%zu]}:", floorCount);
-
    for (size_t i = 0; i < floorCount; i++)
    {
       // Since we're using Vector2 for min/max limits, x is the min; y is the max.
@@ -45,7 +43,6 @@ void InitFloors(void)
       // Init the floor
       InitGameObject(&floors[i].object, floorShape, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %zu", i));
    }
-   LogMessage(LOG_INFO, "Done initializing floors\n");
 }
 
 /**

@@ -43,7 +43,7 @@ void UpdatePlayer(void)
    Rectangle *playerRect = &player.object.shape.rectangle;
 
    // Reapply some states based on grounding
-   if (player.grounded)
+   if (player.grounded == GROUNDED_STATE_GROUNDED)
    {
       player.remaining_jumps = player.max_jumps;
       player.velocity.y = 0.0f;
@@ -65,7 +65,7 @@ void UpdatePlayer(void)
    }
 
    // Check for ground collision at bottom of screen
-   if (playerRect->y + playerRect->height >= SCREEN_DIMENSIONS.y)
+   if (playerRect->y + playerRect->height > SCREEN_DIMENSIONS.y)
    {
       playerRect->y = SCREEN_DIMENSIONS.y - playerRect->height;
       player.velocity.y = 0.0f;
@@ -94,10 +94,16 @@ void UpdatePlayer(void)
       player.move_speed *= player.sneak_speed_mod;
 
    if (IsKeyDown(KEY_RIGHT))
+   {
       player.velocity.x = player.move_speed;
+      LogMessage(LOG_DEBUG, "Player moving right with velocity {%.0f}", player.velocity.x);
+   }
 
    if (IsKeyDown(KEY_LEFT))
+   {
       player.velocity.x = -(player.move_speed);
+      LogMessage(LOG_DEBUG, "Player moving left with velocity {%.0f}", player.velocity.x);
+   }
 
    if (!IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT))
       player.velocity.x = 0.0f;

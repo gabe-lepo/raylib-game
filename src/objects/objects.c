@@ -13,6 +13,8 @@ void InitGameObject(GameObject *object, Shape shape, Color color, ObjectType typ
       return;
    }
 
+   LogMessage(LOG_INFO, "Initializing object...");
+
    // Init basic object members
    object->shape = shape;
    object->color = color;
@@ -28,8 +30,6 @@ void InitGameObject(GameObject *object, Shape shape, Color color, ObjectType typ
    {
       object->label = NULL;
    }
-
-   // L
 
    LogMessage(LOG_INFO,
               "Done initializing object {%s}, parameters:\n"
