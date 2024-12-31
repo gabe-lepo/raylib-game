@@ -70,9 +70,11 @@ void DrawFloors(void)
  * @brief Get the internal Floor object array.
  * @return Pointer to first Floor array item
  */
-Floor *GetFloors(void)
+Floor *GetFloors(int *countFloors)
 {
-   return floors;
+
+   *countFloors = floorCount; // Need this to pass floor pointer to check collision. Not very nice but it works
+   return floors;             // Floors should be an array, so no need for "address of" operator...
 }
 
 /**

@@ -18,7 +18,7 @@ typedef struct Floor
 void InitFloors(void);
 void UpdateFloors(void);
 void DrawFloors(void);
-Floor *GetFloors(void);
+Floor *GetFloors(int *countFloors);
 void CleanUpFloors(void);
 
 #endif

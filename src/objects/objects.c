@@ -35,11 +35,15 @@ void InitGameObject(GameObject *object, Shape shape, Color color, ObjectType typ
               "Done initializing object {%s}, parameters:\n"
               "\tShape: {%d}\n"
               "\tType: {%s}\n"
-              "\tColor: {R:%d, G:%d, B:%d, A:%d}",
+              "\tColor: {R:%d, G:%d, B:%d, A:%d}\n"
+              "\tPosition: {%.0fx%.0f}\n"
+              "\tSize: {%.0fx%.0f}",
               object->label ? object->label : "NULL",
               object->shape.type,
               object->type == OBJECT_TYPE_COLLIDEABLE ? "Collideable" : "Non-collideable",
-              object->color.r, object->color.g, object->color.b, object->color.a);
+              object->color.r, object->color.g, object->color.b, object->color.a,
+              object->shape.rectangle.x, object->shape.rectangle.y,
+              object->shape.rectangle.width, object->shape.rectangle.height);
 }
 
 void UpdateGameObject(GameObject *object)

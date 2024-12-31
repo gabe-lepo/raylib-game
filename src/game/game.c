@@ -24,20 +24,14 @@
 
 #define STACK_PRINT_TIME_S_MOD 10
 
-/**
- * @todo Need to clean up these object definitions. I.e. does player1
- * really need to be "global" by being defined here. Should it (and maybe
- * other objects) be scoped to their unique functionality files (player.c)?
- *
- */
-static Player player1;
-static GameObject floors[10];
-static unsigned int floorSeed = 0;
 static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
 static Menu *loadMenu;
 // static Music mainMenuSong;
+Player *p_player;
+Floor *p_floors;
+static int floorCount;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -68,9 +62,11 @@ void InitGame()
 
    // Floor init
    InitFloors();
+   p_floors = GetFloors(&floorCount);
 
    // Player init
    InitPlayer();
+   p_player = GetPlayer();
 
    // Music init
    // InitMusic();
@@ -115,7 +111,7 @@ int UpdateGame(void)
       }
 
       // Normal routine
-      CheckPlayerCollision(&player1, floors, sizeof(floors) / sizeof(floors[0]));
+      CheckPlayerFloorCollision(p_player, p_floors, floorCount);
       UpdatePlayer();
       UpdateFPS();
       UpdateTimer();

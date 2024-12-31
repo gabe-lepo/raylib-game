@@ -23,7 +23,7 @@ void InitPlayer(void)
 
    // Movement properties
    player.velocity = (Vector2){0.0f, 0.0f};
-   player.terminal_velocity = (Vector2){50.0f, 15.0f}; // x term vel is placeholder for now
+   player.terminal_velocity = (Vector2){50.0f, 30.0f}; // x term vel is placeholder for now
    player.move_speed = 5.0f;
    player.sprint_speed_mod = 2.0f;
    player.sneak_speed_mod = 0.5f;
@@ -70,7 +70,7 @@ void UpdatePlayer(void)
       playerRect->y = SCREEN_DIMENSIONS.y - playerRect->height;
       player.velocity.y = 0.0f;
       player.grounded = GROUNDED_STATE_GROUNDED;
-
+      player.remaining_jumps = player.max_jumps;
       LogMessage(LOG_DEBUG, "Player grounded due to collision at bottom of screen");
    }
 
@@ -96,13 +96,13 @@ void UpdatePlayer(void)
    if (IsKeyDown(KEY_RIGHT))
    {
       player.velocity.x = player.move_speed;
-      LogMessage(LOG_DEBUG, "Player moving right with velocity {%.0f}", player.velocity.x);
+      // LogMessage(LOG_DEBUG, "Player moving right with velocity {%.0f}", player.velocity.x);
    }
 
    if (IsKeyDown(KEY_LEFT))
    {
       player.velocity.x = -(player.move_speed);
-      LogMessage(LOG_DEBUG, "Player moving left with velocity {%.0f}", player.velocity.x);
+      // LogMessage(LOG_DEBUG, "Player moving left with velocity {%.0f}", player.velocity.x);
    }
 
    if (!IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT))
@@ -138,27 +138,33 @@ void DrawPlayer(void)
    DrawGameObject(&player.object);
 
    // Additional info for debugging
-   int textWidth = MeasureText(TextFormat("Position: %.2fx%.2f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
+   int textWidth = MeasureText(TextFormat("Position: %.0fx%.0f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
    DrawText(
        TextFormat(
-           "Position: %.2fx%.2f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\nTerminal_V: %s\nGrounded: %s\nJumps: %d",
-           player.object.shape.rectangle.x,
-           player.object.shape.rectangle.y,
+           "Position: %.0fx%.0f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\n%s\nJumps: %d",
+           player.object.shape.rectangle.x, player.object.shape.rectangle.y,
            0 + player.object.shape.rectangle.x,
            SCREEN_DIMENSIONS.x - player.object.shape.rectangle.x,
            player.velocity.x,
            player.velocity.y,
-           player.velocity.y >= player.terminal_velocity.y ? "Yes" : "No",
-           player.grounded > 0 ? "GROUNDED" : "GROUNDED_STATE_UNGROUNDED",
+           player.grounded > 0 ? "GROUNDED" : "UNGROUNDED",
            player.remaining_jumps),
        SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
        10,
        20,
        BLACK);
+
+   DrawText(
+       TextFormat(
+           "BLx {%.0f} | BRx {%.0f}",
+           player.object.shape.rectangle.x,
+           player.object.shape.rectangle.x + player.object.shape.rectangle.width),
+       100, 100,
+       20, BLACK);
 }
 
 /**
- * @brief Get the Player object by reference
+ * @brief Get the Player object memory address
  * @return Player* object
  */
 Player *GetPlayer(void)
