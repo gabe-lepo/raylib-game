@@ -11,7 +11,7 @@ static int xChunks = 0;
 static int yChunks = 0;
 static int divisor = 100;
 
-void InitChunks(void)
+void InitChunks(bool colorful)
 {
    xChunks = SCREEN_DIMENSIONS.x / divisor;
    yChunks = SCREEN_DIMENSIONS.y / divisor;
@@ -25,8 +25,12 @@ void InitChunks(void)
    }
 
    // Init each chunk
+   bool blackOrWhite = false;
    for (int i = 0; i < xChunks; i++)
    {
+      if (!colorful)
+         blackOrWhite = !blackOrWhite;
+
       for (int j = 0; j < yChunks; j++)
       {
          Shape chunkShape = {
@@ -38,8 +42,19 @@ void InitChunks(void)
                  .height = divisor,
              }};
 
-         Color chunkColor = GetRandomColor(0.0f, 255.0f, 255.0f);
          const char *chunkLabel = TextFormat("%dx%d", i, j);
+
+         // Colors or not
+         Color chunkColor;
+         if (colorful)
+         {
+            chunkColor = GetRandomColor(0.0f, 255.0f, 255.0f);
+         }
+         else
+         {
+            chunkColor = blackOrWhite ? BLACK : WHITE;
+            blackOrWhite = !blackOrWhite;
+         }
 
          // Init the objects
          InitGameObject(

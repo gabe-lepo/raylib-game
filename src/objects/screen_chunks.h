@@ -9,7 +9,7 @@ typedef struct Chunk
    GameObject object;
 } Chunk;
 
-void InitChunks(void);
+void InitChunks(bool colorful);
 void UpdateChunks(void);
 void DrawChunks(void);
 Chunk *GetChunks(int *countChunks, int *xCount, int *yCount);

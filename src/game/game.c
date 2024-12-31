@@ -65,7 +65,7 @@ void InitGame()
    InitSeed(0);
 
    // Init screen chunks
-   InitChunks();
+   InitChunks(false);
    p_chunks = GetChunks(&chunkCount, &chunkXCount, &chunkYCount);
 
    // Floor init
