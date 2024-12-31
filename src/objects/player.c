@@ -23,8 +23,7 @@ void InitPlayer(void)
 
    // Movement properties
    player.velocity = (Vector2){0.0f, 0.0f};
-   player.terminal_velocity = (Vector2){50.0f, 30.0f}; // x term vel is placeholder for now
-   player.move_speed = 5.0f;
+   player.terminal_velocity = (Vector2){50.0f, 15.0f}; // x term vel is placeholder for now
    player.sprint_speed_mod = 2.0f;
    player.sneak_speed_mod = 0.5f;
 
@@ -84,7 +83,7 @@ void UpdatePlayer(void)
    }
 
    // Horizontal movement controls
-   player.move_speed = 5.0f; // Reset move speed every frame
+   player.move_speed = 2.5f; // Reset move speed every frame
 
    // Sprint/sneaking modifiers
    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
@@ -153,14 +152,6 @@ void DrawPlayer(void)
        10,
        20,
        BLACK);
-
-   DrawText(
-       TextFormat(
-           "BLx {%.0f} | BRx {%.0f}",
-           player.object.shape.rectangle.x,
-           player.object.shape.rectangle.x + player.object.shape.rectangle.width),
-       100, 100,
-       20, BLACK);
 }
 
 /**

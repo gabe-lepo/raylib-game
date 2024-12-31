@@ -15,6 +15,7 @@
 #include "physics/check_collisions.h"
 // #include "audio/music.h"
 #include "utils/seed.h"
+#include "objects/screen_chunks.h"
 
 #include <stdlib.h>
 #include <time.h> // For random seed for floors
@@ -32,6 +33,10 @@ static Menu *loadMenu;
 Player *p_player;
 Floor *p_floors;
 static int floorCount;
+// Chunk *p_chunks;
+// static int chunkCount;
+// static int chunkXCount;
+// static int chunkYCount;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -59,6 +64,10 @@ void InitGame()
    InitFPS(target_fps);
    InitTimer();
    InitSeed(123456789);
+
+   // Init screen chunks
+   InitChunks();
+   // p_chunks = GetChunks(&chunkCount, &chunkXCount, &chunkYCount);
 
    // Floor init
    InitFloors();
@@ -153,6 +162,7 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
+      DrawChunks();
       DrawTimer();
       DrawMyFPS();
       DrawFloors();
@@ -194,7 +204,9 @@ int DrawGame(void)
 void CloseGame()
 {
    LogMessage(LOG_INFO, "Closing game");
-   // Cleanup object labels
+   CleanUpPlayer();
+   CleanUpFloors();
+   CleanUpChunks();
    ClearGameStateStack();
    gameShouldClose = 1;
 }
