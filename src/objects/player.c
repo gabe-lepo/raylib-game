@@ -83,7 +83,7 @@ void UpdatePlayer(void)
    }
 
    // Horizontal movement controls
-   player.move_speed = 2.5f; // Reset move speed every frame
+   player.move_speed = 5.0f; // Reset move speed every frame
 
    // Sprint/sneaking modifiers
    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
