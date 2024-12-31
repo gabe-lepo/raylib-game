@@ -12,7 +12,7 @@ typedef struct Chunk
 void InitChunks(void);
 void UpdateChunks(void);
 void DrawChunks(void);
-Chunk **GetChunks(int *countChunks, int *xCount, int *yCount);
+Chunk *GetChunks(int *countChunks, int *xCount, int *yCount);
 void CleanUpChunks(void);
 
 #endif

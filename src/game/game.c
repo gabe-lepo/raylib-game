@@ -18,7 +18,6 @@
 #include "objects/screen_chunks.h"
 
 #include <stdlib.h>
-#include <time.h> // For random seed for floors
 
 #define DEBUG_LOGS 1
 #define RAYLIB_LOGS 1
@@ -33,10 +32,10 @@ static Menu *loadMenu;
 Player *p_player;
 Floor *p_floors;
 static int floorCount;
-// Chunk *p_chunks;
-// static int chunkCount;
-// static int chunkXCount;
-// static int chunkYCount;
+Chunk *p_chunks;
+static int chunkCount;
+static int chunkXCount;
+static int chunkYCount;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -63,11 +62,11 @@ void InitGame()
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    InitFPS(target_fps);
    InitTimer();
-   InitSeed(123456789);
+   InitSeed(0);
 
    // Init screen chunks
    InitChunks();
-   // p_chunks = GetChunks(&chunkCount, &chunkXCount, &chunkYCount);
+   p_chunks = GetChunks(&chunkCount, &chunkXCount, &chunkYCount);
 
    // Floor init
    InitFloors();
@@ -121,6 +120,7 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
+      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount);
       UpdatePlayer();
       UpdateFPS();
       UpdateTimer();

@@ -46,7 +46,7 @@ void InitChunks(void)
              &screen_chunks[i][j].object,
              chunkShape,
              chunkColor,
-             OBJECT_TYPE_NON_COLLIDEABLE,
+             OBJECT_TYPE_COLLIDEABLE,
              chunkLabel);
       }
    }
@@ -68,12 +68,14 @@ void DrawChunks(void)
    }
 }
 
-Chunk **GetChunks(int *countChunks, int *xCount, int *yCount)
+Chunk *GetChunks(int *countChunks, int *xCount, int *yCount)
 {
    *countChunks = chunkCount;
    *xCount = xChunks;
    *yCount = yChunks;
-   return screen_chunks;
+
+   // Flatten array to 1 dimension
+   return &screen_chunks[0][0];
 }
 
 void CleanUpChunks(void)

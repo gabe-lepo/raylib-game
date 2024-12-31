@@ -91,7 +91,11 @@ void DrawGameObject(GameObject *object)
    }
 
    // Draw label
-   DrawText(object->label, labelPosition.x, labelPosition.y, textSize, GetComplimentaryColor(object->color));
+   DrawText(
+       object->label,
+       labelPosition.x, labelPosition.y,
+       textSize,
+       GetComplimentaryColor(object->color));
 }
 
 void CleanUpObject(GameObject *object)

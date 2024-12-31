@@ -19,7 +19,7 @@ void InitPlayer(void)
 
    player.object.color = BLUE;
 
-   InitGameObject(&player.object, playerShape, player.object.color, OBJECT_TYPE_COLLIDEABLE, "Player");
+   InitGameObject(&player.object, playerShape, player.object.color, OBJECT_TYPE_COLLIDEABLE, "");
 
    // Movement properties
    player.velocity = (Vector2){0.0f, 0.0f};
