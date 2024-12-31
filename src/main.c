@@ -24,6 +24,7 @@ int main(void)
       {
          break;
       }
+      EndMode2D();
       EndDrawing();
    }
 

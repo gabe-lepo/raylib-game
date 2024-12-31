@@ -16,6 +16,7 @@
 // #include "audio/music.h"
 #include "utils/seed.h"
 #include "objects/screen_chunks.h"
+#include "camera/game_camera.h"
 
 #include <stdlib.h>
 
@@ -36,6 +37,7 @@ Chunk *p_chunks;
 static int chunkCount;
 static int chunkXCount;
 static int chunkYCount;
+static GameCamera *p_gameCamera;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -75,6 +77,10 @@ void InitGame()
    // Player init
    InitPlayer();
    p_player = GetPlayer();
+
+   // Init camera
+   InitGameCamera(p_player);
+   p_gameCamera = GetGameCamera();
 
    // Music init
    // InitMusic();
@@ -122,6 +128,7 @@ int UpdateGame(void)
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
       // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount);
       UpdatePlayer();
+      UpdateGameCamera(p_player);
       UpdateFPS();
       UpdateTimer();
       break;
@@ -156,6 +163,7 @@ int UpdateGame(void)
 
 int DrawGame(void)
 {
+   BeginMode2D(p_gameCamera->camera2d);
    switch (PeekGameState())
    {
    case GAME_STATE_INIT:
