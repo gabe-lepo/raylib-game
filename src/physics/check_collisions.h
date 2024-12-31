@@ -2,11 +2,11 @@
 #define CHECK_COLLISIONS_H
 
 #include "raylib.h"
-#include "objects/objects.h"
 #include "objects/player.h"
+#include "objects/floor.h"
 
 #include <stddef.h>
 
-void CheckPlayerCollision(Player *player, GameObject objects[], size_t objectCount);
+void CheckPlayerFloorCollision(Player *player, Floor objects[], size_t floorCount);
 
 #endif

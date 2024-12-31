@@ -14,6 +14,7 @@
 #include "objects/player.h"
 #include "physics/check_collisions.h"
 // #include "audio/music.h"
+#include "utils/seed.h"
 
 #include <stdlib.h>
 #include <time.h> // For random seed for floors
@@ -23,23 +24,19 @@
 
 #define STACK_PRINT_TIME_S_MOD 10
 
-/**
- * @todo Need to clean up these object definitions. I.e. does player1
- * really need to be "global" by being defined here. Should it (and maybe
- * other objects) be scoped to their unique functionality files (player.c)?
- *
- */
-static Player player1;
-static GameObject floors[10];
-static unsigned int floorSeed = 0;
 static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
 static Menu *loadMenu;
 // static Music mainMenuSong;
+Player *p_player;
+Floor *p_floors;
+static int floorCount;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
+
+static int target_fps = 60;
 
 void InitGame()
 {
@@ -59,21 +56,17 @@ void InitGame()
 
    // Other setup stuff
    SetExitKey(KEY_NULL); // Must be called after InitWindow
-   InitFPS();
+   InitFPS(target_fps);
    InitTimer();
+   InitSeed(123456789);
 
    // Floor init
-   InitFloors(floors, sizeof(floors) / sizeof(floors[0]), floorSeed);
+   InitFloors();
+   p_floors = GetFloors(&floorCount);
 
    // Player init
-   float basicSize = 50.0f;
-   Vector2 size = {basicSize, basicSize};
-   Vector2 startPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - basicSize - 100};
-   InitPlayer(
-       &player1,
-       startPosition,
-       size,
-       BLUE);
+   InitPlayer();
+   p_player = GetPlayer();
 
    // Music init
    // InitMusic();
@@ -94,7 +87,7 @@ int UpdateGame(void)
 {
    // Print out contents of state stack occasionally
    updateGameIterations++;
-   if (updateGameIterations == TARGET_FPS * STACK_PRINT_TIME_S_MOD)
+   if (updateGameIterations == target_fps * STACK_PRINT_TIME_S_MOD)
    {
       const GameStateStack *stack = getStateStack();
       LogMessage(LOG_INFO, "Contents of game state stack:");
@@ -118,8 +111,8 @@ int UpdateGame(void)
       }
 
       // Normal routine
-      CheckPlayerCollision(&player1, floors, sizeof(floors) / sizeof(floors[0]));
-      UpdatePlayer(&player1);
+      CheckPlayerFloorCollision(p_player, p_floors, floorCount);
+      UpdatePlayer();
       UpdateFPS();
       UpdateTimer();
       break;
@@ -160,10 +153,10 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      DrawFloors(floors, sizeof(floors) / sizeof(floors[0]));
-      DrawPlayer(&player1);
       DrawTimer();
       DrawMyFPS();
+      DrawFloors();
+      DrawPlayer();
       break;
    case GAME_STATE_START_MENU:
       if (drawMenu(startMenu))

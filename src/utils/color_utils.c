@@ -1,20 +1,17 @@
 #include "color_utils.h"
 
-#include "math.h"
-
 // Util utils
 /**
  * @brief Convert RGB Color structs to *HSL
- *
  * @param rgb RGB Color struct to convert
  * @param h Pointer to hue
  * @param s Pointer to saturation
  * @param l Pointer to luminance
- *
- * @return void - Sets referenced HSL values
+ * @return hsl - RGB Color converted to ColorHSL
  */
-void RGBToHSL(Color rgb, float *h, float *s, float *l)
+ColorHSL RGBToHSL(Color rgb)
 {
+   ColorHSL hsl;
    float r = rgb.r / 255.0f;
    float g = rgb.g / 255.0f;
    float b = rgb.b / 255.0f;
@@ -24,54 +21,55 @@ void RGBToHSL(Color rgb, float *h, float *s, float *l)
    float delta = max - min;
 
    // Lightness
-   *l = (max + min) / 2.0f;
+   hsl.l = (max + min) / 2.0f;
 
    // Saturation
-   if (delta == 0)
-      *s = 0;
+   if (delta == 0.0f)
+      hsl.s = 0.0f;
    else
-      *s = delta / (1.0f - fabsf(2.0f * *l - 1.0f));
+      hsl.s = delta / (1.0f - fabsf(2.0f * hsl.l - 1.0f));
 
    // Hue
-   if (delta == 0)
-      *h = 0;
+   if (delta == 0.0f)
+      hsl.h = 0.0f;
    else if (max == r)
-      *h = fmodf((g - b) / delta, 6.0f);
+      hsl.h = fmodf((g - b) / delta, 6.0f);
    else if (max == g)
-      *h = (b - r) / delta + 2.0f;
+      hsl.h = (b - r) / delta + 2.0f;
    else
-      *h = (r - g) / delta + 4.0f;
+      hsl.h = (r - g) / delta + 4.0f;
 
-   *h *= 60.0f; // Degrees
-   if (*h < 0)
-      *h += 360.0f; // Ensure hue is positive
+   hsl.h *= 60.0f; // Degrees
+   if (hsl.h < 0.0f)
+      hsl.h += 360.0f; // Ensure hue is positive
+
+   // Keep alpha
+   hsl.a = (float)rgb.a;
+
+   return hsl;
 }
 
 /**
- * @brief Convert HSL to RGB
- *
- * @param h Hue float
- * @param s Saturation float
- * @param l luminance float
- *
+ * @brief Convert ColorHSL to RGB Color
+ * @param hsl ColorHSL color
  * @return RGB Color struct
  */
-Color HSLToRGB(float h, float s, float l)
+Color HSLToRGB(ColorHSL hsl)
 {
-   float c = (1.0f - fabsf(2.0f * l - 1.0f)) * s;
-   float x = c * (1.0f - fabsf(fmodf(h / 60.0f, 2.0f) - 1.0f));
-   float m = l - c / 2.0f;
+   float c = (1.0f - fabsf(2.0f * hsl.l - 1.0f)) * hsl.s;
+   float x = c * (1.0f - fabsf(fmodf(hsl.h / 60.0f, 2.0f) - 1.0f));
+   float m = hsl.l - c / 2.0f;
 
-   float r, g, b;
-   if (h >= 0 && h < 60)
+   float r, g, b, a;
+   if (hsl.h >= 0 && hsl.h < 60)
       r = c, g = x, b = 0;
-   else if (h >= 60 && h < 120)
+   else if (hsl.h >= 60 && hsl.h < 120)
       r = x, g = c, b = 0;
-   else if (h >= 120 && h < 180)
+   else if (hsl.h >= 120 && hsl.h < 180)
       r = 0, g = c, b = x;
-   else if (h >= 180 && h < 240)
+   else if (hsl.h >= 180 && hsl.h < 240)
       r = 0, g = x, b = c;
-   else if (h >= 240 && h < 300)
+   else if (hsl.h >= 240 && hsl.h < 300)
       r = x, g = 0, b = c;
    else
       r = c, g = 0, b = x;
@@ -80,42 +78,37 @@ Color HSLToRGB(float h, float s, float l)
    g = (g + m) * 255.0f;
    b = (b + m) * 255.0f;
 
+   // Keep alpha
+   a = hsl.a;
+
    return (Color){
        (unsigned char)r,
        (unsigned char)g,
        (unsigned char)b,
-       255};
+       (unsigned char)a};
 }
 
 /**
  * @brief Generates a random color with each RGB component between the specified min and max values.
- *
  * @param min The minimum value for the RGB components.
  * @param max The maximum value for the RGB components.
  * @param alpha The alpha value for the color.
- *
  * @return A Color struct with random RGB values and the specified alpha.
  */
 Color GetRandomColor(int min, int max, int alpha)
 {
    // Clamping/corrections
-   if (min < 0)
-      min = 0;
-   if (max > 255)
-      max = 255;
-   if (alpha < 0)
-      alpha = 0;
-   if (alpha > 255)
-      alpha = 255;
+   // float Clamp(float value, float min, float max);
+   min = (int)Clamp((float)min, 0.0f, 255.0f);
+   max = (int)Clamp((float)max, 0.0f, 255.0f);
+   alpha = (int)Clamp((float)alpha, 0.0f, 255.0f);
 
    return (Color){GetRandomValue(min, max), GetRandomValue(min, max), GetRandomValue(min, max), alpha};
 }
 
 /**
  * @brief Get the Complimentary Color object
- *
  * @param color Color struct
- *
  * @return Color Complimentary Color struct
  */
 Color GetComplimentaryColor(Color color)
@@ -129,51 +122,43 @@ Color GetComplimentaryColor(Color color)
 
 /**
  * @brief Get the Analogous shifted Color struct
- *
  * @param baseColor Starting Color
  * @param hueShift Degrees to shift hue
- *
  * @return Shifted Color struct
  */
 Color GetAnalogousColor(Color baseColor, int hueShift)
 {
-   float h, s, l;
-   RGBToHSL(baseColor, &h, &s, &l);
-   h += hueShift;
+   ColorHSL hsl = RGBToHSL(baseColor);
+   hsl.h += hueShift;
 
-   if (h > 360.0f)
-      h -= 360.0f;
-   if (h < 0.0f)
-      h += 360.0f;
+   hsl.h = fmodf(hsl.h + 360.0f, 360.0f);
 
-   return HSLToRGB(h, s, l);
+   return HSLToRGB(hsl);
 }
 
 /**
  * @brief Get the Triadic colors for a given Color struct
- *
  * @param baseColor Used to find remaining triadic colors
  * @param color1 Reference to first triadic result
  * @param color2 Reference to second triadic result
- *
  * @return void - Sets referenced Color structs to triadic baseColor result
  */
 void GetTriadicColors(Color baseColor, Color *color1, Color *color2)
 {
-   float h, s, l;
-   RGBToHSL(baseColor, &h, &s, &l);
+   ColorHSL baseHSL = RGBToHSL(baseColor);
 
-   *color1 = HSLToRGB(fmodf(h + 120.0f, 360.0f), s, l);
-   *color2 = HSLToRGB(fmodf(h - 120.0f, 360.0f), s, l);
+   ColorHSL hsl1 = {fmodf(baseHSL.h + 120.0f, 360.0f), baseHSL.s, baseHSL.l};
+   ColorHSL hsl2 = {fmodf(baseHSL.h - 120.0f + 360.0f, 360.0f), baseHSL.s, baseHSL.l};
+
+   *color1 = HSLToRGB(hsl1);
+   *color2 = HSLToRGB(hsl2);
 }
 
 /**
  * @brief Compute blend between 2 Color structs
- *
  * @param c1 First Color struct
  * @param c2 Second Color struct
  * @param factor Float factor value
- *
  * @return Color Blended Color struct
  */
 Color BlendColors(Color c1, Color c2, float factor)
@@ -193,12 +178,9 @@ Color BlendColors(Color c1, Color c2, float factor)
 
 /**
  * @brief Get the Contrast between 2 Color structs
- *
  * @cite https://en.wikipedia.org/wiki/Rec._709
- *
  * @param c1 First Color struct
  * @param c2 Second Color struct
- *
  * @return float Floating point contrast
  */
 float GetContrast(Color c1, Color c2)
@@ -215,12 +197,10 @@ float GetContrast(Color c1, Color c2)
 
 /**
  * @brief Insert array of gradient Color structs to the referenced gradientArray.
- *
  * @param gradientArray Pointer to array of Color structs
  * @param start Starting of gradient
  * @param end End of gradient
  * @param steps "Resolution" of gradient
- *
  * @return void - Assign gradient array to referenced object
  */
 void GenerateGradient(Color *gradientArray, Color start, Color end, int steps)

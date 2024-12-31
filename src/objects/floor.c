@@ -1,43 +1,93 @@
 #include "floor.h"
 #include "logging/log.h"
 #include "utils/color_utils.h"
+#include "game/screen.h"
 
-void InitFloors(GameObject *floors, size_t floorCount, unsigned int seed)
+#include <stdlib.h>
+
+static Floor floors[8];
+static int floorCount = sizeof(floors) / sizeof(floors[0]);
+
+/**
+ * @brief Initialize random array of floors.
+ * @return void - Operates on internal Floor object array.
+ * @note To get truely random floor placement, you MUST call raylib's SetRandomSeed() first; use src/utils/seed.*.
+ */
+void InitFloors(void)
 {
-   LogMessage(LOG_INFO, "Initializing floors {[%zu]}:", floorCount);
-   SetRandomSeed(seed);
-   int colorRandMin = 0;
-   int colorRandMax = 255;
-
    for (size_t i = 0; i < floorCount; i++)
    {
-      // Random dimensions and positions
-      float width = (float)GetRandomValue(MIN_FLOOR_WIDTH, MAX_FLOOR_WIDTH);
-      float x = (float)GetRandomValue(0, SCREEN_DIMENSIONS.x - (int)width);
-      float y = (float)GetRandomValue(FLOOR_HEIGHT, SCREEN_DIMENSIONS.y - FLOOR_HEIGHT * 2);
+      // Since we're using Vector2 for min/max limits, x is the min; y is the max.
+      floors[i].width_limit = (Vector2){100, 300};
+      floors[i].height_limit = (Vector2){20, 20};
 
-      Vector2 size = {width, FLOOR_HEIGHT};
+      // Random dimensions within limits
+      float width = (float)GetRandomValue((int)floors[i].width_limit.x, (int)floors[i].width_limit.x);
+      float height = (float)GetRandomValue((int)floors[i].height_limit.x, (int)floors[i].height_limit.x);
+
+      // Random positioning, ensuring within screen limits
+      float x = (float)GetRandomValue(SCREEN_EDGE_PADDING, (int)(SCREEN_DIMENSIONS.x - width + SCREEN_EDGE_PADDING));
+      float y = (float)GetRandomValue(SCREEN_EDGE_PADDING, (int)(SCREEN_DIMENSIONS.y - height + SCREEN_EDGE_PADDING));
       Vector2 position = {x, y};
+      Vector2 size = {width, height};
 
-      // Unique colors
-      Color color = GetRandomColor(0, 255, 255);
+      // Colors
+      Color color = GetRandomColor(50, 200, 255);
+
+      // Floor object shape
+      Shape floorShape = {
+          .type = SHAPE_TYPE_RECTANGLE,
+          .rectangle = {position.x, position.y, size.x, size.y},
+      };
 
       // Init the floor
-      InitGameObject(&floors[i], position, size, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %zu", i));
+      InitGameObject(&floors[i].object, floorShape, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %zu", i));
    }
-   LogMessage(LOG_INFO, "Done initializing floors\n");
 }
 
-void DrawFloors(GameObject *floors, size_t floorCount)
+/**
+ * @brief Doesn't do anything at the moment.
+ * @return void - Operates on internal Floor object array.
+ */
+void UpdateFloors(void)
+{
+   // TODO
+}
+
+/**
+ * @brief Draw the internal floor objects.
+ * @return void - Operates on internal Floor object array.
+ */
+void DrawFloors(void)
 {
    for (size_t i = 0; i < floorCount; i++)
    {
-      DrawGameObject(&floors[i]);
+      DrawGameObject(&floors[i].object);
    }
 }
 
-// GameObject *getFloors(size_t *count)
-// {
-//    *count = floorCount;
-//    return floors;
-// }
+/**
+ * @brief Get the internal Floor object array.
+ * @return Pointer to first Floor array item
+ */
+Floor *GetFloors(int *countFloors)
+{
+
+   *countFloors = floorCount; // Need this to pass floor pointer to check collision. Not very nice but it works
+   return floors;             // Floors should be an array, so no need for "address of" operator...
+}
+
+/**
+ * @brief Cleanup any dynamically allocated Floor memory.
+ * @return void - Operates on internal Floor object array.
+ */
+void CleanUpFloors(void)
+{
+   for (size_t i = 0; i < floorCount; i++)
+   {
+      if (floors[i].object.label)
+      {
+         free(floors[i].object.label);
+      }
+   }
+}

@@ -1,137 +1,185 @@
 #include "player.h"
 #include "logging/log.h"
-#include "utils/lerp.h"
 
-// #include "math.h"
+#include <stdlib.h>
+#include <string.h>
 
-void InitPlayer(Player *player, Vector2 position, Vector2 size, Color color)
+static Player player;
+
+void InitPlayer(void)
 {
-   player->objectType = OBJECT_TYPE_COLLIDEABLE;
-   player->rect.x = position.x;
-   player->rect.y = position.y;
-   player->rect.width = size.x;
-   player->rect.height = size.y;
-   player->velocity.x = 0.0f;
-   player->velocity.y = 0.0f;
-   player->color = color;
-   player->grounded = UNGROUNDED;
-   player->gravity = 0.5f;
-   player->sprint_speed_mod = 2.0f;
-   player->sneak_speed_mod = 0.5f;
-   player->jump_speed = 15.0f;
-   player->max_jump_height = player->rect.height * 2;
-   player->num_jumps = 2;
-   player->remaining_jumps = player->num_jumps;
-   player->terminal_velocity.x = 50.0f; // PLaceholder
-   player->terminal_velocity.y = 15.0f;
+   // Init player as 50x50 px rectangle
+   player.size = (Vector2){50.0f, 50.0f};
+   Vector2 playerStartPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - player.size.y - 100};
+
+   Shape playerShape = {
+       .type = SHAPE_TYPE_RECTANGLE,
+       .rectangle = {playerStartPosition.x, playerStartPosition.y, player.size.x, player.size.y},
+   };
+
+   player.object.color = BLUE;
+
+   InitGameObject(&player.object, playerShape, player.object.color, OBJECT_TYPE_COLLIDEABLE, "Player");
+
+   // Movement properties
+   player.velocity = (Vector2){0.0f, 0.0f};
+   player.terminal_velocity = (Vector2){50.0f, 30.0f}; // x term vel is placeholder for now
+   player.move_speed = 5.0f;
+   player.sprint_speed_mod = 2.0f;
+   player.sneak_speed_mod = 0.5f;
+
+   // Jumping mechanics
+   player.grounded = GROUNDED_STATE_UNGROUNDED;
+   player.gravity = 0.5f;
+   player.jump_speed = (15.0f <= player.terminal_velocity.y) ? 15.0f : player.terminal_velocity.y; // Ensure jump speed doesn't exceed y term vel
+   player.max_jump_height = player.size.y * 2;
+   player.max_jumps = 2;
+   player.remaining_jumps = player.max_jumps;
 }
 
-void UpdatePlayer(Player *player)
+void UpdatePlayer(void)
 {
+   // Player rect object alias
+   Rectangle *playerRect = &player.object.shape.rectangle;
+
    // Reapply some states based on grounding
-   if (player->grounded)
+   if (player.grounded == GROUNDED_STATE_GROUNDED)
    {
-      player->remaining_jumps = player->num_jumps;
-      player->velocity.y = 0;
+      player.remaining_jumps = player.max_jumps;
+      player.velocity.y = 0.0f;
    }
    else
    {
-      // Apply terminal y velocity
-      if (!(player->velocity.y >= player->terminal_velocity.y))
+      // Apply gravity and terminal y velocity
+      if (player.velocity.y < player.terminal_velocity.y)
       {
-         player->velocity.y += player->gravity;
+         player.velocity.y += player.gravity;
       }
       else
       {
-         player->velocity.y = player->terminal_velocity.y;
+         player.velocity.y = player.terminal_velocity.y;
       }
 
-      // Apply final y velocity
-      player->rect.y += player->velocity.y;
+      // Apply vertical movement
+      playerRect->y += player.velocity.y;
    }
 
    // Check for ground collision at bottom of screen
-   if (player->rect.y + player->rect.height >= SCREEN_DIMENSIONS.y)
+   if (playerRect->y + playerRect->height > SCREEN_DIMENSIONS.y)
    {
-      player->rect.y = SCREEN_DIMENSIONS.y - player->rect.height;
-      player->velocity.y = 0.0f;
-      player->grounded = GROUNDED;
-
+      playerRect->y = SCREEN_DIMENSIONS.y - playerRect->height;
+      player.velocity.y = 0.0f;
+      player.grounded = GROUNDED_STATE_GROUNDED;
+      player.remaining_jumps = player.max_jumps;
       LogMessage(LOG_DEBUG, "Player grounded due to collision at bottom of screen");
    }
 
    // Check for ceiling collision
-   if (player->rect.y - player->rect.height <= 0)
+   if (playerRect->y <= 0)
    {
-      player->rect.y = 0 + player->rect.height;
-      player->velocity.y = 0.0f;
+      playerRect->y = 0;
+      player.velocity.y = 0.0f;
+
       LogMessage(LOG_DEBUG, "Player hit the ceiling");
    }
 
-   // Left/right movement controls
-   player->move_speed = 5.0f; // Reset move speed every frame
+   // Horizontal movement controls
+   player.move_speed = 5.0f; // Reset move speed every frame
 
    // Sprint/sneaking modifiers
    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
-      player->move_speed *= player->sprint_speed_mod;
+      player.move_speed *= player.sprint_speed_mod;
 
    if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))
-      player->move_speed *= player->sneak_speed_mod;
+      player.move_speed *= player.sneak_speed_mod;
 
    if (IsKeyDown(KEY_RIGHT))
-      player->velocity.x = player->move_speed;
+   {
+      player.velocity.x = player.move_speed;
+      // LogMessage(LOG_DEBUG, "Player moving right with velocity {%.0f}", player.velocity.x);
+   }
 
    if (IsKeyDown(KEY_LEFT))
-      player->velocity.x = -(player->move_speed);
+   {
+      player.velocity.x = -(player.move_speed);
+      // LogMessage(LOG_DEBUG, "Player moving left with velocity {%.0f}", player.velocity.x);
+   }
 
    if (!IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT))
-      player->velocity.x = 0.0f;
+      player.velocity.x = 0.0f;
 
-   // Apply velocity
-   player->rect.x += player->velocity.x;
+   // Apply horizontal movement
+   playerRect->x += player.velocity.x;
 
    // Horizontal screen collision (must be done after horizontal movement checks)
-   if (player->rect.x + player->rect.width >= SCREEN_DIMENSIONS.x)
+   if (playerRect->x + playerRect->width >= SCREEN_DIMENSIONS.x)
    {
-      player->rect.x = SCREEN_DIMENSIONS.x - player->rect.width - SCREEN_EDGE_PADDING;
+      playerRect->x = SCREEN_DIMENSIONS.x - playerRect->width - SCREEN_EDGE_PADDING;
    }
-   if (player->rect.x <= 0)
+   if (playerRect->x <= 0)
    {
-      player->rect.x = SCREEN_EDGE_PADDING;
+      playerRect->x = SCREEN_EDGE_PADDING;
    }
 
-   // Multi jump logic
-   if (IsKeyPressed(KEY_SPACE) && player->remaining_jumps > 0)
+   // Jump logic
+   if (IsKeyPressed(KEY_SPACE) && player.remaining_jumps > 0)
    {
-      LogMessage(LOG_DEBUG, "PLAYER: Ungrounded due to space bar jump");
-      player->grounded = UNGROUNDED;
-      player->velocity.y = -(player->jump_speed);
-      player->remaining_jumps--;
+      player.grounded = GROUNDED_STATE_UNGROUNDED;
+      player.velocity.y = -(player.jump_speed);
+      player.remaining_jumps--;
+
+      LogMessage(LOG_DEBUG, "Player jumped, {%d} remaining jumps", player.remaining_jumps);
    }
 }
 
-void DrawPlayer(Player *player)
+void DrawPlayer(void)
 {
    // Object
-   DrawRectangleRec(player->rect, player->color);
+   DrawGameObject(&player.object);
 
-   // Player info text
-   int textWidth = MeasureText(TextFormat("Position: %.2fx%.2f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
-
+   // Additional info for debugging
+   int textWidth = MeasureText(TextFormat("Position: %.0fx%.0f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
    DrawText(
        TextFormat(
-           "Position: %.2fx%.2f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\nTerminal_V: %s\nGrounded: %s\nJumps: %d",
-           player->rect.x,
-           player->rect.y,
-           0 + player->rect.x,
-           SCREEN_DIMENSIONS.x - player->rect.x,
-           player->velocity.x,
-           player->velocity.y,
-           player->velocity.y >= player->terminal_velocity.y ? "Yes" : "No",
-           player->grounded > 0 ? "GROUNDED" : "UNGROUNDED",
-           player->remaining_jumps),
+           "Position: %.0fx%.0f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\n%s\nJumps: %d",
+           player.object.shape.rectangle.x, player.object.shape.rectangle.y,
+           0 + player.object.shape.rectangle.x,
+           SCREEN_DIMENSIONS.x - player.object.shape.rectangle.x,
+           player.velocity.x,
+           player.velocity.y,
+           player.grounded > 0 ? "GROUNDED" : "UNGROUNDED",
+           player.remaining_jumps),
        SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
        10,
        20,
        BLACK);
+
+   DrawText(
+       TextFormat(
+           "BLx {%.0f} | BRx {%.0f}",
+           player.object.shape.rectangle.x,
+           player.object.shape.rectangle.x + player.object.shape.rectangle.width),
+       100, 100,
+       20, BLACK);
+}
+
+/**
+ * @brief Get the Player object memory address
+ * @return Player* object
+ */
+Player *GetPlayer(void)
+{
+   return &player;
+}
+
+/**
+ * @brief Free dynamically allocated memory for the player's object label
+ * @return void - Works on internal Player object
+ */
+void CleanUpPlayer(void)
+{
+   if (player.object.label)
+   {
+      free(player.object.label);
+   }
 }

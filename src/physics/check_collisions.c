@@ -1,53 +1,41 @@
 #include "check_collisions.h"
 #include "logging/log.h"
 
-void CheckPlayerCollision(Player *player, GameObject objects[], size_t objectCount)
+void CheckPlayerFloorCollision(Player *player, Floor floors[], size_t floorCount)
 {
-   for (size_t i = 0; i < objectCount; i++)
+   bool colliding;
+   for (size_t i = 0; i < floorCount; i++)
    {
-      GameObject *object = &objects[i];
+      GameObject floor_object = floors[i].object;
 
       // Check for collisions with only collideable objects
-      if (player->objectType == OBJECT_TYPE_COLLIDEABLE &&
-          object->type == OBJECT_TYPE_COLLIDEABLE)
+      if (player->object.type == OBJECT_TYPE_COLLIDEABLE &&
+          floor_object.type == OBJECT_TYPE_COLLIDEABLE)
       {
          // Check for vertical collision
-         if (CheckCollisionRecs(player->rect, object->rect))
+         if (CheckCollisionRecs(player->object.shape.rectangle, floor_object.shape.rectangle))
          {
-            LogMessage(LOG_DEBUG, "Player collided with object");
+            colliding = true;
+            LogMessage(LOG_DEBUG, "Player collided with object {%s}", floor_object.label);
 
             // Vertical collision: Player landing on top of the object
-            if (player->velocity.y > 0 &&
-                player->rect.y + player->rect.height <= object->rect.y + player->velocity.y)
+            if (player->velocity.y >= 0 &&
+                player->object.shape.rectangle.y + player->object.shape.rectangle.height <= floor_object.shape.rectangle.y + player->velocity.y)
             {
-               player->rect.y = object->rect.y - player->rect.height;
+               player->object.shape.rectangle.y = floor_object.shape.rectangle.y - player->object.shape.rectangle.height + 0.1;
                player->velocity.y = 0;
+               player->grounded = GROUNDED_STATE_GROUNDED;
                LogMessage(LOG_DEBUG, "Player grounded due to vertical object collision");
-               player->grounded = GROUNDED;
+
+               if (player->object.shape.rectangle.x > floor_object.shape.rectangle.x + floor_object.shape.rectangle.width ||
+                   player->object.shape.rectangle.x + player->object.shape.rectangle.width < floor_object.shape.rectangle.x)
+               {
+                  colliding = false;
+               }
             }
-         }
-
-         // Check if player is no longer touching top of the object
-         bool isOverlappingHorizontally =
-             (player->rect.x < object->rect.x + object->rect.width) &&
-             (player->rect.x + player->rect.width > object->rect.x);
-
-         bool isTouchingVertically =
-             (player->rect.y + player->rect.height == object->rect.y);
-
-         if (isTouchingVertically && !isOverlappingHorizontally)
-         {
-            // Player moved off the object horizontally
-            player->grounded = UNGROUNDED;
-            LogMessage(LOG_DEBUG, "Player ungrounded due to moving off object");
          }
       }
    }
-
-   // If the player is ungrounded, apply gravity
-   if (player->grounded == UNGROUNDED)
-   {
-      LogMessage(LOG_DEBUG, "Player falling due to being ungrounded");
-      player->velocity.y += player->gravity;
-   }
+   if (!colliding)
+      player->grounded = GROUNDED_STATE_UNGROUNDED;
 }
