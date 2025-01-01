@@ -30,7 +30,7 @@ void InitPlayer(void)
    // Jumping mechanics
    player.grounded = GROUNDED_STATE_UNGROUNDED;
    player.gravity = 0.5f;
-   player.jump_speed = (15.0f <= player.terminal_velocity.y) ? 15.0f : player.terminal_velocity.y; // Ensure jump speed doesn't exceed y term vel
+   player.jump_speed = 15.0f;
    player.max_jump_height = player.size.y * 2;
    player.max_jumps = 2;
    player.remaining_jumps = player.max_jumps;
@@ -43,6 +43,16 @@ void UpdatePlayer(void)
 
    // Update player corners
    UpdateGameObject(&player.object);
+
+   // Control grounded state properly based on player bottom - floor top collision
+   if (player.bottomCollide)
+   {
+      player.grounded = GROUNDED_STATE_GROUNDED;
+   }
+   else
+   {
+      player.grounded = GROUNDED_STATE_UNGROUNDED;
+   }
 
    // Reapply some states based on grounding
    if (player.grounded == GROUNDED_STATE_GROUNDED)
@@ -73,6 +83,7 @@ void UpdatePlayer(void)
       player.velocity.y = 0.0f;
       player.grounded = GROUNDED_STATE_GROUNDED;
       player.remaining_jumps = player.max_jumps;
+      player.bottomCollide = false;
       LogMessage(LOG_DEBUG, "Player grounded due to collision at bottom of screen");
    }
 
@@ -96,22 +107,29 @@ void UpdatePlayer(void)
       player.move_speed *= player.sneak_speed_mod;
 
    if (IsKeyDown(KEY_RIGHT))
-   {
       player.velocity.x = player.move_speed;
-      // LogMessage(LOG_DEBUG, "Player moving right with velocity {%.0f}", player.velocity.x);
-   }
 
    if (IsKeyDown(KEY_LEFT))
-   {
       player.velocity.x = -(player.move_speed);
-      // LogMessage(LOG_DEBUG, "Player moving left with velocity {%.0f}", player.velocity.x);
-   }
 
    if (!IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT))
       player.velocity.x = 0.0f;
 
    // Apply horizontal movement
    playerRect->x += player.velocity.x;
+
+   // God mode debug controls (also set gravity to 0)
+   // if (IsKeyDown(KEY_UP))
+   //    player.velocity.y = -(player.move_speed);
+
+   // if (IsKeyDown(KEY_DOWN))
+   //    player.velocity.y = player.move_speed;
+
+   // if (!IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN))
+   //    player.velocity.y = 0.0f;
+
+   // // Apply vertical movement
+   // playerRect->y += player.velocity.y;
 
    // Horizontal screen collision (must be done after horizontal movement checks)
    if (playerRect->x + playerRect->width >= SCREEN_DIMENSIONS.x)

@@ -33,6 +33,7 @@ typedef struct Player
 
    // Other
    Vector2 size;
+   bool bottomCollide;
 } Player;
 
 void InitPlayer(void);

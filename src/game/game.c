@@ -63,7 +63,7 @@ void InitGame()
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    InitFPS(target_fps);
    InitTimer();
-   InitSeed(0);
+   InitSeed(1735706498);
 
    // Init screen chunks
    InitChunks(true);
@@ -124,7 +124,7 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
-      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
+      // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
       UpdateChunks();
       UpdateFloors();
       UpdatePlayer();
@@ -176,7 +176,7 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      DrawChunks();
+      // DrawChunks();
       DrawTimer();
       DrawMyFPS();
       DrawFloors();

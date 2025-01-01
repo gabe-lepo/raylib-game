@@ -18,7 +18,7 @@ void InitFloors(void)
    for (size_t i = 0; i < floorCount; i++)
    {
       // Since we're using Vector2 for min/max limits, x is the min; y is the max.
-      floors[i].width_limit = (Vector2){100.0f, 300.0f};
+      floors[i].width_limit = (Vector2){30.0f, 300.0f};
       floors[i].height_limit = (Vector2){20.0f, 80.0f};
 
       // Random dimensions within limits
