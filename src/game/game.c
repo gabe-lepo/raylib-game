@@ -41,7 +41,7 @@ static int chunkYCount;
 int gameShouldClose = 0;
 int updateGameIterations = 0;
 
-static int target_fps = 60;
+static int target_fps = 60; // Changing this drastically effects physics!
 
 void InitGame()
 {
