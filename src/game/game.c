@@ -37,7 +37,6 @@ Chunk *p_chunks;
 static int chunkCount;
 static int chunkXCount;
 static int chunkYCount;
-static GameCamera *p_gameCamera;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -80,7 +79,6 @@ void InitGame()
 
    // Init camera
    InitGameCamera(p_player);
-   p_gameCamera = GetGameCamera();
 
    // Music init
    // InitMusic();
@@ -163,7 +161,6 @@ int UpdateGame(void)
 
 int DrawGame(void)
 {
-   BeginMode2D(p_gameCamera->camera2d);
    switch (PeekGameState())
    {
    case GAME_STATE_INIT:

@@ -129,6 +129,13 @@ void UpdatePlayer(void)
 
       LogMessage(LOG_DEBUG, "Player jumped, {%d} remaining jumps", player.remaining_jumps);
    }
+
+   // Reset player
+   if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_R))
+   {
+      player.object.shape.rectangle.x = SCREEN_DIMENSIONS.x / 2.0f;
+      player.object.shape.rectangle.y = SCREEN_DIMENSIONS.y - player.size.y - 100.0f;
+   }
 }
 
 void DrawPlayer(void)
@@ -137,21 +144,21 @@ void DrawPlayer(void)
    DrawGameObject(&player.object);
 
    // Additional info for debugging
-   int textWidth = MeasureText(TextFormat("Position: %.0fx%.0f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
-   DrawText(
-       TextFormat(
-           "Position: %.0fx%.0f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\n%s\nJumps: %d",
-           player.object.shape.rectangle.x, player.object.shape.rectangle.y,
-           0 + player.object.shape.rectangle.x,
-           SCREEN_DIMENSIONS.x - player.object.shape.rectangle.x,
-           player.velocity.x,
-           player.velocity.y,
-           player.grounded > 0 ? "GROUNDED" : "UNGROUNDED",
-           player.remaining_jumps),
-       SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
-       10,
-       20,
-       BLACK);
+   // int textWidth = MeasureText(TextFormat("Position: %.0fx%.0f", SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y), 20);
+   // DrawText(
+   //     TextFormat(
+   //         "Position: %.0fx%.0f\nWall Offsets: %.2f - %.2f\nVelocity: %.2fx%.2f\n%s\nJumps: %d",
+   //         player.object.shape.rectangle.x, player.object.shape.rectangle.y,
+   //         0 + player.object.shape.rectangle.x,
+   //         SCREEN_DIMENSIONS.x - player.object.shape.rectangle.x,
+   //         player.velocity.x,
+   //         player.velocity.y,
+   //         player.grounded > 0 ? "GROUNDED" : "UNGROUNDED",
+   //         player.remaining_jumps),
+   //     SCREEN_DIMENSIONS.x / 2 - textWidth / 2,
+   //     10,
+   //     20,
+   //     BLACK);
 }
 
 /**

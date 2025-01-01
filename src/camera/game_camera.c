@@ -25,7 +25,8 @@ void InitGameCamera(Player *player)
 void UpdateGameCamera(Player *player)
 {
    // Zoom
-   gameCamera.camera2d.zoom += (float)GetMouseWheelMove() * 0.05f;
+   gameCamera.camera2d.zoom += GetMouseWheelMove() * 0.05f;
+
    if (IsKeyPressed(KEY_R))
       gameCamera.camera2d.zoom = 1.0f;
 
@@ -34,8 +35,10 @@ void UpdateGameCamera(Player *player)
    if (gameCamera.camera2d.zoom < 0.25f)
       gameCamera.camera2d.zoom = 0.25f;
 
-   // Retarget player?
-   gameCamera.camera2d.target = (Vector2){player->object.shape.rectangle.x, player->object.shape.rectangle.y};
+   // Retarget player
+   Vector2 playerCenter = {player->object.shape.rectangle.x + (player->object.shape.rectangle.width / 2.0f),
+                           player->object.shape.rectangle.y + (player->object.shape.rectangle.height / 2.0f)};
+   gameCamera.camera2d.target = playerCenter;
 }
 
 GameCamera *GetGameCamera(void)
