@@ -14,6 +14,7 @@ int InitPlayerParticles(size_t maxParticles)
    else
    {
       LogMessage(LOG_INFO, "PlayerParticles: Initialized player particles with max count {%zu}", maxParticles);
+      return EXIT_SUCCESS;
    }
 }
 
@@ -30,11 +31,11 @@ void EmitPlayerParticles(Vector2 playerPosition, size_t count, Color color)
           .y = sinf(angle) * speed};
 
       // Randomized life span and decay
-      float lifespan = (float)GetRandomValue(50, 150) / 100.0f;
-      float decayRate = (float)GetRandomValue(20, 50) / 100.0f;
+      float lifespan = (float)GetRandomValue(10, 15) / 100.0f;
+      float decayRate = (float)GetRandomValue(10, 30) / 100.0f;
 
       // Random size
-      float radius = (float)GetRandomValue(2, 5);
+      float radius = (float)GetRandomValue(5, 15); // temp player size based range
 
       // Emit
       AddParticleToSystem(playerPosition, velocity, radius, color, lifespan, decayRate);

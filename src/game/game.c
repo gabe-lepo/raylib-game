@@ -17,6 +17,8 @@
 #include "utils/seed.h"
 #include "objects/screen_chunks.h"
 #include "camera/game_camera.h"
+#include "objects/particles/particle.h"
+#include "objects/particles/player_particles.h"
 
 #include <stdlib.h>
 
@@ -63,7 +65,13 @@ void InitGame()
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    InitFPS(target_fps);
    InitTimer();
-   InitSeed(1735706498);
+   InitSeed(0);
+
+   // Menu init
+   startMenu = getStartMenu();
+   pauseMenu = getPauseMenu();
+   settingsMenu = getSettingsMenu();
+   loadMenu = getLoadMenu();
 
    // Init screen chunks
    InitChunks(true);
@@ -84,12 +92,10 @@ void InitGame()
    // InitMusic();
    // StartMusic(mainMenuSong);
 
-   // Menu init
-   startMenu = getStartMenu();
-   pauseMenu = getPauseMenu();
-   settingsMenu = getSettingsMenu();
-   loadMenu = getLoadMenu();
+   // Particles!
+   InitPlayerParticles(1000);
 
+   // Must be done last!
    PopGameState();
    PushGameState(GAME_STATE_START_MENU);
    LogMessage(LOG_INFO, "InitGame done");
@@ -124,10 +130,11 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
-      // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
+      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
       UpdateChunks();
       UpdateFloors();
       UpdatePlayer();
+      UpdatePlayerParticles(GetFrameTime());
       UpdateGameCamera(p_player);
       UpdateFPS();
       UpdateTimer();
@@ -180,6 +187,7 @@ int DrawGame(void)
       DrawTimer();
       DrawMyFPS();
       DrawFloors();
+      DrawPlayerParticles();
       DrawPlayer();
       break;
    case GAME_STATE_START_MENU:
@@ -219,6 +227,7 @@ void CloseGame()
 {
    LogMessage(LOG_INFO, "Closing game");
    CleanUpPlayer();
+   CleanupPlayerParticles();
    CleanUpFloors();
    CleanUpChunks();
    ClearGameStateStack();

@@ -1,16 +1,21 @@
 #include "player.h"
 #include "logging/log.h"
+#include "objects/particles/player_particles.h"
+#include "utils/color_utils.h"
 
 #include <stdlib.h>
 #include <string.h>
 
 static Player player;
+static Vector2 playerCenter;
 
 void InitPlayer(void)
 {
    // Init player as 50x50 px rectangle
    player.size = (Vector2){50.0f, 50.0f};
    Vector2 playerStartPosition = {SCREEN_DIMENSIONS.x / 2, (float)SCREEN_DIMENSIONS.y - player.size.y - 100};
+   playerCenter = (Vector2){player.object.shape.rectangle.x + (player.object.shape.rectangle.width / 2.0f),
+                            player.object.shape.rectangle.y + (player.object.shape.rectangle.height / 2.0f)};
 
    Shape playerShape = {
        .type = SHAPE_TYPE_RECTANGLE,
@@ -40,6 +45,9 @@ void UpdatePlayer(void)
 {
    // Player rect object alias
    Rectangle *playerRect = &player.object.shape.rectangle;
+
+   playerCenter = (Vector2){playerRect->x + (playerRect->width / 2.0f),
+                            playerRect->y + (playerRect->height / 2.0f)};
 
    // Update player corners
    UpdateGameObject(&player.object);
@@ -157,6 +165,12 @@ void UpdatePlayer(void)
       player.object.shape.rectangle.x = SCREEN_DIMENSIONS.x / 2.0f;
       player.object.shape.rectangle.y = SCREEN_DIMENSIONS.y - player.size.y - 100.0f;
       player.grounded = GROUNDED_STATE_UNGROUNDED;
+   }
+
+   // Emit player particles
+   if (player.velocity.x != 0 || player.velocity.y != 0)
+   {
+      EmitPlayerParticles(playerCenter, 500, GetAnalogousColor(GetComplimentaryColor(player.object.color), 90));
    }
 }
 
