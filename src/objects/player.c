@@ -34,16 +34,6 @@ void InitPlayer(void)
    player.max_jump_height = player.size.y * 2;
    player.max_jumps = 2;
    player.remaining_jumps = player.max_jumps;
-
-   // Set corner coords for easier collision detection
-   player.corners[0] = (Vector2){player.object.shape.rectangle.x,
-                                 player.object.shape.rectangle.y};
-   player.corners[1] = (Vector2){player.object.shape.rectangle.x + player.object.shape.rectangle.width,
-                                 player.object.shape.rectangle.y};
-   player.corners[2] = (Vector2){player.object.shape.rectangle.x,
-                                 player.object.shape.rectangle.y + player.object.shape.rectangle.height};
-   player.corners[3] = (Vector2){player.object.shape.rectangle.x + player.object.shape.rectangle.width,
-                                 player.object.shape.rectangle.y + player.object.shape.rectangle.height};
 }
 
 void UpdatePlayer(void)
@@ -51,11 +41,8 @@ void UpdatePlayer(void)
    // Player rect object alias
    Rectangle *playerRect = &player.object.shape.rectangle;
 
-   // Update player corner coordinates
-   player.corners[0] = (Vector2){playerRect->x, playerRect->y};
-   player.corners[1] = (Vector2){playerRect->x + playerRect->width, playerRect->y};
-   player.corners[2] = (Vector2){playerRect->x, playerRect->y + playerRect->height};
-   player.corners[3] = (Vector2){playerRect->x + playerRect->width, playerRect->y + playerRect->height};
+   // Update player corners
+   UpdateGameObject(&player.object);
 
    // Reapply some states based on grounding
    if (player.grounded == GROUNDED_STATE_GROUNDED)
@@ -176,13 +163,6 @@ void DrawPlayer(void)
    //     10,
    //     20,
    //     BLACK);
-
-   // Player corners for collision debugging
-   for (int i = 0; i < sizeof(player.corners) / sizeof(player.corners[0]); i++)
-   {
-      // DrawCircle(player.corners[i].x, player.corners[i].y, 5.0f, YELLOW);
-      DrawCircleGradient(player.corners[i].x, player.corners[i].y, 5.0f, BLUE, YELLOW);
-   }
 }
 
 /**

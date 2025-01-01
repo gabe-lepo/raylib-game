@@ -33,7 +33,6 @@ typedef struct Player
 
    // Other
    Vector2 size;
-   Vector2 corners[4]; // {top left, top right, bottom left, bottom right}
 } Player;
 
 void InitPlayer(void);

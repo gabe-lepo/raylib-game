@@ -43,6 +43,8 @@ typedef struct GameObject
    Shape shape;
    Color color;
    char *label;
+
+   Vector2 corners[4]; // {top left, top right, bottom left, bottom right}
 } GameObject;
 
 void InitGameObject(GameObject *object, Shape shape, Color color, ObjectType type, const char *label);

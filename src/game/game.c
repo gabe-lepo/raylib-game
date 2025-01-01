@@ -125,6 +125,8 @@ int UpdateGame(void)
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
       CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
+      UpdateChunks();
+      UpdateFloors();
       UpdatePlayer();
       UpdateGameCamera(p_player);
       UpdateFPS();

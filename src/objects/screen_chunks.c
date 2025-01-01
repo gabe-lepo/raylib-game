@@ -69,7 +69,13 @@ void InitChunks(bool colorful)
 
 void UpdateChunks(void)
 {
-   // TODO
+   for (int i = 0; i < xChunks; i++)
+   {
+      for (int j = 0; j < yChunks; j++)
+      {
+         UpdateGameObject(&screen_chunks[i][j].object);
+      }
+   }
 }
 
 void DrawChunks(void)

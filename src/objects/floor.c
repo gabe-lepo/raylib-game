@@ -46,12 +46,15 @@ void InitFloors(void)
 }
 
 /**
- * @brief Doesn't do anything at the moment.
+ * @brief Call object updater for each floor
  * @return void - Operates on internal Floor object array.
  */
 void UpdateFloors(void)
 {
-   // TODO
+   for (int i = 0; i < floorCount; i++)
+   {
+      UpdateGameObject(&floors[i].object);
+   }
 }
 
 /**
