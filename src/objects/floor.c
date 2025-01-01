@@ -18,12 +18,12 @@ void InitFloors(void)
    for (size_t i = 0; i < floorCount; i++)
    {
       // Since we're using Vector2 for min/max limits, x is the min; y is the max.
-      floors[i].width_limit = (Vector2){100, 300};
-      floors[i].height_limit = (Vector2){20, 20};
+      floors[i].width_limit = (Vector2){100.0f, 300.0f};
+      floors[i].height_limit = (Vector2){20.0f, 80.0f};
 
       // Random dimensions within limits
-      float width = (float)GetRandomValue((int)floors[i].width_limit.x, (int)floors[i].width_limit.x);
-      float height = (float)GetRandomValue((int)floors[i].height_limit.x, (int)floors[i].height_limit.x);
+      float width = (float)GetRandomValue((int)floors[i].width_limit.x, (int)floors[i].width_limit.y);
+      float height = (float)GetRandomValue((int)floors[i].height_limit.x, (int)floors[i].height_limit.y);
 
       // Random positioning, ensuring within screen limits
       float x = (float)GetRandomValue(SCREEN_EDGE_PADDING, (int)(SCREEN_DIMENSIONS.x - width + SCREEN_EDGE_PADDING));
