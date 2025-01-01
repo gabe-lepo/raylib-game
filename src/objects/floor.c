@@ -41,7 +41,7 @@ void InitFloors(void)
       };
 
       // Init the floor
-      InitGameObject(&floors[i].object, floorShape, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("Floor %zu", i));
+      InitGameObject(&floors[i].object, floorShape, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("F%zu", i));
    }
 }
 

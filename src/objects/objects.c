@@ -76,10 +76,11 @@ void DrawGameObject(GameObject *object)
       DrawRectangleRec(object->shape.rectangle, object->color);
       labelPosition.x = object->shape.rectangle.x + (object->shape.rectangle.width / 2) - (textWidth / 2);
       labelPosition.y = object->shape.rectangle.y + (object->shape.rectangle.height / 2) - (textSize / 2);
-      for (int i = 0; i < 4; i++)
-      {
-         DrawCircle(object->corners[i].x, object->corners[i].y, 3.0f, BLACK);
-      }
+      // Draw object corners
+      // for (int i = 0; i < 4; i++)
+      // {
+      //    DrawCircle(object->corners[i].x, object->corners[i].y, 3.0f, BLACK);
+      // }
       break;
    case SHAPE_TYPE_CIRCLE:
       DrawCircleV(object->shape.circle.center, object->shape.circle.radius, object->color);
