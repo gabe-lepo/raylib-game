@@ -66,7 +66,7 @@ void InitGame()
    InitSeed(0);
 
    // Init screen chunks
-   InitChunks(false);
+   InitChunks(true);
    p_chunks = GetChunks(&chunkCount, &chunkXCount, &chunkYCount);
 
    // Floor init
@@ -124,7 +124,7 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
-      // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount);
+      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
       UpdatePlayer();
       UpdateGameCamera(p_player);
       UpdateFPS();
@@ -161,13 +161,20 @@ int UpdateGame(void)
 
 int DrawGame(void)
 {
+   // Things that need to happen in all states but playing state
+   if (PeekGameState() != GAME_STATE_PLAYING)
+   {
+      CenterGameCamera();
+   }
+
+   // Full game state cases
    switch (PeekGameState())
    {
    case GAME_STATE_INIT:
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      // DrawChunks();
+      DrawChunks();
       DrawTimer();
       DrawMyFPS();
       DrawFloors();

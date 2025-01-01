@@ -12,11 +12,11 @@ void InitGameCamera(Player *player)
    gameCamera.camera2d.zoom = 1.0f;
 
    LogMessage(LOG_INFO, "Camera initialized with params:\n"
-                        "\tTarget: {%.0fx%.0f}\n"
+                        "\tTarget: {%s}\n"
                         "\tOffset: {%.0fx%.0f}\n"
                         "\tRotation: {%.0f}\n"
                         "\tZoom: {%.0f}",
-              gameCamera.camera2d.target.x, gameCamera.camera2d.target.y,
+              player->object.label,
               gameCamera.camera2d.offset.x, gameCamera.camera2d.offset.y,
               gameCamera.camera2d.rotation,
               gameCamera.camera2d.zoom);
@@ -38,7 +38,13 @@ void UpdateGameCamera(Player *player)
    // Retarget player
    Vector2 playerCenter = {player->object.shape.rectangle.x + (player->object.shape.rectangle.width / 2.0f),
                            player->object.shape.rectangle.y + (player->object.shape.rectangle.height / 2.0f)};
-   gameCamera.camera2d.target = playerCenter;
+   Vector2 cameraTarget = gameCamera.camera2d.target;
+   const float followSpeed = 0.05f;
+
+   cameraTarget.x = Lerp(cameraTarget.x, playerCenter.x, followSpeed);
+   cameraTarget.y = Lerp(cameraTarget.y, playerCenter.y, followSpeed);
+
+   gameCamera.camera2d.target = cameraTarget;
 }
 
 GameCamera *GetGameCamera(void)
@@ -49,4 +55,10 @@ GameCamera *GetGameCamera(void)
 void CleanUpGameCamera(void)
 {
    // TOOD
+}
+
+void CenterGameCamera(void)
+{
+   gameCamera.camera2d.target = (Vector2){SCREEN_DIMENSIONS.x / 2.0f, SCREEN_DIMENSIONS.y / 2.0f};
+   gameCamera.camera2d.zoom = 1.0f;
 }
