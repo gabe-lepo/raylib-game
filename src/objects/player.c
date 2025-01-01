@@ -30,7 +30,7 @@ void InitPlayer(void)
    // Jumping mechanics
    player.grounded = GROUNDED_STATE_UNGROUNDED;
    player.gravity = 0.5f;
-   player.jump_speed = 15.0f;
+   player.jump_speed = 12.0f;
    player.max_jump_height = player.size.y * 2;
    player.max_jumps = 2;
    player.remaining_jumps = player.max_jumps;
@@ -84,7 +84,7 @@ void UpdatePlayer(void)
       player.grounded = GROUNDED_STATE_GROUNDED;
       player.remaining_jumps = player.max_jumps;
       player.bottomCollide = false;
-      LogMessage(LOG_DEBUG, "Player grounded due to collision at bottom of screen");
+      LogMessage(LOG_DEBUG, "Player bottom collided with bottom of screen");
    }
 
    // Check for ceiling collision
@@ -93,18 +93,18 @@ void UpdatePlayer(void)
       playerRect->y = 0;
       player.velocity.y = 0.0f;
 
-      LogMessage(LOG_DEBUG, "Player hit the ceiling");
+      LogMessage(LOG_DEBUG, "Player top collided with the ceiling");
    }
 
    // Horizontal movement controls
-   player.move_speed = 5.0f; // Reset move speed every frame
+   player.move_speed = 3.5f; // Reset move speed every frame
 
    // Sprint/sneaking modifiers
    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
       player.move_speed *= player.sprint_speed_mod;
 
-   if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))
-      player.move_speed *= player.sneak_speed_mod;
+   // if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))
+   //    player.move_speed *= player.sneak_speed_mod;
 
    if (IsKeyDown(KEY_RIGHT))
       player.velocity.x = player.move_speed;
