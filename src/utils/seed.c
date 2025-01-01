@@ -1,4 +1,5 @@
 #include "seed.h"
+#include "logging/log.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -22,6 +23,8 @@ void InitSeed(unsigned int value)
    }
 
    SetRandomSeed(gameSeed);
+
+   LogMessage(LOG_INFO, "RNG seed initialized as {%d}", GetSeed());
 }
 
 /**
