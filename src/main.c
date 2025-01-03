@@ -2,22 +2,18 @@
 #include "game/game.h"
 #include "logging/log.h"
 #include "camera/game_camera.h"
-#include "shaders/shader.h"
 
 #include <stdlib.h>
 
 static GameCamera *p_gameCamera;
-static Shader *p_shader;
 
 int main(void)
 {
-   // Init game states
-   InitGame();
-   InitShader();
-
-   // Pointers
+   // Set pre-fab object pointers
    p_gameCamera = GetGameCamera();
-   p_shader = GetShader();
+
+   // Init game
+   InitGame();
 
    // Main game loop
    while (!WindowShouldClose() && !gameShouldClose)
@@ -31,12 +27,10 @@ int main(void)
       // Draw the updates
       BeginDrawing();
       BeginMode2D(p_gameCamera->camera2d);
-      BeginShaderMode(*p_shader);
       if (DrawGame())
       {
          break;
       }
-      EndShaderMode();
       EndMode2D();
       EndDrawing();
    }

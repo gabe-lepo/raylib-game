@@ -19,7 +19,6 @@
 #include "camera/game_camera.h"
 #include "objects/particles/particle.h"
 #include "objects/particles/player_particles.h"
-#include "shaders/shader.h"
 
 #include <stdlib.h>
 
@@ -149,7 +148,6 @@ int UpdateGame(void)
       UpdateGameCamera(p_player);
       UpdateFPS();
       UpdateTimer();
-      UpdateShader();
       break;
    case GAME_STATE_START_MENU:
       UpdateMenu(startMenu);
@@ -201,7 +199,6 @@ int DrawGame(void)
       DrawFloors();
       DrawPlayerParticles();
       DrawPlayer();
-      // DrawShader(); // Doesnt do anything atm
       break;
    case GAME_STATE_START_MENU:
       if (DrawMenu(startMenu))
@@ -239,7 +236,6 @@ int DrawGame(void)
 void CloseGame()
 {
    LogMessage(LOG_INFO, "Closing game");
-   CleanupShader();
    CleanUpPlayer();
    CleanupPlayerParticles();
    CleanupParticleSystem();

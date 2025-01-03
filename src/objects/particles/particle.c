@@ -18,12 +18,24 @@ int InitParticleSystem(size_t maxCount)
    return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Add a Particle object to the ParticleSystem
+ *
+ * @todo this function is called way too many times, need to limit it, hence the first if check
+ *
+ * @param position Vector of particle
+ * @param velocity How it should move
+ * @param radius Size of particle
+ * @param color Color of particle
+ * @param lifespan Overall time span of it existing
+ * @param decayRate How quickly does it reach lifespan limit
+ */
 void AddParticleToSystem(Vector2 position, Vector2 velocity, float radius, Color color, float lifespan, float decayRate)
 {
    if (particleSystem.count >= particleSystem.maxCount)
    {
       particleSystem.count = particleSystem.maxCount;
-      LogMessage(LOG_WARNING, "Tried to add too many particles to system!");
+      // LogMessage(LOG_WARNING, "Tried to add too many particles to system!");
       return;
    }
 
@@ -35,7 +47,7 @@ void AddParticleToSystem(Vector2 position, Vector2 velocity, float radius, Color
    particle->lifespan = lifespan;
    particle->decayRate = decayRate;
 
-   // LogMessage(LOG_DEBUG, "ParticleSystem: Added particle at position {%.2fx%.2f}", position.x, position.y);
+   // LogMessage(LOG_INFO, "ParticleSystem: Added particle at position {%.2fx%.2f}", position.x, position.y);
 }
 
 void UpdateParticleSystem(float deltaTime)
