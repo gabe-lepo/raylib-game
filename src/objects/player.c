@@ -136,7 +136,7 @@ void UpdatePlayer(void)
    // if (!IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN))
    //    player.velocity.y = 0.0f;
 
-   // // Apply vertical movement
+   // Apply vertical movement
    // playerRect->y += player.velocity.y;
 
    // Horizontal screen collision (must be done after horizontal movement checks)
@@ -170,7 +170,7 @@ void UpdatePlayer(void)
    // Emit player particles
    if (player.velocity.x != 0 || player.velocity.y != 0)
    {
-      EmitPlayerParticles(playerCenter, 500, GetAnalogousColor(GetComplimentaryColor(player.object.color), 90));
+      EmitPlayerParticles(playerCenter, 500, GetAnalogousColor(GRAY, 90));
    }
 }
 
