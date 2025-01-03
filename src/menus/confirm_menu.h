@@ -3,6 +3,6 @@
 
 #include "menu.h"
 
-Menu *getConfirmMenu(void);
+Menu *GetConfirmMenu(void);
 
 #endif

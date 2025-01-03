@@ -4,22 +4,22 @@
 #include "game/game_state_stack.h"
 
 // Unique actions
-void newGame(void)
+void NewGame(void)
 {
    PushGameState(GAME_STATE_PLAYING);
 }
 
-void closeGame(void)
+void MyCloseGame(void)
 {
    CloseGame();
 }
 
 // Objects
 static MenuItem startMenuItems[] = {
-    {"New Game", newGame},
-    {"Load Game", openLoad},    // Shared actions
-    {"Settings", openSettings}, // Shared actions
-    {"Close", closeGame},
+    {"New Game", NewGame},
+    {"Load Game", OpenLoad},    // Shared actions
+    {"Settings", OpenSettings}, // Shared actions
+    {"Close", MyCloseGame},
 };
 
 static Menu startMenu = {
@@ -31,7 +31,7 @@ static Menu startMenu = {
 };
 
 // Getter func
-Menu *getStartMenu(void)
+Menu *GetStartMenu(void)
 {
    return &startMenu;
 }

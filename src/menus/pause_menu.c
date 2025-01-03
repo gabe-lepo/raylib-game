@@ -3,23 +3,23 @@
 #include "game/game_state_stack.h"
 
 // Actions
-void resumeGame(void)
+void ResumeGame(void)
 {
    PopGameState();
    PushGameState(GAME_STATE_PLAYING);
 }
-void saveGame(void)
+void SaveGame(void)
 {
    // TODO
 }
 
 // Objects
 static MenuItem pauseMenuItems[] = {
-    {"Resume", resumeGame},
-    {"Save", saveGame},
-    {"Load", openLoad},
-    {"Settings", openSettings},
-    {"Exit", backUpMenu},
+    {"Resume", ResumeGame},
+    {"Save", SaveGame},
+    {"Load", OpenLoad},
+    {"Settings", OpenSettings},
+    {"Exit", BackUpMenu},
 };
 
 static Menu pauseMenu = {
@@ -31,7 +31,7 @@ static Menu pauseMenu = {
 };
 
 // Getter func
-Menu *getPauseMenu(void)
+Menu *GetPauseMenu(void)
 {
    return &pauseMenu;
 }

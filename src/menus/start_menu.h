@@ -3,6 +3,6 @@
 
 #include "menu.h"
 
-Menu *getStartMenu(void);
+Menu *GetStartMenu(void);
 
 #endif

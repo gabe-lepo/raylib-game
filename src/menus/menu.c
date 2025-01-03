@@ -4,12 +4,12 @@
 #include <stdlib.h>
 
 // Menu control funcs
-void toggleMenu(Menu *menu)
+void ToggleMenu(Menu *menu)
 {
    // TODO
 }
 
-void updateMenu(Menu *menu)
+void UpdateMenu(Menu *menu)
 {
    // Validate menu structure
    if (menu == NULL)
@@ -54,7 +54,7 @@ void updateMenu(Menu *menu)
    }
 }
 
-int drawMenu(Menu *menu)
+int DrawMenu(Menu *menu)
 {
    // Background
    DrawRectangle(0, 0, SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, menu->backgroundColor);

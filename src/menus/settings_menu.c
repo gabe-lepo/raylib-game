@@ -3,12 +3,12 @@
 #include "logging/log.h"
 
 // Actions
-void setVsync(void)
+void SetVsync(void)
 {
     LogMessage(LOG_INFO, "SETTINGS: {FLAG_VSYNC_HINT} flag");
     SetWindowState(FLAG_VSYNC_HINT);
 }
-void setFullscreen(void)
+void SetFullscreen(void)
 {
     ToggleFullscreen();
 
@@ -21,12 +21,12 @@ void setFullscreen(void)
         LogMessage(LOG_INFO, "SETTINGS: Fullscreen off");
     }
 }
-void setResizeable(void)
+void SetResizeable(void)
 {
     LogMessage(LOG_INFO, "SETTINGS: {FLAG_WINDOW_RESIZABLE} flag");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 }
-void setBorderless(void)
+void SetBorderless(void)
 {
     ToggleBorderlessWindowed();
 
@@ -39,7 +39,7 @@ void setBorderless(void)
         LogMessage(LOG_INFO, "SETTINGS: Borderless window off");
     }
 }
-void setMSAA(void)
+void SetMSAA(void)
 {
     LogMessage(LOG_INFO, "SETTINGS: {FLAG_MSAA_4X_HINT} flag");
     SetWindowState(FLAG_MSAA_4X_HINT);
@@ -47,12 +47,12 @@ void setMSAA(void)
 
 // Objects
 static MenuItem settingsMenuItems[] = {
-    {"V-Sync", setVsync},
-    {"Fullscreen", setFullscreen},
-    {"Resizeable Window", setResizeable},
-    {"Borderless Window", setBorderless},
-    {"4X MSAA", setMSAA},
-    {"Back", backUpMenu},
+    {"V-Sync", SetVsync},
+    {"Fullscreen", SetFullscreen},
+    {"Resizeable Window", SetResizeable},
+    {"Borderless Window", SetBorderless},
+    {"4X MSAA", SetMSAA},
+    {"Back", BackUpMenu},
 };
 
 static Menu settingsMenu = {
@@ -64,7 +64,7 @@ static Menu settingsMenu = {
 };
 
 // Getter func
-Menu *getSettingsMenu(void)
+Menu *GetSettingsMenu(void)
 {
     return &settingsMenu;
 }

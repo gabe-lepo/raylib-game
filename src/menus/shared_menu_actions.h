@@ -1,8 +1,8 @@
 #ifndef SHARED_MENU_ACTIONS_H
 #define SHARED_MENU_ACTIONS_H
 
-void openLoad(void);
-void openSettings(void);
-void backUpMenu(void);
+void OpenLoad(void);
+void OpenSettings(void);
+void BackUpMenu(void);
 
 #endif

@@ -2,15 +2,15 @@
 #include "shared_menu_actions.h"
 
 // Actions
-void tempLoad(void)
+void TempLoad(void)
 {
     // TODO
 }
 
 // Objects
 static MenuItem loadMenuItems[] = {
-    {"Some load options", tempLoad},
-    {"Back", backUpMenu},
+    {"Some load options", TempLoad},
+    {"Back", BackUpMenu},
 };
 
 static Menu loadMenu = {
@@ -22,7 +22,7 @@ static Menu loadMenu = {
 };
 
 // Getter func
-Menu *getLoadMenu(void)
+Menu *GetLoadMenu(void)
 {
     return &loadMenu;
 }

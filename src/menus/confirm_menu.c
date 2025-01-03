@@ -17,7 +17,7 @@ static Menu confirmMenu = {
     BLACK,
 };
 
-Menu *getConfirmMenu(void)
+Menu *GetConfirmMenu(void)
 {
-   return &confirmMenu;
+    return &confirmMenu;
 }

@@ -78,10 +78,10 @@ void InitGame()
    InitSeed(target_seed);
 
    // Menu init
-   startMenu = getStartMenu();
-   pauseMenu = getPauseMenu();
-   settingsMenu = getSettingsMenu();
-   loadMenu = getLoadMenu();
+   startMenu = GetStartMenu();
+   pauseMenu = GetPauseMenu();
+   settingsMenu = GetSettingsMenu();
+   loadMenu = GetLoadMenu();
 
    // Init screen chunks
    InitChunks(colorfulChunks);
@@ -150,7 +150,7 @@ int UpdateGame(void)
       UpdateTimer();
       break;
    case GAME_STATE_START_MENU:
-      updateMenu(startMenu);
+      UpdateMenu(startMenu);
       // if (IsKeyPressed(KEY_P))
       //    UpdateMusic(mainMenuSong, true);
       break;
@@ -162,13 +162,13 @@ int UpdateGame(void)
       }
 
       // Normal routine
-      updateMenu(pauseMenu);
+      UpdateMenu(pauseMenu);
       break;
    case GAME_STATE_SETTINGS_MENU:
-      updateMenu(settingsMenu);
+      UpdateMenu(settingsMenu);
       break;
    case GAME_STATE_LOAD_MENU:
-      updateMenu(loadMenu);
+      UpdateMenu(loadMenu);
       break;
    default:
       LogMessage(LOG_ERROR, "Can't update game, undefined game state!");
@@ -201,25 +201,25 @@ int DrawGame(void)
       DrawPlayer();
       break;
    case GAME_STATE_START_MENU:
-      if (drawMenu(startMenu))
+      if (DrawMenu(startMenu))
       {
          return EXIT_FAILURE;
       }
       break;
    case GAME_STATE_PAUSE_MENU:
-      if (drawMenu(pauseMenu))
+      if (DrawMenu(pauseMenu))
       {
          return EXIT_FAILURE;
       }
       break;
    case GAME_STATE_SETTINGS_MENU:
-      if (drawMenu(settingsMenu))
+      if (DrawMenu(settingsMenu))
       {
          return EXIT_FAILURE;
       }
       break;
    case GAME_STATE_LOAD_MENU:
-      if (drawMenu(loadMenu))
+      if (DrawMenu(loadMenu))
       {
          return EXIT_FAILURE;
       }

@@ -22,8 +22,8 @@ typedef struct Menu
    Color backgroundColor;
 } Menu;
 
-void toggleMenu(Menu *menu);
-void updateMenu(Menu *menu);
-int drawMenu(Menu *menu);
+void ToggleMenu(Menu *menu);
+void UpdateMenu(Menu *menu);
+int DrawMenu(Menu *menu);
 
 #endif // MENU_H
