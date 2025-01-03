@@ -24,7 +24,7 @@ void EmitPlayerParticles(Vector2 playerPosition, size_t count, Color color)
    {
       // Random velocity
       float angle = GetRandomValue(0, 360) * (PI / 180.0f); // Degrees to radians
-      float speed = (float)GetRandomValue(20, 60) / 10.0f;
+      float speed = (float)GetRandomValue(400, 800) / 10.0f;
 
       Vector2 velocity = {
           .x = cosf(angle) * speed,

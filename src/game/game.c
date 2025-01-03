@@ -27,23 +27,33 @@
 
 #define STACK_PRINT_TIME_S_MOD 10
 
+// Object pointers
+// Menus
 static Menu *startMenu;
 static Menu *pauseMenu;
 static Menu *settingsMenu;
 static Menu *loadMenu;
+
+// Sound
 // static Music mainMenuSong;
+
+// Objects
 Player *p_player;
+
 Floor *p_floors;
 static int floorCount;
+
 Chunk *p_chunks;
 static int chunkCount;
 static int chunkXCount;
 static int chunkYCount;
+static bool colorfulChunks = false;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
 
 static int target_fps = 60; // Changing this drastically effects physics!
+static size_t target_seed = 1735754714;
 
 void InitGame()
 {
@@ -65,7 +75,7 @@ void InitGame()
    SetExitKey(KEY_NULL); // Must be called after InitWindow
    InitFPS(target_fps);
    InitTimer();
-   InitSeed(0);
+   InitSeed(target_seed);
 
    // Menu init
    startMenu = getStartMenu();
@@ -74,7 +84,7 @@ void InitGame()
    loadMenu = getLoadMenu();
 
    // Init screen chunks
-   InitChunks(true);
+   InitChunks(colorfulChunks);
    p_chunks = GetChunks(&chunkCount, &chunkXCount, &chunkYCount);
 
    // Floor init
@@ -130,8 +140,8 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
-      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
-      UpdateChunks();
+      // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
+      // UpdateChunks();
       UpdateFloors();
       UpdatePlayer();
       UpdatePlayerParticles(GetFrameTime());
@@ -183,7 +193,7 @@ int DrawGame(void)
       break;
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
-      // DrawChunks();
+      DrawChunks();
       DrawTimer();
       DrawMyFPS();
       DrawFloors();

@@ -16,5 +16,6 @@ typedef struct TimerText
 void InitTimer(void);
 void UpdateTimer(void);
 void DrawTimer(void);
+TimerText *GetGameTime(void);
 
 #endif // TIMER_H

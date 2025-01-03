@@ -1,4 +1,5 @@
 #include "log.h"
+#include "utils/timer.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -81,8 +82,12 @@ int InitLog(int withDebugMessages, int withRaylibMessages)
 
 void WriteLog(int logLevel, const char *text, va_list args)
 {
+   TimerText *p_timerText = GetGameTime();
    if (log_file != NULL)
    {
+      // Write timestamp
+      fprintf(log_file, "{%s} - ", p_timerText->text);
+
       // Write log level
       switch (logLevel)
       {

@@ -34,7 +34,7 @@ void AddParticleToSystem(Vector2 position, Vector2 velocity, float radius, Color
    particle->lifespan = lifespan;
    particle->decayRate = decayRate;
 
-   LogMessage(LOG_INFO, "ParticleSystem: Added particle at position {%.2fx%.2f}", position.x, position.y);
+   // LogMessage(LOG_DEBUG, "ParticleSystem: Added particle at position {%.2fx%.2f}", position.x, position.y);
 }
 
 void UpdateParticleSystem(float deltaTime)

@@ -41,3 +41,13 @@ void DrawTimer(void)
 {
    DrawText(timerText.text, timerText.position.x, timerText.position.y, timerText.size, timerText.color);
 }
+
+/**
+ * @brief Get the Game Time object
+ *
+ * @return TimerText*
+ */
+TimerText *GetGameTime(void)
+{
+   return &timerText;
+}
