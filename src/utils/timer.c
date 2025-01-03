@@ -47,7 +47,7 @@ void DrawTimer(void)
  *
  * @return TimerText*
  */
-TimerText *GetGameTime(void)
+const char *GetGameTime(void)
 {
-   return &timerText;
+   return timerText.text;
 }

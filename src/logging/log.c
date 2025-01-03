@@ -5,11 +5,28 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <time.h>
+#include <string.h>
 #include <errno.h>
 
 static FILE *log_file = NULL;
 static int debug;
+static char timestamp[64];
+
+void GetFormattedTime(char *buffer, size_t bufferSize)
+{
+   time_t now = time(NULL);
+   struct tm *localTime = localtime(&now);
+
+   struct timeval tv;
+   gettimeofday(&tv, NULL);
+
+   strftime(buffer, bufferSize, "%Y%m%d - %H:%M:%S", localTime);
+
+   size_t ms = tv.tv_usec / 1000;
+   snprintf(buffer + strlen(buffer), bufferSize - strlen(buffer), ".%03zu", ms);
+}
 
 int ensureDirectory(const char *path)
 {
@@ -76,17 +93,20 @@ int InitLog(int withDebugMessages, int withRaylibMessages)
       return EXIT_FAILURE;
    }
 
+   GetFormattedTime(timestamp, sizeof(timestamp));
+
    printf("[INFO]: Logging started in {%s}\n", logFilename);
    return EXIT_SUCCESS;
 }
 
 void WriteLog(int logLevel, const char *text, va_list args)
 {
-   TimerText *p_timerText = GetGameTime();
+   GetFormattedTime(timestamp, sizeof(timestamp));
+
    if (log_file != NULL)
    {
       // Write timestamp
-      fprintf(log_file, "{%s} - ", p_timerText->text);
+      fprintf(log_file, "[%s] ", timestamp);
 
       // Write log level
       switch (logLevel)
