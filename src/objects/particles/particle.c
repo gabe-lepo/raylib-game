@@ -24,6 +24,7 @@ void AddParticleToSystem(Vector2 position, Vector2 velocity, float radius, Color
    {
       particleSystem.count = particleSystem.maxCount;
       LogMessage(LOG_WARNING, "Tried to add too many particles to system!");
+      return;
    }
 
    Particle *particle = &particleSystem.particles[particleSystem.count++];
