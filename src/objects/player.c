@@ -65,11 +65,13 @@ void UpdatePlayer(void)
    // Reapply some states based on grounding
    if (player.grounded == GROUNDED_STATE_GROUNDED)
    {
+      // LogMessage(LOG_DEBUG, "player grounded");
       player.remaining_jumps = player.max_jumps;
       player.velocity.y = 0.0f;
    }
    else
    {
+      // LogMessage(LOG_DEBUG, "player ungrounded");
       // Apply gravity and terminal y velocity
       if (player.velocity.y < player.terminal_velocity.y)
       {
@@ -92,7 +94,7 @@ void UpdatePlayer(void)
       player.grounded = GROUNDED_STATE_GROUNDED;
       player.remaining_jumps = player.max_jumps;
       player.bottomCollide = false;
-      LogMessage(LOG_DEBUG, "Player bottom collided with bottom of screen");
+      // LogMessage(LOG_DEBUG, "Player bottom collided with bottom of screen");
    }
 
    // Check for ceiling collision
