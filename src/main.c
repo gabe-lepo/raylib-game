@@ -13,8 +13,9 @@ int main(void)
 {
    // Init game states
    InitGame();
+   InitShader();
 
-   // GameCamera pointer to pass to raylib's cam init
+   // Pointers
    p_gameCamera = GetGameCamera();
    p_shader = GetShader();
 
