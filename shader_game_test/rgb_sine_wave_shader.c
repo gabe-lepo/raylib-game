@@ -9,12 +9,12 @@ const char *fragmentShaderCode_sineWave =
     "uniform float u_time;\n"
     "out vec4 fragColor;\n"
 
-    "float screenHeight = 450.0f;\n"
+    "float screenHeight = 450.0 * 2.0;\n"
     "float placementOffset = screenHeight * 0.5;\n"
     "float frequency = 0.05;\n"
-    "float amplitude = screenHeight * 0.33;\n"
+    "float amplitude = screenHeight * 0.45;\n"
     "float offset = 40.0;\n"
-    "float lineThickness = 10.0;\n"
+    "float lineThickness = 20.0;\n"
 
     "void main(){\n"
     "    float red_wave = sin(gl_FragCoord.x * (frequency * 0.1) + u_time + offset) * amplitude + placementOffset;\n"
@@ -23,8 +23,8 @@ const char *fragmentShaderCode_sineWave =
     "    float green_wave = sin(gl_FragCoord.x * (frequency * 0.33) + u_time + offset) * amplitude + placementOffset;\n"
     "    float green = smoothstep(1.0, 0.0, abs(gl_FragCoord.y - green_wave) - lineThickness);\n"
 
-    "    float blue_wave = sin(gl_FragCoord.x * (frequency * 1.1) + u_time + offset) * amplitude + placementOffset;\n"
-    "    float blue = smoothstep(1.5, 0.0, abs(gl_FragCoord.y - blue_wave) - lineThickness);\n"
+    "    float blue_wave = sin(gl_FragCoord.x * (frequency * 1.0) + u_time + offset) * amplitude + placementOffset;\n"
+    "    float blue = smoothstep(1.0, 0.0, abs(gl_FragCoord.y - blue_wave) - lineThickness);\n"
 
     "    fragColor = vec4(red, green, blue, 1.0);\n"
     "}\n";
@@ -32,7 +32,7 @@ const char *fragmentShaderCode_sineWave =
 int main(void)
 {
    // Consts
-   const Vector2 SCREEN_DIMENSIONS = (Vector2){800.0f, 450.0f};
+   const Vector2 SCREEN_DIMENSIONS = (Vector2){1600.0f, 900.0f};
 
    // Creates OpenGL context to LoadShader
    InitWindow(SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, "RGB Sine Wave Shader");
