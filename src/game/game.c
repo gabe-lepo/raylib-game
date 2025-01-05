@@ -19,6 +19,8 @@
 #include "camera/game_camera.h"
 #include "objects/particles/particle.h"
 #include "objects/particles/player_particles.h"
+// #include "game/background.h"
+#include "shaders/shader.h"
 
 #include <stdlib.h>
 
@@ -59,9 +61,7 @@ void InitGame()
 {
    // Setup logs
    if (InitLog(DEBUG_LOGS, RAYLIB_LOGS))
-   {
       CloseGame();
-   }
    LogMessage(LOG_INFO, "InitGame start");
 
    // Setup game state
@@ -105,6 +105,13 @@ void InitGame()
    // Particles!
    InitPlayerParticles(1000);
 
+   // Parallax background
+   // InitParallaxBackground();
+
+   // Player shader
+   if (InitShader())
+      CloseGame();
+
    // Must be done last!
    PopGameState();
    PushGameState(GAME_STATE_START_MENU);
@@ -142,7 +149,9 @@ int UpdateGame(void)
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
       // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
       // UpdateChunks();
+      // UpdateParallaxBackground(p_player->velocity.x);
       UpdateFloors(p_player);
+      UpdateShader();
       UpdatePlayer();
       UpdatePlayerParticles(GetFrameTime());
       UpdateGameCamera(p_player);
@@ -194,11 +203,13 @@ int DrawGame(void)
    case GAME_STATE_PLAYING:
       ClearBackground(DARKGRAY);
       // DrawChunks();
+      // DrawParallaxBackground();
       DrawTimer();
       DrawMyFPS();
-      DrawFloors();
+      // DrawFloors();
+      // DrawPlayer();
       DrawPlayerParticles();
-      DrawPlayer();
+      DrawShader();
       break;
    case GAME_STATE_START_MENU:
       if (DrawMenu(startMenu))
@@ -241,6 +252,7 @@ void CloseGame()
    CleanupParticleSystem();
    CleanUpFloors();
    CleanUpChunks();
+   // CleanupParallaxBackground();
    ClearGameStateStack();
    gameShouldClose = 1;
 }
