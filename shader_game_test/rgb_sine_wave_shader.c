@@ -9,7 +9,7 @@ const char *fragmentShaderCode_sineWave =
     "uniform float u_time;\n"
     "out vec4 fragColor;\n"
 
-    "float screenHeight = 900.0;\n"
+    "float screenHeight = 450.0;\n"
     "float yOffset = screenHeight * 0.5;\n"
     "float amplitude = screenHeight * 0.45;\n"
     "float frequency = 0.05;\n"
@@ -31,7 +31,7 @@ const char *fragmentShaderCode_sineWave =
 int main(void)
 {
    // Consts
-   const Vector2 SCREEN_DIMENSIONS = (Vector2){1600.0f, 900.0f};
+   const Vector2 SCREEN_DIMENSIONS = (Vector2){1600.0f, 450.0f};
 
    // Creates OpenGL context to LoadShader
    InitWindow(SCREEN_DIMENSIONS.x, SCREEN_DIMENSIONS.y, "RGB Sine Wave Shader");
@@ -59,7 +59,7 @@ int main(void)
    int fd_u_time = GetShaderLocation(shader, "u_time");
    float ShaderTime = 0.0f;
    float *p_ShaderTime = &ShaderTime;
-   float oscillationSpeedMod = 5.0f;
+   float oscillationSpeedMod = 2.0f;
 
    // Other setup stuff
    // SetTargetFPS(60);
