@@ -142,7 +142,7 @@ int UpdateGame(void)
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
       // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
       // UpdateChunks();
-      UpdateFloors();
+      UpdateFloors(p_player);
       UpdatePlayer();
       UpdatePlayerParticles(GetFrameTime());
       UpdateGameCamera(p_player);

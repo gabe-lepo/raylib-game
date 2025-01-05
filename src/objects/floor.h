@@ -2,6 +2,7 @@
 #define FLOOR_H
 
 #include "objects.h"
+#include "player.h"
 
 typedef struct Floor
 {
@@ -16,7 +17,7 @@ typedef struct Floor
 } Floor;
 
 void InitFloors(void);
-void UpdateFloors(void);
+void UpdateFloors(Player *player);
 void DrawFloors(void);
 Floor *GetFloors(int *countFloors);
 void CleanUpFloors(void);

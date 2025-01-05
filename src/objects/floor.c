@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 
-static Floor floors[8];
+static Floor floors[10];
 static int floorCount = sizeof(floors) / sizeof(floors[0]);
 
 /**
@@ -15,7 +15,8 @@ static int floorCount = sizeof(floors) / sizeof(floors[0]);
  */
 void InitFloors(void)
 {
-   for (size_t i = 0; i < floorCount; i++)
+   // Randomly generate all but 2 of floor count, last 2 are for static wall and ground floors
+   for (size_t i = 0; i < floorCount - 2; i++)
    {
       // Since we're using Vector2 for min/max limits, x is the min; y is the max.
       floors[i].width_limit = (Vector2){30.0f, 300.0f};
@@ -43,18 +44,37 @@ void InitFloors(void)
       // Init the floor
       InitGameObject(&floors[i].object, floorShape, color, OBJECT_TYPE_COLLIDEABLE, TextFormat("F%zu", i));
    }
+
+   // Generate the left screen boundary
+   floors[floorCount - 2].width_limit = (Vector2){0, 0};
+   floors[floorCount - 2].height_limit = (Vector2){0, 0};
+   Shape floorShape = {
+       .type = SHAPE_TYPE_RECTANGLE,
+       .rectangle = {0, 0, 2, SCREEN_DIMENSIONS.y},
+   };
+   InitGameObject(&floors[floorCount - 2].object, floorShape, BLACK, OBJECT_TYPE_COLLIDEABLE, "Wall");
+
+   // Generate the ground floor (moves horizontally with player)
+   floors[floorCount - 1].width_limit = (Vector2){0, 0};
+   floors[floorCount - 1].height_limit = (Vector2){0, 0};
+   floorShape.rectangle = (Rectangle){0, SCREEN_DIMENSIONS.y, SCREEN_DIMENSIONS.x, 2};
+   InitGameObject(&floors[floorCount - 1].object, floorShape, BLACK, OBJECT_TYPE_COLLIDEABLE, "Ground");
 }
 
 /**
  * @brief Call object updater for each floor
  * @return void - Operates on internal Floor object array.
  */
-void UpdateFloors(void)
+void UpdateFloors(Player *player)
 {
    for (int i = 0; i < floorCount; i++)
    {
       UpdateGameObject(&floors[i].object);
    }
+
+   // Move the ground floor with player to simulate infinite floor
+   Floor *ground = &floors[floorCount - 1];
+   ground->object.shape.rectangle.x = player->object.shape.rectangle.x - (SCREEN_DIMENSIONS.x / 2);
 }
 
 /**

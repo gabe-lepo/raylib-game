@@ -86,17 +86,6 @@ void UpdatePlayer(void)
       playerRect->y += player.velocity.y;
    }
 
-   // Check for ground collision at bottom of screen
-   if (playerRect->y + playerRect->height > SCREEN_DIMENSIONS.y)
-   {
-      playerRect->y = SCREEN_DIMENSIONS.y - playerRect->height;
-      player.velocity.y = 0.0f;
-      player.grounded = GROUNDED_STATE_GROUNDED;
-      player.remaining_jumps = player.max_jumps;
-      player.bottomCollide = false;
-      // LogMessage(LOG_DEBUG, "Player bottom collided with bottom of screen");
-   }
-
    // Check for ceiling collision
    if (playerRect->y <= 0)
    {
@@ -141,16 +130,6 @@ void UpdatePlayer(void)
    // Apply vertical movement
    // playerRect->y += player.velocity.y;
 
-   // Horizontal screen collision (must be done after horizontal movement checks)
-   if (playerRect->x + playerRect->width >= SCREEN_DIMENSIONS.x)
-   {
-      playerRect->x = SCREEN_DIMENSIONS.x - playerRect->width - SCREEN_EDGE_PADDING;
-   }
-   if (playerRect->x <= 0)
-   {
-      playerRect->x = SCREEN_EDGE_PADDING;
-   }
-
    // Jump logic
    if (IsKeyPressed(KEY_SPACE) && player.remaining_jumps > 0)
    {
@@ -162,7 +141,7 @@ void UpdatePlayer(void)
    }
 
    // Reset player
-   if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_R))
+   if ((IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_R)) || (player.object.shape.rectangle.y >= SCREEN_DIMENSIONS.y * 2.0f))
    {
       player.object.shape.rectangle.x = SCREEN_DIMENSIONS.x / 2.0f;
       player.object.shape.rectangle.y = SCREEN_DIMENSIONS.y - player.size.y - 100.0f;

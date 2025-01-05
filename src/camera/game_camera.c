@@ -30,19 +30,17 @@ void UpdateGameCamera(Player *player)
    if (IsKeyPressed(KEY_R))
       gameCamera.camera2d.zoom = 1.0f;
 
-   if (gameCamera.camera2d.zoom > 3.0f)
-      gameCamera.camera2d.zoom = 3.0f;
-   if (gameCamera.camera2d.zoom < 0.25f)
-      gameCamera.camera2d.zoom = 0.25f;
+   gameCamera.camera2d.zoom = Clamp(gameCamera.camera2d.zoom, 0.5f, 1.5f);
 
    // Retarget player
    Vector2 playerCenter = {player->object.shape.rectangle.x + (player->object.shape.rectangle.width / 2.0f),
                            player->object.shape.rectangle.y + (player->object.shape.rectangle.height / 2.0f)};
    Vector2 cameraTarget = gameCamera.camera2d.target;
-   const float followSpeed = 0.05f;
+
+   const float followSpeed = 0.1f;
 
    cameraTarget.x = Lerp(cameraTarget.x, playerCenter.x, followSpeed);
-   cameraTarget.y = Lerp(cameraTarget.y, playerCenter.y, followSpeed);
+   // cameraTarget.y = Lerp(cameraTarget.y, playerCenter.y, followSpeed);
 
    gameCamera.camera2d.target = cameraTarget;
 }
