@@ -1,4 +1,4 @@
-#include "background.h"
+#include "parallax_background.h"
 
 #define NUM_LAYERS 3
 

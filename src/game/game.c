@@ -19,7 +19,6 @@
 #include "camera/game_camera.h"
 #include "objects/particles/particle.h"
 #include "objects/particles/player_particles.h"
-// #include "game/background.h"
 #include "shaders/shader.h"
 
 #include <stdlib.h>
@@ -49,7 +48,7 @@ Chunk *p_chunks;
 static int chunkCount;
 static int chunkXCount;
 static int chunkYCount;
-static bool colorfulChunks = false;
+static bool colorfulChunks = true;
 
 int gameShouldClose = 0;
 int updateGameIterations = 0;
@@ -147,8 +146,8 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
-      // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
-      // UpdateChunks();
+      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
+      UpdateChunks();
       // UpdateParallaxBackground(p_player->velocity.x);
       UpdateFloors(p_player);
       UpdateShader();
@@ -201,15 +200,14 @@ int DrawGame(void)
    case GAME_STATE_INIT:
       break;
    case GAME_STATE_PLAYING:
-      ClearBackground(DARKGRAY);
+      ClearBackground(BLACK);
       // DrawChunks();
-      // DrawParallaxBackground();
+      DrawShader(); // Background shader
       DrawTimer();
       DrawMyFPS();
-      // DrawFloors();
-      // DrawPlayer();
+      DrawFloors();
       DrawPlayerParticles();
-      DrawShader();
+      DrawPlayer();
       break;
    case GAME_STATE_START_MENU:
       if (DrawMenu(startMenu))

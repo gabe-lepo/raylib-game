@@ -2,6 +2,7 @@
 #define SHADER_H
 
 #include "raylib.h"
+#include "raymath.h"
 
 int InitShader(void);
 void UpdateShader(void);

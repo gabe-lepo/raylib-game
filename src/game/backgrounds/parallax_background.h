@@ -1,5 +1,5 @@
-#ifndef BACKGROUND_H
-#define BACKGROUND_H
+#ifndef PARALLAX_BACKGROUND_H
+#define PARALLAX_BACKGROUND_H
 
 #include "raylib.h"
 

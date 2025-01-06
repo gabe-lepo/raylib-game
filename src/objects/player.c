@@ -151,7 +151,7 @@ void UpdatePlayer(void)
    // Emit player particles
    if (player.velocity.x != 0 || player.velocity.y != 0)
    {
-      EmitPlayerParticles(playerCenter, 500, GetAnalogousColor(GRAY, 90));
+      EmitPlayerParticles(playerCenter, 500, GetComplimentaryColor(player.object.color));
    }
 }
 

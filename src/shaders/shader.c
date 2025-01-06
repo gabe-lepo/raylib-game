@@ -1,19 +1,21 @@
 #include "shader.h"
 #include "logging/log.h"
+#include "game/backgrounds/shaded_background.h"
+#include "game/screen.h"
 #include "objects/player.h"
-#include "objects/floor.h"
 
 #include <stdlib.h>
+#include <math.h>
 
 static const char *fragmentShaderCode_sinewave =
     "#version 330\n"
 
     "uniform float u_time;\n"
+    "uniform float u_screenHeight;\n"
     "out vec4 fragColor;\n"
 
-    "float screenHeight = 450.0;\n"
-    "float yOffset = screenHeight * 0.5;\n"
-    "float amplitude = screenHeight * 0.45;\n"
+    "float yOffset = u_screenHeight * 0.5;\n"
+    "float amplitude = u_screenHeight * 0.45;\n"
     "float frequency = 0.05;\n"
     "float lineThickness = 20.0;\n"
 
@@ -33,7 +35,6 @@ static const char *fragmentShaderCode_sinewave =
 static Shader shader;
 static int u_time_location;
 static float ShaderTime;
-static float *p_ShaderTime;
 static float oscillationSpeedMod;
 
 int InitShader(void)
@@ -57,8 +58,11 @@ int InitShader(void)
 
    u_time_location = GetShaderLocation(shader, "u_time");
    ShaderTime = 0.0f;
-   p_ShaderTime = &ShaderTime;
    oscillationSpeedMod = 2.0f;
+
+   SetShaderValue(shader, GetShaderLocation(shader, "u_screenHeight"), &SCREEN_DIMENSIONS.y, SHADER_UNIFORM_FLOAT);
+
+   InitShadedBackground();
 
    return EXIT_SUCCESS;
 }
@@ -66,14 +70,15 @@ int InitShader(void)
 void UpdateShader(void)
 {
    ShaderTime += GetFrameTime() * oscillationSpeedMod;
-   SetShaderValue(shader, u_time_location, p_ShaderTime, SHADER_UNIFORM_FLOAT);
+   SetShaderValue(shader, u_time_location, &ShaderTime, SHADER_UNIFORM_FLOAT);
+
+   UpdateShadedBackground();
 }
 
 void DrawShader(void)
 {
    BeginShaderMode(shader);
-   DrawFloors();
-   DrawPlayer();
+   DrawShadedBackground();
    EndShaderMode();
 }
 
