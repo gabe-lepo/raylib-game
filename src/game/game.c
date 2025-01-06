@@ -19,7 +19,7 @@
 #include "camera/game_camera.h"
 #include "objects/particles/particle.h"
 #include "objects/particles/player_particles.h"
-#include "shaders/shader.h"
+#include "shaders/background_shader.h"
 
 #include <stdlib.h>
 

@@ -1,8 +1,7 @@
-#include "shader.h"
+#include "background_shader.h"
 #include "logging/log.h"
 #include "game/backgrounds/shaded_background.h"
 #include "game/screen.h"
-#include "objects/player.h"
 
 #include <stdlib.h>
 #include <math.h>
