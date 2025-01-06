@@ -146,8 +146,8 @@ int UpdateGame(void)
 
       // Normal routine
       CheckPlayerFloorCollision(p_player, p_floors, floorCount);
-      CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
-      UpdateChunks();
+      // CheckPlayerChunkCollision(p_player, p_chunks, chunkCount); // Recolors player
+      // UpdateChunks();
       // UpdateParallaxBackground(p_player->velocity.x);
       UpdateFloors(p_player);
       UpdateShader();
@@ -200,7 +200,7 @@ int DrawGame(void)
    case GAME_STATE_INIT:
       break;
    case GAME_STATE_PLAYING:
-      ClearBackground(BLACK);
+      ClearBackground(DARKGRAY);
       // DrawChunks();
       DrawShader(); // Background shader
       DrawTimer();

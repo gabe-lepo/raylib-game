@@ -8,15 +8,13 @@
 #include <math.h>
 
 static Shader shader;
-static int u_time_location;
 static float ShaderTime;
-static float oscillationSpeedMod;
 
-const char *fs_file = "/Users/glepoutre/Documents/vscode/raylib-game/src/shaders/fragment/rgb_sine_wave.fs";
+const char *fs_file = "src/shaders/fragment/blue_gold_pulse.fs";
 
 int InitShader(void)
 {
-   // Default vertext shader, inline fragment shader
+   // Default raylib vs
    shader = LoadShader(0, fs_file);
    if (shader.id == 0)
    {
@@ -33,11 +31,10 @@ int InitShader(void)
       LogMessage(LOG_INFO, "Shader loaded successfully!");
    }
 
-   u_time_location = GetShaderLocation(shader, "u_time");
+   SetShaderValue(shader, GetShaderLocation(shader, "u_screenX"), &SCREEN_DIMENSIONS.x, SHADER_UNIFORM_FLOAT);
+   SetShaderValue(shader, GetShaderLocation(shader, "u_screenY"), &SCREEN_DIMENSIONS.y, SHADER_UNIFORM_FLOAT);
    ShaderTime = 0.0f;
-   oscillationSpeedMod = 2.0f;
-
-   SetShaderValue(shader, GetShaderLocation(shader, "u_screenHeight"), &SCREEN_DIMENSIONS.y, SHADER_UNIFORM_FLOAT);
+   SetShaderValue(shader, GetShaderLocation(shader, "u_time"), &ShaderTime, SHADER_UNIFORM_FLOAT);
 
    InitShadedBackground();
 
@@ -46,8 +43,8 @@ int InitShader(void)
 
 void UpdateShader(void)
 {
-   ShaderTime += GetFrameTime() * oscillationSpeedMod;
-   SetShaderValue(shader, u_time_location, &ShaderTime, SHADER_UNIFORM_FLOAT);
+   ShaderTime += GetFrameTime();
+   SetShaderValue(shader, GetShaderLocation(shader, "u_time"), &ShaderTime, SHADER_UNIFORM_FLOAT);
 
    UpdateShadedBackground();
 }
