@@ -7,40 +7,17 @@
 #include <stdlib.h>
 #include <math.h>
 
-static const char *fragmentShaderCode_sinewave =
-    "#version 330\n"
-
-    "uniform float u_time;\n"
-    "uniform float u_screenHeight;\n"
-    "out vec4 fragColor;\n"
-
-    "float yOffset = u_screenHeight * 0.5;\n"
-    "float amplitude = u_screenHeight * 0.45;\n"
-    "float frequency = 0.05;\n"
-    "float lineThickness = 20.0;\n"
-
-    "void main(){\n"
-    "    float red_wave = sin(gl_FragCoord.x * (frequency * 0.1) + u_time) * amplitude + yOffset;\n"
-    "    float red = smoothstep(1.0, 0.0, abs(gl_FragCoord.y - red_wave) - lineThickness);\n"
-
-    "    float green_wave = sin(gl_FragCoord.x * (frequency * 0.33) + u_time) * amplitude + yOffset;\n"
-    "    float green = smoothstep(1.0, 0.0, abs(gl_FragCoord.y - green_wave) - lineThickness);\n"
-
-    "    float blue_wave = sin(gl_FragCoord.x * (frequency * 1.0) + u_time) * amplitude + yOffset;\n"
-    "    float blue = smoothstep(1.0, 0.0, abs(gl_FragCoord.y - blue_wave) - lineThickness);\n"
-
-    "    fragColor = vec4(red, green, blue, 1.0);\n"
-    "}\n";
-
 static Shader shader;
 static int u_time_location;
 static float ShaderTime;
 static float oscillationSpeedMod;
 
+const char *fs_file = "/Users/glepoutre/Documents/vscode/raylib-game/src/shaders/fragment/rgb_sine_wave.fs";
+
 int InitShader(void)
 {
    // Default vertext shader, inline fragment shader
-   shader = LoadShaderFromMemory(0, fragmentShaderCode_sinewave);
+   shader = LoadShader(0, fs_file);
    if (shader.id == 0)
    {
       LogMessage(LOG_ERROR, "Shader failed to load");

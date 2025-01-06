@@ -39,7 +39,12 @@ void UpdateGameCamera(Player *player)
 
    const float followSpeed = 0.1f;
 
-   cameraTarget.x = Lerp(cameraTarget.x, playerCenter.x, followSpeed);
+   // Non-smoothed retargeting
+   cameraTarget.x = playerCenter.x;
+   cameraTarget.y = playerCenter.y;
+
+   // Smoothed retargeting
+   // cameraTarget.x = Lerp(cameraTarget.x, playerCenter.x, followSpeed);
    // cameraTarget.y = Lerp(cameraTarget.y, playerCenter.y, followSpeed);
 
    gameCamera.camera2d.target = cameraTarget;

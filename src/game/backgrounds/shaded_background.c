@@ -20,8 +20,9 @@ void InitShadedBackground(void)
 
 void UpdateShadedBackground(void)
 {
-   // Center background horizontally with player
+   // Center background with player
    backgroundMask.x = p_player->object.shape.rectangle.x - backgroundMask.width + (SCREEN_DIMENSIONS.x / 2);
+   backgroundMask.y = p_player->object.shape.rectangle.y - backgroundMask.height + (SCREEN_DIMENSIONS.y / 2);
 }
 
 void DrawShadedBackground(void)
