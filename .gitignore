@@ -56,3 +56,4 @@ build/
 logs/
 raylib_examples/
 # assets/music/
+assets/tiled_maps
