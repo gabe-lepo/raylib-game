@@ -1,0 +1,8 @@
+[
+  {
+    "directory": "/Users/glepoutre/Documents/old_projects/raylib-game", 
+    "command": "clang -I/Users/glepoutre/Documents/old_projects/raylib/src -I/Users/glepoutre/Documents/old_projects/raylib-game/src -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL -c src/main.c",
+    "file": "src/main.c"
+  }
+]
+

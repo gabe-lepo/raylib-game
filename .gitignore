@@ -58,3 +58,5 @@ raylib_examples/
 # assets/music/
 assets/tiled_maps
 *tags*
+# Neovim clangd LSP cache
+.cache/
